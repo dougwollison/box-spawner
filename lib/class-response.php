@@ -48,7 +48,7 @@ class Response {
 	 * @since 1.0.0
 	 */
 	public function result() {
-		$handler = $this->request->get_curl_handler();
+		$handler = $this->request->get_curl_handle();
 		$response = $this->request->get_curl_result();
 
 		$header_size = curl_getinfo( $handler, CURLINFO_HEADER_SIZE );
