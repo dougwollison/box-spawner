@@ -18,7 +18,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-class API {
+abstract class API {
 	/**
 	 * The name of the class to use for requests.
 	 *
