@@ -18,7 +18,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-abstract class Asset implements API {
+abstract class Asset extends API {
 	/**
 	 * The parent object.
 	 *
