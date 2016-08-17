@@ -1,8 +1,6 @@
 <?php
 /**
- * The Information API
- *
- * An interface for accessing Linode public information.
+ * The Information API.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Information class.
+ *
+ * An interface for accessing Linode public information.
+ *
+ * @api
+ *
+ * @since 1.0.0
+ */
 class Information extends API {
 	// to be written
 }

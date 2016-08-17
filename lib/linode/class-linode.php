@@ -1,8 +1,6 @@
 <?php
 /**
- * The Linode Object
- *
- * An interface for creating/manipulating Linode boxes.
+ * The Linode Object.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Linode class.
+ *
+ * An interface for creating/manipulating Linode boxes.
+ *
+ * @api
+ *
+ * @since 1.0.0
+ */
 class Linode extends API_Object {
 	// to be written
 }

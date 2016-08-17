@@ -1,8 +1,6 @@
 <?php
 /**
- * The root API Framework
- *
- * The basis for all API classes.
+ * The root API Framework.
  *
  * @package Box_Spawner
  * @subpackage Framework
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner;
 
+/**
+ * The API class.
+ *
+ * The basis for all API classes.
+ *
+ * @internal Extended by other vendor-specific API classes.
+ *
+ * @since 1.0.0
+ */
 class API {
 	// to be written
 }

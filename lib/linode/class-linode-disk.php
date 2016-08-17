@@ -1,8 +1,6 @@
 <?php
 /**
- * The Linode Disk Object
- *
- * An interface for creating/manipulating disks for a linode.
+ * The Linode Disk Asset.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Linode Disk class.
+ *
+ * An interface for creating/manipulating disks for a linode.
+ *
+ * @internal Used by the Linode class.
+ *
+ * @since 1.0.0
+ */
 class Linode_Disk extends Asset {
 	// to be written
 }

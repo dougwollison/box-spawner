@@ -1,8 +1,6 @@
 <?php
 /**
- * The DigitalOcean Object Framework
- *
- * The base interface for all Linode objects.
+ * The DigitalOcean Object Framework.
  *
  * @package Box_Spawner
  * @subpackage DigitalOcean
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\DigitalOcean;
 
+/**
+ * The API Object class.
+ *
+ * The base interface for all DigitalOcean objects.
+ *
+ * @internal Extended by other DigitalOcean object classes.
+ *
+ * @since 1.0.0
+ */
 abstract class API_Object extends API implements \BoxSpawner\API_Object {
 	// to be written
 }

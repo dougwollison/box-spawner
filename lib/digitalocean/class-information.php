@@ -1,8 +1,6 @@
 <?php
 /**
- * The Information API
- *
- * An interface for accessing DigitalOcean public information.
+ * The Information API.
  *
  * @package Box_Spawner
  * @subpackage DigitalOcean
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\DigitalOcean;
 
+/**
+ * The Infromation class.
+ *
+ * An interface for accessing DigitalOcean public information.
+ *
+ * @api
+ *
+ * @since 1.0.0
+ */
 class Information extends API {
 	// to be written
 }

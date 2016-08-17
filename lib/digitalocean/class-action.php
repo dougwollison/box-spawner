@@ -1,8 +1,6 @@
 <?php
 /**
- * The Action API
- *
- * An interface for accessing DigitalOcean account info.
+ * The Action API.
  *
  * @package Box_Spawner
  * @subpackage DigitalOcean
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\DigitalOcean;
 
-class Account extends API {
+/**
+ * The Action class.
+ *
+ * An interface for accessing DigitalOcean event info.
+ *
+ * @api
+ *
+ * @since 1.0.0
+ */
+class Action extends API {
 	// to be written
 }

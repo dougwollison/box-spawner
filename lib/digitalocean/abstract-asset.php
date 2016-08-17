@@ -1,8 +1,6 @@
 <?php
 /**
- * The DigitalOcean Asset Framework
- *
- * The base interface for all DigitalOcean object assets.
+ * The DigitalOcean Asset Framework.
  *
  * @package Box_Spawner
  * @subpackage DigitalOcean
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\DigitalOcean;
 
+/**
+ * The Asset class.
+ *
+ * The base interface for all DigitalOcean object assets.
+ *
+ * @internal Extended by other DigitalOcean asset classes.
+ *
+ * @since 1.0.0
+ */
 abstract class Asset extends API_Object implements \BoxSpawner\Asset {
 	// to be written
 }

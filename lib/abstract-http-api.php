@@ -1,8 +1,6 @@
 <?php
 /**
- * The "HTTP" API Framework
- *
- * For APIs that use headers and methods.
+ * The "HTTP" API Framework.
  *
  * @package Box_Spawner
  * @subpackage Framework
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner;
 
+/**
+ * The "HTTP" API class.
+ *
+ * For APIs that use headers and methods.
+ *
+ * @internal Extended by other vendor-specific API classes.
+ *
+ * @since 1.0.0
+ */
 class HTTP_API extends API {
 	// to be written
 }

@@ -1,8 +1,6 @@
 <?php
 /**
- * The API Object Framework
- *
- * The base interface for all objects.
+ * The API Object Framework.
  *
  * @package Box_Spawner
  * @subpackage Framework
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner;
 
+/**
+ * The API Object Interface.
+ *
+ * The base interface for all objects.
+ *
+ * @internal Implemented by other vendor-specific object classes.
+ *
+ * @since 1.0.0
+ */
 interface API_Object {
 	// to be written
 }

@@ -1,8 +1,6 @@
 <?php
 /**
- * The Domain Object
- *
- * An interface for creating/manipulating Linode domains.
+ * The Domain Object.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -11,6 +9,15 @@
  */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Domain class.
+ *
+ * An interface for creating/manipulating Linode domains.
+ *
+ * @api
+ *
+ * @since 1.0.0
+ */
 class Domain extends API_Object {
 	// to be written
 }
