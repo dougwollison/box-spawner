@@ -18,6 +18,13 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-abstract class Asset implements API_Object {
-	// to be written
+abstract class Asset implements API {
+	/**
+	 * The parent object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var object
+	 */
+	protected $parent;
 }
