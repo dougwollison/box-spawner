@@ -19,5 +19,14 @@ namespace BoxSpawner\Linode;
  * @since 1.0.0
  */
 class StackScript extends API_Object {
-	// to be written
+	use Creatable, Deletable, Updatable, Listable;
+
+	/**
+	 * The name of the option to assign the ID to.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	const ID_ATTRIBUTE = 'StackScriptID';
 }
