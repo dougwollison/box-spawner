@@ -20,24 +20,6 @@ namespace BoxSpawner\Linode;
  */
 abstract class API extends \BoxSpawner\API {
 	/**
-	 * The name of the class to use for requests.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string
-	 */
-	protected static $request_class = 'Linode\\Request';
-
-	/**
-	 * The name of the class to use for responses.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string
-	 */
-	protected static $response_class = 'Linode\\Response';
-
-	/**
 	 * The API key for all requests.
 	 *
 	 * @since 1.0.0
