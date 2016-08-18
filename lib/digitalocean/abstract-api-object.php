@@ -18,6 +18,6 @@ namespace BoxSpawner\DigitalOcean;
  *
  * @since 1.0.0
  */
-abstract class API_Object extends API {
+abstract class API_Object {
 	// to be written
 }
