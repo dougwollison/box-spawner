@@ -56,7 +56,7 @@ abstract class API_Object {
 	public function __construct( $data ) {
 		if ( is_array( $data ) ) {
 			// Create a new one, replacing $data with the ID
-			$data = static::create( $data );
+			$data = $this->create( $data );
 		}
 
 		// Store the ID
