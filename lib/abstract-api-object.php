@@ -51,18 +51,26 @@ abstract class API_Object {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int|array $data Either an the ID of an existing object, or settings to create one with.
+	 * @param int|string $id   Either an ID of an existing one, or NULL to create one.
+	 * @param int|array  $data Either the attributes for an already fetched one, or the options for creating one.
 	 */
-	public function __construct( $data ) {
-		if ( is_array( $data ) ) {
-			// Create a new one, replacing $data with the ID
-			$data = $this->create( $data );
+	public function __construct( $id, array $data = array() ) {
+		// If $id is NULL, create a new one
+		if ( is_null( $id ) ) {
+			// Replace $id with the result and empty $data
+			$id = $this->create( $data );
+			$data = array();
 		}
 
 		// Store the ID
-		$this->id = $data;
+		$this->id = $id;
 
-		// Fetch the attributes and store
-		$this->attributes = static::fetch( $data );
+		// If no $data is present, fetch
+		if ( empty( $data ) ) {
+			$data = static::fetch( $id );
+		}
+
+		// Store the attributes
+		$this->attributes = $data;
 	}
 }
