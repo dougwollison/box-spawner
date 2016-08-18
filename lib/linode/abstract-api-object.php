@@ -158,7 +158,7 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	/**
 	 * Method overloader.
 	 *
-	 * Handles add_*, get_* and fetch_* methods that use the same logic.
+	 * Handles add_*, get_* and load_* methods that use the same logic.
 	 *
 	 * @since 1.0.0
 	 *
