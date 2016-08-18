@@ -1,6 +1,6 @@
 <?php
 /**
- * The Linode IP Address Asset.
+ * The Linode IP Address Object.
  *
  * @package Box_Spawner
  * @subpackage Linode

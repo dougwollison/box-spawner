@@ -1,6 +1,6 @@
 <?php
 /**
- * The Linode Disk Asset.
+ * The Linode Disk Object.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Linode_Disk extends Asset {
+class Linode_Disk extends API_Object {
 	use Creatable, Deletable, Updatable;
 
 	/**

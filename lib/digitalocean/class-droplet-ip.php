@@ -18,6 +18,6 @@ namespace BoxSpawner\DigitalOcean;
  *
  * @since 1.0.0
  */
-class Droplet_IP extends Asset {
+class Droplet_IP extends Object {
 	// to be written
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * The Domain Resource Asset.
+ * The Domain Resource Object.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Domain_Resource extends Asset {
+class Domain_Resource extends API_Object {
 	use Creatable, Deletable, Updatable;
 
 	/**

@@ -18,6 +18,6 @@ namespace BoxSpawner\DigitalOcean;
  *
  * @since 1.0.0
  */
-class Domain_Record extends Asset {
+class Domain_Record extends Object {
 	// to be written
 }

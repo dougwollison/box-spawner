@@ -1,6 +1,6 @@
 <?php
 /**
- * The Nodebalancer Config Asset.
+ * The Nodebalancer Config Object.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Nodebalancer_Config extends Asset {
+class Nodebalancer_Config extends API_Object {
 	use Creatable, Deletable, Updatable;
 
 	/**

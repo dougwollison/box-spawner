@@ -1,6 +1,6 @@
 <?php
 /**
- * The Nodebalancer Node Asset.
+ * The Nodebalancer Node Objectv.
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Nodebalancer_Node extends Asset {
+class Nodebalancer_Node extends API_Object {
 	use Creatable, Deletable, Updatable;
 
 	/**
