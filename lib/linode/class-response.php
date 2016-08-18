@@ -39,7 +39,9 @@ class Response extends \BoxSpawner\Response_JSON {
 
 		if ( isset( $json['ERRORARRAY'] ) && count( $json['ERRORARRAY'] ) > 0 ) {
 			$error = $json['ERRORARRAY'][0];
-			throw new Exception( 'Linode API Error: ' . $json['ERRORMESSAGE'] );
+			if ( $error['ERRORCODE'] !== 0 ) {
+				throw new Exception( 'Linode API Error: ' . $json['ERRORMESSAGE'] );
+			}
 		}
 
 		return $json['DATA'];
