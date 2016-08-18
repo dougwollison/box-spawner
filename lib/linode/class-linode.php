@@ -31,4 +31,31 @@ class Linode extends API_Object {
 	 * @var string
 	 */
 	const ID_ATTRIBUTE = 'LinodeID';
+
+	/**
+	 * A list of Config objects tied to it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $configs = array();
+
+	/**
+	 * A list of Disk objects tied to it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $disks = array();
+
+	/**
+	 * A list of IP objects tied to it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $ips = array();
 }
