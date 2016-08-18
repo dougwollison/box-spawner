@@ -12,9 +12,11 @@ trait Deletable {
 	 *
 	 * @return bool The result of the delete request.
 	 */
-	public static function delete( $id, array $options = array() ) {
+	public function delete( $id, array $options = array() ) {
 		$options[ static::ID_ATTRIBUTE ] = $id;
 
-		return static::call_api( 'delete', $options );
+		$result = static::call_api( 'delete', $options );
+
+		return $result[ static::ID_ATTRIBUTE ] == $this->id;
 	}
 }

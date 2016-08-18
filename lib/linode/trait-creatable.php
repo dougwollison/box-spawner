@@ -11,7 +11,9 @@ trait Creatable {
 	 *
 	 * @return int|string The ID of the new object.
 	 */
-	public static function create( array $options = array() ) {
-		return static::call_api( 'create', $options );
+	public function create( array $options = array() ) {
+		$result = static::call_api( 'create', $options );
+
+		return $result[ static::ID_ATTRIBUTE ];
 	}
 }

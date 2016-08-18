@@ -12,9 +12,11 @@ trait Updatable {
 	 *
 	 * @return bool The result of the update request.
 	 */
-	public static function update( $id, array $options ) {
-		$options[ static::ID_ATTRIBUTE ] = $id;
+	public function update( array $options ) {
+		$options[ static::ID_ATTRIBUTE ] = $this->id;
 
-		return static::call_api( 'update', $options );
+		$result = static::call_api( 'update', $options );
+
+		return $result[ static::ID_ATTRIBUTE ] == $this->id;
 	}
 }
