@@ -40,10 +40,26 @@ class Response extends \BoxSpawner\Response_JSON {
 		if ( isset( $json['ERRORARRAY'] ) && count( $json['ERRORARRAY'] ) > 0 ) {
 			$error = $json['ERRORARRAY'][0];
 			if ( $error['ERRORCODE'] !== 0 ) {
-				throw new Exception( 'Linode API Error: ' . $json['ERRORMESSAGE'] );
+				throw new Exception( 'Linode API Error: ' . $error['ERRORMESSAGE'] );
 			}
 		}
 
-		return $json['DATA'];
+		// Get the response data
+		$data = $json['DATA'];
+
+		// Standardize the keys of the DATA entries if needed
+		if ( $json['ACTION'] == 'linode.config.list' ) {
+			$formatted = array();
+			foreach ( $data as $entry ) {
+				// Convert all keys to uppercase
+				$keys = array_map( 'strtoupper', array_keys( $entry ) );
+				$values = array_values( $entry );
+
+				$formatted[] = array_combine( $keys, $values );
+			}
+			$data = $formatted;
+		}
+
+		return $data;
 	}
 }
