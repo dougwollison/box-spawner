@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Linode_IP extends Asset {
+class Linode_IP extends API_Object {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -27,24 +27,6 @@ class Linode_IP extends Asset {
 	 * @var string
 	 */
 	const ID_ATTRIBUTE = 'IPAddresID';
-
-	/**
-	 * Create a new IP for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $options A hash of options for the create request.
-	 *      @option int    "LinodeID"    The ID of the linode to create from.
-	 *      @option bool   "IsPublic"    Wether or not the IP should be public.
-	 *
-	 * @return int|string The ID of the new object.
-	 */
-	public static function create( array $options ) {
-		// Determine the subaction to use
-		$action = $options['IsPublic'] ? 'addpublic' : 'addprivate';
-
-		return static::call_api( $action, $options );
-	}
 
 	/**
 	 * Set the rDNS name of a *public* IP.
@@ -66,40 +48,45 @@ class Linode_IP extends Asset {
 	}
 
 	/**
-	 * Transfer the IP Address to another linode.
-	 *
-	 * Updates the LINODEID attribute when performed.
+	 * Utility for transfer_to and swap_with methods.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode to assign the IP to.
+	 * @param array $options The options for the swap request.
 	 */
-	public function transfer( $linode_id ) {
-		$result = static::call_api( 'swap', array(
-			'IPAddressID' => $this->id,
-			'toLinodeID' => $linode_id,
-		) );
+	protected function swap( $options ) {
+		// Perform the swap request
+		$result = static::call_api( 'swap', $options );
 
 		// Update the LINODEID attribute
 		$this->attributes['LINODEID'] = $result[0]['LINODEID'];
 	}
 
 	/**
-	 * Swap the IP Address with another.
+	 * Transfer the IP Address to another linode.
 	 *
-	 * Updates the LINODEID attribute when performed.
+	 * @since 1.0.0
+	 *
+	 * @param int $linode_id The ID of the linode to assign the IP to.
+	 */
+	public function transfer_to( $linode_id ) {
+		$this->swap( array(
+			'IPAddressID' => $this->id,
+			'toLinodeID' => $linode_id,
+		) );
+	}
+
+	/**
+	 * Swap the IP Address with another.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param int $ipaddress_id The ID of the IP Address to swap with.
 	 */
-	public function swap( $ipaddress_id ) {
-		$result = static::call_api( 'swap', array(
+	public function swap_with( $ipaddress_id ) {
+		$this->swap( 'swap', array(
 			'IPAddressID' => $this->id,
 			'withIPAddressID' => $ipaddress_id,
 		) );
-
-		// Update the LINODEID attribute
-		$this->attributes['LINODEID'] = $result[0]['LINODEID'];
 	}
 }
