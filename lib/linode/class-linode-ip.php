@@ -29,6 +29,27 @@ class Linode_IP extends API_Object {
 	const ID_ATTRIBUTE = 'IPAddresID';
 
 	/**
+	 * Create a new IP for a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $options A hash of options for the create request.
+	 *      @option int    "LinodeID"    The ID of the linode to create from.
+	 *      @option bool   "IsPublic"    Wether or not the IP should be public.
+	 *
+	 * @return int|string The ID of the new object.
+	 */
+	public static function create( array $options ) {
+		// Determine the subaction to use
+		$action = 'addpublic';
+		if ( isset( $options['IsPublic'] ) && ! $options['IsPublic'] ) {
+			$action = 'addprivate';
+		}
+
+		return static::call_api( $action, $options );
+	}
+
+	/**
 	 * Set the rDNS name of a *public* IP.
 	 *
 	 * Updates the RDNS_NAME attribute when performed.
