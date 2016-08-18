@@ -19,8 +19,6 @@ namespace BoxSpawner\Linode;
  * @since 1.0.0
  */
 class Linode_IP extends Asset {
-	use Listable;
-
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -45,6 +43,6 @@ class Linode_IP extends Asset {
 		// Determine the subaction to use
 		$action = $options['IsPublic'] ? 'addpublic' : 'addprivate';
 
-		return static::request( 'linode.ip.' . $action, $options );
+		return static::request( $action, $options );
 	}
 }

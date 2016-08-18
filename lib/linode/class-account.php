@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Account extends API {
+class Account {
 	/**
 	 * List information about the current account.
 	 *
@@ -27,7 +27,7 @@ class Account extends API {
 	 * @return array The account information (opened date, balance, network usage, etc.).
 	 */
 	public static function get_info() {
-		return static::request( 'account.info' );
+		return API::request( 'account.info' );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Account extends API {
 				$data['PaymentTerm'] = $arg2;
 		}
 
-		return static::request( 'account.estimateinvoice', $data );
+		return API::request( 'account.estimateinvoice', $data );
 	}
 
 	/**
@@ -78,7 +78,7 @@ class Account extends API {
 		$options['username'] = $username;
 		$options['password'] = $password;
 
-		$result = static::request( 'user.getapikey', $options );
+		$result = API::request( 'user.getapikey', $options );
 
 		return $result['API_KEY'];
 	}

@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Information extends API {
+class Information {
 	/**
 	 * Get the machine-readable API specification.
 	 *
@@ -27,7 +27,7 @@ class Information extends API {
 	 * @return array The full specification list of the Linode API.
 	 */
 	public static function get_api_spec() {
-		return static::request( 'api.spec' );
+		return API::request( 'api.spec' );
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Information extends API {
 	 * @return array The list of datacenters.
 	 */
 	public static function list_datacenters() {
-		return static::request( 'avail.datacenters' );
+		return API::request( 'avail.datacenters' );
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Information extends API {
 	 * @return array The list of distributions.
 	 */
 	public static function list_distributions() {
-		return static::request( 'avail.distributions' );
+		return API::request( 'avail.distributions' );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Information extends API {
 	 * @return array The information of the requested distribution.
 	 */
 	public static function get_distribution( $distribution_id ) {
-		return static::request( 'avail.distributions', array(
+		return API::request( 'avail.distributions', array(
 			'DistributionID' => $distribution_id,
 		) );
 	}
@@ -75,7 +75,7 @@ class Information extends API {
 	 * @return array The list of kernels.
 	 */
 	public static function list_kernels( array $filter = array() ) {
-		return static::request( 'avail.kernels', $filter );
+		return API::request( 'avail.kernels', $filter );
 	}
 
 	/**
@@ -86,7 +86,7 @@ class Information extends API {
 	 * @return array The list of plans.
 	 */
 	public static function list_linodeplans() {
-		return static::request( 'avail.linodeplans' );
+		return API::request( 'avail.linodeplans' );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Information extends API {
 	 * @return array The information of the requested plan.
 	 */
 	public static function get_linodeplan( $plan_id ) {
-		return static::request( 'avail.linodeplans', array(
+		return API::request( 'avail.linodeplans', array(
 			'PlanID' => $plan_id,
 		) );
 	}
@@ -110,7 +110,7 @@ class Information extends API {
 	 * @return array The pricing information.
 	 */
 	public static function list_nodebalancers() {
-		return static::request( 'avail.nodebalancers' );
+		return API::request( 'avail.nodebalancers' );
 	}
 
 	/**
@@ -123,6 +123,6 @@ class Information extends API {
 	 * @return array The list of scripts.
 	 */
 	public static function list_stackscripts( array $filter = array() ) {
-		return static::request( 'avail.stackscripts', $filter );
+		return API::request( 'avail.stackscripts', $filter );
 	}
 }

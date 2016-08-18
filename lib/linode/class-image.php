@@ -19,7 +19,7 @@ namespace BoxSpawner\Linode;
  * @since 1.0.0
  */
 class Image extends API_Object {
-	use Deletable, Updatable, Listable;
+	use Deletable, Updatable;
 
 	/**
 	 * The name of the option to assign the ID to.

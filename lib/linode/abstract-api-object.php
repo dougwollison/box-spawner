@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-abstract class API_Object extends API {
+abstract class API_Object {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -79,11 +79,45 @@ abstract class API_Object extends API {
 	 * @return mixed The result of the request.
 	 */
 	protected static function request( $action, array $data = array() ) {
-		// Figure out the name of the object class this was called from
-		$object = substr( get_called_class(), strlen( __NAMESPACE__ ) + 1 );
+		// If the full action name isn't specified, figure it out
+		if ( strpos( $action, '.' ) === false ) {
+			// Figure out the name of the object class this was called from
+			$object = substr( get_called_class(), strlen( __NAMESPACE__ ) + 1 );
 
-		$action = strtolower( str_replace( '_' , '.', $object ) ) . '.' . $action;
+			$action = strtolower( str_replace( '_' , '.', $object ) ) . '.' . $action;
+		}
 
-		return parent::request( $action, $data );
+		return API::request( $action, $data );
+	}
+
+	/**
+	 * List all existing objects.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter A hash of options for the list request.
+	 *
+	 * @return array The list of objects.
+	 */
+	public static function all( array $filter = array() ) {
+		return static::request( 'list', $filter );
+	}
+
+	/**
+	 * Get a specific object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int|string $id      The ID of the object being fetched.
+	 * @param array      $options Optional A hash of options for the get request.
+	 *
+	 * @return int|string The ID of the new object.
+	 */
+	public static function fetch( $id, array $options = array() ) {
+		$options[ static::ID_ATTRIBUTE ] = $id;
+
+		$result = static::request( 'list', $options );
+
+		return $result[0];
 	}
 }
