@@ -36,13 +36,13 @@ abstract class Asset extends API_Object {
 	 * @param int|array $data Either an the ID of an existing object, or settings to create one with.
 	 */
 	public function __construct( $data, API $parent ) {
+		// Store the parent
+		$this->parent = $parent;
+
 		if ( is_array( $data ) ) {
 			// Create a new one, replacing $data with the ID
 			$data = static::create( $data );
 		}
-
-		// Store the parent
-		$this->parent = $parent;
 
 		// Store the ID
 		$this->id = $data;
