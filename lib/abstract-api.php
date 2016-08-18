@@ -31,7 +31,7 @@ abstract class API {
 	 *
 	 * @return array The headers array and body string.
 	 */
-	protected static function request( $endpoint, array $data = array() ) {
+	public static function request( $endpoint, array $data = array() ) {
 		// Get the calling class' name
 		$source = get_called_class();
 

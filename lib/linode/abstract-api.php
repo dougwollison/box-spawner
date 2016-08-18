@@ -50,7 +50,7 @@ abstract class API extends \BoxSpawner\API {
 	 *
 	 * @see BoxSpawner\API::request() for parameter details.
 	 */
-	protected static function request( $endpoint, array $data = array() ) {
+	public static function request( $endpoint, array $data = array() ) {
 		if ( ! empty( static::$api_key ) ) {
 			$data['api_key'] = static::$api_key;
 		}
