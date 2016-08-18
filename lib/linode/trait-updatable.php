@@ -15,6 +15,6 @@ trait Updatable {
 	public static function update( $id, array $options ) {
 		$options[ static::ID_ATTRIBUTE ] = $id;
 
-		return static::request( 'update', $options );
+		return static::call_api( 'update', $options );
 	}
 }

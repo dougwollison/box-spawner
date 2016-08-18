@@ -15,6 +15,6 @@ trait Deletable {
 	public static function delete( $id, array $options = array() ) {
 		$options[ static::ID_ATTRIBUTE ] = $id;
 
-		return static::request( 'delete', $options );
+		return static::call_api( 'delete', $options );
 	}
 }

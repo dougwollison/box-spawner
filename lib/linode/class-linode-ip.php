@@ -43,6 +43,6 @@ class Linode_IP extends Asset {
 		// Determine the subaction to use
 		$action = $options['IsPublic'] ? 'addpublic' : 'addprivate';
 
-		return static::request( $action, $options );
+		return static::call_api( $action, $options );
 	}
 }

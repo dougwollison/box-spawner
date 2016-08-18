@@ -12,6 +12,6 @@ trait Creatable {
 	 * @return int|string The ID of the new object.
 	 */
 	public static function create( array $options = array() ) {
-		return static::request( 'create', $options );
+		return static::call_api( 'create', $options );
 	}
 }

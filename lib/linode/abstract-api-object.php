@@ -18,54 +18,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-abstract class API_Object {
-	/**
-	 * The name of the option to assign the ID to.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string
-	 */
-	const ID_ATTRIBUTE = '';
-
-	/**
-	 * The ID of the object.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var int
-	 */
-	public $id;
-
-	/**
-	 * The attributes of the object.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var array
-	 */
-	public $attributes;
-
-	/**
-	 * Create a new object or retrieve and existing one.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int|array $data Either an the ID of an existing object, or settings to create one with.
-	 */
-	public function __construct( $data ) {
-		if ( is_array( $data ) ) {
-			// Create a new one, replacing $data with the ID
-			$data = static::create( $data );
-		}
-
-		// Store the ID
-		$this->id = $data;
-
-		// Fetch the attributes and store
-		$this->attributes = static::fetch( $data );
-	}
-
+abstract class API_Object extends \BoxSpawner\API_Object {
 	/**
 	 * Perform a particular action request.
 	 *
@@ -78,7 +31,7 @@ abstract class API_Object {
 	 *
 	 * @return mixed The result of the request.
 	 */
-	protected static function request( $action, array $data = array() ) {
+	protected static function call_api( $action, array $data = array() ) {
 		// If the full action name isn't specified, figure it out
 		if ( strpos( $action, '.' ) === false ) {
 			// Figure out the name of the object class this was called from
@@ -100,7 +53,7 @@ abstract class API_Object {
 	 * @return array The list of objects.
 	 */
 	public static function all( array $filter = array() ) {
-		return static::request( 'list', $filter );
+		return static::call_api( 'list', $filter );
 	}
 
 	/**
@@ -116,7 +69,7 @@ abstract class API_Object {
 	public static function fetch( $id, array $options = array() ) {
 		$options[ static::ID_ATTRIBUTE ] = $id;
 
-		$result = static::request( 'list', $options );
+		$result = static::call_api( 'list', $options );
 
 		return $result[0];
 	}
