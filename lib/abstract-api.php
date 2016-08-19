@@ -31,7 +31,7 @@ abstract class API {
 	 *
 	 * @return array The headers array and body string.
 	 */
-	public static function request( $endpoint, array $data = array() ) {
+	public static function request( $endpoint, array $data = array(), array $headers = array(), $method = 'GET' ) {
 		// Get the calling class' name
 		$source = get_called_class();
 
@@ -43,7 +43,7 @@ abstract class API {
 		$response_class = $namespace . '\\Response';
 
 		// Create the request & response
-		$request  = new $request_class( $endpoint, $data );
+		$request  = new $request_class( $endpoint, $data, $headers, $method );
 		$response = new $response_class( $request );
 
 		// Return it's result
