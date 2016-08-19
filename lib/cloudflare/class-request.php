@@ -19,7 +19,7 @@ namespace BoxSpawner\CloudFlare;
  *
  * @since 1.0.0
  */
-class Request extends \BoxSpawner\Request_REST {
+class Request extends \BoxSpawner\JSON_Request {
 	/**
 	 * The base endpoint URL.
 	 *

@@ -19,7 +19,7 @@ namespace BoxSpawner\Linode;
  *
  * @since 1.0.0
  */
-class Response extends \BoxSpawner\Response_JSON {
+class Response extends \BoxSpawner\JSON_Response {
 	/**
 	 * Get the results of the request.
 	 *
