@@ -85,6 +85,6 @@ abstract class REST_Object extends API_Object {
 	 */
 	public static function fetch( $id, array $options = array() ) {
 		$endpoint = static::ENDPOINT_FORMAT . '/' . $id;
-		return static::call_api( $endpoint, $filter );
+		return static::call_api( $endpoint, $options );
 	}
 }
