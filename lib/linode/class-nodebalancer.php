@@ -29,4 +29,13 @@ class Nodebalancer extends API_Object {
 	 * @var string
 	 */
 	const ID_ATTRIBUTE = 'NodeBalancerID';
+
+	/**
+	 * A list of Nodebalancer_Config objects tied to it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $configs = array();
 }
