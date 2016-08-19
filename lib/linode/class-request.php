@@ -37,6 +37,8 @@ class Request extends \BoxSpawner\Request {
 	/**
 	 * Set the options on the cURL handle.
 	 *
+	 * Adds the api_action value.
+	 *
 	 * @since 1.0.0
 	 */
 	protected function setup() {
