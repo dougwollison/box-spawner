@@ -44,10 +44,9 @@ class Nodebalancer_Config extends API_Object {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type    The type of object to load.
-	 * @param array  $options Optional The create request parameters.
+	 * @param array $options Optional The create request parameters.
 	 *
-	 * @return API_Object The new object.
+	 * @return Nodebancer_Node The new object.
 	 */
 	protected function add_node( $options = array() ) {
 		// Add the ID attribute to the options
@@ -89,6 +88,8 @@ class Nodebalancer_Config extends API_Object {
 	 * @since 1.0.0
 	 *
 	 * @param int $id The ID of the Node to load.
+	 *
+	 * @return Nodebancer_Node The node object.
 	 */
 	public function load_node( $id ) {
 		$entries = Nodebalancer_Node::fetch( $id, array(

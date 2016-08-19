@@ -162,6 +162,8 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	 *
 	 * @param string $type The type of object to load.
 	 * @param int    $id   The ID of the object to load.
+	 *
+	 * @return API_Object The loaded object.
 	 */
 	public function load_child( $type, $id ) {
 		// Get the class name for the child object
