@@ -112,10 +112,7 @@ trait Dependable {
 		// Get the class name for the child object
 		$class = get_class( $this ) . '_' . ucwords( $type );
 
-		$id_attr = $class::ID_ATTRIBUTE;
-
-		$entries = $class::all( array(
-			$id_attr => $id,
+		$entries = $class::fetch( $id, array(
 			static::ID_ATTRIBUTE => $this->id,
 		) );
 
