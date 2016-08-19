@@ -18,6 +18,6 @@ namespace BoxSpawner\CloudFlare;
  *
  * @since 1.0.0
  */
-abstract class API_Object extends \BoxSpawner\API_Object {
+abstract class API_Object extends \BoxSpawner\REST_Object {
 	// to be written
 }
