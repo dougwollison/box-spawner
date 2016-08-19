@@ -33,7 +33,7 @@ abstract class REST_Response extends JSON_Response {
 
 		$json = $result['body'];
 
-		if ( ! isset( $json['result'] ) ) {
+		if ( ! isset( $json['success'] ) ) {
 			throw new Exception( 'Unrecognized response format. "result" entry should be present.' );
 		}
 
