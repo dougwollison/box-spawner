@@ -33,7 +33,7 @@ class Linode extends API_Object {
 	const ID_ATTRIBUTE = 'LinodeID';
 
 	/**
-	 * A list of Config objects tied to it.
+	 * A list of Linode_Config objects tied to it.
 	 *
 	 * @since 1.0.0
 	 *
@@ -42,7 +42,7 @@ class Linode extends API_Object {
 	protected $configs = array();
 
 	/**
-	 * A list of Disk objects tied to it.
+	 * A list of Linode_Disk objects tied to it.
 	 *
 	 * @since 1.0.0
 	 *
@@ -51,7 +51,7 @@ class Linode extends API_Object {
 	protected $disks = array();
 
 	/**
-	 * A list of IP objects tied to it.
+	 * A list of Linode_IP objects tied to it.
 	 *
 	 * @since 1.0.0
 	 *
