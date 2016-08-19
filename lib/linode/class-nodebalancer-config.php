@@ -19,7 +19,7 @@ namespace BoxSpawner\Linode;
  * @since 1.0.0
  */
 class Nodebalancer_Config extends API_Object {
-	use Creatable, Deletable, Updatable;
+	use Creatable, Deletable, Updatable, \BoxSpawner\Dependable;
 
 	/**
 	 * The name of the option to assign the ID to.

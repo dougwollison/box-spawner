@@ -19,6 +19,8 @@ namespace BoxSpawner\CloudFlare;
  * @since 1.0.0
  */
 class Zone_Record extends API_Object {
+	use \BoxSpawner\REST_Createable, \BoxSpawner\REST_Deleteable, \BoxSpawner\REST_Updateable;
+
 	/**
 	 * The endpoint template.
 	 *

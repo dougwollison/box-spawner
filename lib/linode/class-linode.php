@@ -21,7 +21,7 @@ use \BoxSpawner as Framework;
  * @since 1.0.0
  */
 class Linode extends API_Object {
-	use Creatable, Deletable, Updatable;
+	use Creatable, Deletable, Updatable, \BoxSpawner\Dependable;
 
 	/**
 	 * The name of the option to assign the ID to.
