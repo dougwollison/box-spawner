@@ -150,7 +150,7 @@ class Linode extends API_Object {
 	public function resize( $plan_id ) {
 		$options = array(
 			'LinodeID' => $this->id,
-			'PlanID' => $plan_id,
+			'PlanID'   => $plan_id,
 		);
 
 		static::call_api( 'resize', $options );
@@ -170,9 +170,9 @@ class Linode extends API_Object {
 	 */
 	public function duplicate( $options ) {
 		$defaults = array(
-			'LinodeID' => $this->id,
+			'LinodeID'     => $this->id,
 			'DatacenterID' => $this->attributes['DATACENTERID'],
-			'PlanID' => $this->attributes['PLANID'],
+			'PlanID'       => $this->attributes['PLANID'],
 		);
 		$options = array_merge( $defaults, $options );
 

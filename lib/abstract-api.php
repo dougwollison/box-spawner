@@ -39,13 +39,11 @@ abstract class API {
 		$namespace = preg_replace( '/\\\(\w+)$/', '', $source );
 
 		// Create the request/response class names
-		$request_class = $namespace . '\\Request';
+		$request_class  = $namespace . '\\Request';
 		$response_class = $namespace . '\\Response';
 
-		// Create the request
-		$request = new $request_class( $endpoint, $data );
-
-		// Create a response from it
+		// Create the request & response
+		$request  = new $request_class( $endpoint, $data );
 		$response = new $response_class( $request );
 
 		// Return it's result

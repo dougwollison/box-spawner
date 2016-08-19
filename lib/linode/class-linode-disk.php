@@ -64,7 +64,7 @@ class Linode_Disk extends API_Object {
 	public function duplicate() {
 		$options = array(
 			'LinodeID' => $this->attributes['LINODEID'],
-			'DiskID' => $this->id,
+			'DiskID'   => $this->id,
 		);
 
 		$result = static::call_api( 'duplicate', $options );
@@ -82,8 +82,8 @@ class Linode_Disk extends API_Object {
 	public function resize( $size ) {
 		$options = array(
 			'LinodeID' => $this->attributes['LINODEID'],
-			'DiskID' => $this->id,
-			'size' => $size,
+			'DiskID'   => $this->id,
+			'size'     => $size,
 		);
 
 		static::call_api( 'resize', $options );
@@ -100,7 +100,7 @@ class Linode_Disk extends API_Object {
 	 */
 	public function imagize( $options ) {
 		$options['LinodeID'] = $this->attributes['LINODEID'];
-		$options['DiskID'] = $this->id;
+		$options['DiskID']   = $this->id;
 
 		$result = static::call_api( 'imageize', $options );
 

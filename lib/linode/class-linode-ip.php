@@ -93,7 +93,7 @@ class Linode_IP extends API_Object {
 	public function transfer_to( $linode_id ) {
 		$this->swap( array(
 			'IPAddressID' => $this->id,
-			'toLinodeID' => $linode_id,
+			'toLinodeID'  => $linode_id,
 		) );
 	}
 
@@ -106,7 +106,7 @@ class Linode_IP extends API_Object {
 	 */
 	public function swap_with( $ipaddress_id ) {
 		$this->swap( 'swap', array(
-			'IPAddressID' => $this->id,
+			'IPAddressID'     => $this->id,
 			'withIPAddressID' => $ipaddress_id,
 		) );
 	}
