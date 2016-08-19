@@ -26,7 +26,7 @@ abstract class API_Object {
 	 *
 	 * @var string
 	 */
-	const ID_ATTRIBUTE = '';
+	const ID_ATTRIBUTE = 'id';
 
 	/**
 	 * The ID of the object.
@@ -57,9 +57,9 @@ abstract class API_Object {
 	public function __construct( $id, array $data = array() ) {
 		// If $id is NULL, create a new one
 		if ( is_null( $id ) ) {
-			// Replace $id with the result and empty $data
-			$id = $this->create( $data );
-			$data = array();
+			// Perform the create request, get the data and ID
+			$data = $this->create( $data );
+			$id = $data[ static::ID_ATTRIBUTE ];
 		}
 
 		// Store the ID
