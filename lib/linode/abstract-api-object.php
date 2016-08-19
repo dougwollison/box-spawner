@@ -25,7 +25,7 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	 * @since 1.0.0
 	 *
 	 * @param int|string $id   Either an ID of an existing one, or NULL to create one.
-	 * @param int|array  $data Either the attributes for an already fetched one, or the options for creating one.
+	 * @param int|array  $data Optional Either the attributes for an already fetched one, or the options for creating one.
 	 */
 	public function __construct( $id, array $data = array() ) {
 		// If $id is NULL, create a new one
@@ -55,7 +55,7 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	 * @since 1.0.0
 	 *
 	 * @param string $action The action to perform.
-	 * @param array  $data   The data for the request.
+	 * @param array  $data   Optional The data for the request.
 	 *
 	 * @return mixed The result of the request.
 	 */
