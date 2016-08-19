@@ -29,4 +29,13 @@ class Domain extends API_Object {
 	 * @var string
 	 */
 	const ID_ATTRIBUTE = 'DomainID';
+
+	/**
+	 * A list of Domain_Resource objects tied to it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $resources = array();
 }
