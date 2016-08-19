@@ -19,7 +19,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-abstract class JSON_Request {
+abstract class JSON_Request extends Request {
 	/**
 	 * Set the options on the cURL handle.
 	 *
