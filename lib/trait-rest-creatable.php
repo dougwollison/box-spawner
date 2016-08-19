@@ -7,7 +7,7 @@
  *
  * @since 1.0.0
  */
-namespace BoxSpawner\Linode;
+namespace BoxSpawner;
 
 /**
  * The REST Creatable trait.
