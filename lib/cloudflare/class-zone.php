@@ -29,4 +29,13 @@ class Zone extends API_Object {
 	 * @var string
 	 */
 	const ENDPOINT_FORMAT = 'zones';
+
+	/**
+	 * A list of Zone_Record objects tied to it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $records = array();
 }
