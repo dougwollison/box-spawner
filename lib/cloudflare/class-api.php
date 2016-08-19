@@ -19,5 +19,54 @@ namespace BoxSpawner\CloudFlare;
  * @since 1.0.0
  */
 abstract class API extends \BoxSpawner\API {
-	// to be written
+	/**
+	 * The API email for all requests.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	protected static $api_email;
+
+	/**
+	 * The API key for all requests.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	protected static $api_key;
+
+	/**
+	 * Set the API key.
+	 *
+	 * @api
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $email The API email to set with.
+	 * @param string $key   The API key to set with.
+	 */
+	public static function set_auth( $email, $key ) {
+		static::$api_email = $email;
+		static::$api_key   = $key;
+	}
+
+	/**
+	 * The main cURL request method.
+	 *
+	 * Adds the X-Auth-* headers.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @see BoxSpawner\API::request() for parameter details.
+	 */
+	public static function request( $endpoint, array $data = array(), array $headers = array(), $method = 'GET' ) {
+		$headers = array(
+			'X-Auth-Email: ' . static::$api_email,
+			'X-Auth-Key: '   . static::$api_key,
+		);
+
+		return parent::request( $endpoint, $data, $headers, $method );
+	}
 }
