@@ -44,6 +44,8 @@ class Image extends API_Object {
 	 * @return int|string The ID of the new object.
 	 */
 	public static function create( array $options = array() ) {
-		return static::call_api( 'linode.disk.imageize', $options );
+		$result = static::call_api( 'linode.disk.imageize', $options );
+
+		return $result['ImageID'];
 	}
 }
