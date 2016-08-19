@@ -19,7 +19,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-abstract class Response_REST extends Response_JSON {
+abstract class REST_Response extends JSON_Response {
 	/**
 	 * Get the results of the request.
 	 *
