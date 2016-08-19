@@ -39,10 +39,11 @@ abstract class REST_Object extends API_Object {
 	 *
 	 * @param string $action The action to perform.
 	 * @param array  $data   The data for the request.
+	 * @param string $method Optional The request method to use.
 	 *
 	 * @return mixed The result of the request.
 	 */
-	protected static function call_api( $action, array $data = array() ) {
+	protected static function call_api( $action, array $data = array(), $method = 'GET' ) {
 		// Process the endpoint, placing the arguments in matching placeholders
 		foreach ( $data as $key => $value ) {
 			if ( strpos( $endpoint, ":{$key}" ) !== false ) {
@@ -56,7 +57,7 @@ abstract class REST_Object extends API_Object {
 		// Get the API class to use
 		$api_class = $namespace . '\\API';
 
-		return $api_class::request( $endpoint, $data );
+		return $api_class::request( $endpoint, $data, array(), $method );
 	}
 
 	/**
