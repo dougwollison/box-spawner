@@ -3,7 +3,7 @@
  * The JSON Response Object.
  *
  * @package Box_Spawner
- * @subpackage Linode
+ * @subpackage Framework
  *
  * @since 1.0.0
  */

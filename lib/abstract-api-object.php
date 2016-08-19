@@ -3,7 +3,7 @@
  * The API Object Framework.
  *
  * @package Box_Spawner
- * @subpackage DigitalOcean
+ * @subpackage Framework
  *
  * @since 1.0.0
  */
