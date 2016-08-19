@@ -8,7 +8,7 @@
  * @since 1.0.0
  */
 
-namespace BoxSpawner\CloudeFlare;
+namespace BoxSpawner\CloudFlare;
 
 /**
  * The Response class.

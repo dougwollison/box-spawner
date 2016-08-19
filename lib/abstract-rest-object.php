@@ -43,7 +43,7 @@ abstract class REST_Object extends API_Object {
 	 *
 	 * @return mixed The result of the request.
 	 */
-	protected static function call_api( $action, array $data = array(), $method = 'GET' ) {
+	protected static function call_api( $endpoint, array $data = array(), $method = 'GET' ) {
 		// Process the endpoint, placing the arguments in matching placeholders
 		foreach ( $data as $key => $value ) {
 			if ( strpos( $endpoint, ":{$key}" ) !== false ) {

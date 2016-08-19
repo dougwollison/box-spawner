@@ -19,7 +19,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-abstract class Response_JSON extends Response {
+abstract class JSON_Response extends Response {
 	/**
 	 * A reference of JSON deconding errors.
 	 *
