@@ -19,7 +19,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-class Response {
+abstract class Response {
 	/**
 	 * The original request object.
 	 *

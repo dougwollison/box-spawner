@@ -19,7 +19,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-class Request {
+abstract class Request {
 	/**
 	 * The base endpoint URL.
 	 *
