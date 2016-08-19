@@ -1,6 +1,21 @@
 <?php
+/**
+ * The Linode Creatable Framework.
+ *
+ * @package Box_Spawner
+ * @subpackage Linode
+ *
+ * @since 1.0.0
+ */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Creatable trait.
+ *
+ * @internal Used by Linode objects that support the standard create request.
+ *
+ * @since 1.0.0
+ */
 trait Creatable {
 	/**
 	 * Create a new object.

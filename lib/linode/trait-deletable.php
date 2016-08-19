@@ -1,6 +1,21 @@
 <?php
+/**
+ * The Linode Deletable Framework.
+ *
+ * @package Box_Spawner
+ * @subpackage Linode
+ *
+ * @since 1.0.0
+ */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Deletable trait.
+ *
+ * @internal Used by Linode objects that support the standard delete request.
+ *
+ * @since 1.0.0
+ */
 trait Deletable {
 	/**
 	 * Delete an existing object.

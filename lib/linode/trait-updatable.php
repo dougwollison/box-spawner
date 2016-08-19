@@ -1,6 +1,21 @@
 <?php
+/**
+ * The Linode Updatable Framework.
+ *
+ * @package Box_Spawner
+ * @subpackage Linode
+ *
+ * @since 1.0.0
+ */
 namespace BoxSpawner\Linode;
 
+/**
+ * The Updatable trait.
+ *
+ * @internal Used by Linode objects that support the standard update request.
+ *
+ * @since 1.0.0
+ */
 trait Updatable {
 	/**
 	 * Update an existing object.
