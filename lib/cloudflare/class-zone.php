@@ -19,7 +19,16 @@ namespace BoxSpawner\CloudFlare;
  * @since 1.0.0
  */
 class Zone extends API_Object {
-	use \BoxSpawner\REST_Creatable, \BoxSpawner\REST_Deletable, \BoxSpawner\REST_Updatable, \BoxSpawner\Dependable;
+	use \BoxSpawner\REST_Creatable, \BoxSpawner\REST_Deletable, \BoxSpawner\REST_Updatable, \BoxSpawner\REST_Dependable;
+
+	/**
+	 * The name of the option to assign the ID to.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	const ID_ATTRIBUTE = 'zone_id';
 
 	/**
 	 * The endpoint template.
