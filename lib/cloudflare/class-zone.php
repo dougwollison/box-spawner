@@ -19,5 +19,12 @@ namespace BoxSpawner\CloudFlare;
  * @since 1.0.0
  */
 class Zone extends API_Object {
-	// to be written
+	/**
+	 * The endpoint template.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	const ENDPOINT_FORMAT = 'zones';
 }
