@@ -126,6 +126,7 @@ abstract class Request {
 	 * @param string $action  The specific action/endpoint for the request.
 	 * @param array  $data    Optional The data to send in the request.
 	 * @param array  $headers Optional A list of custom headers to pass.
+	 * @param string $method  Optional The method to use for the request.
 	 */
 	public function __construct( $endpoint, array $data = array(), array $headers = array(), $method = 'GET' ) {
 		$this->endpoint = $endpoint;

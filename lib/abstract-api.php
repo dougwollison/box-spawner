@@ -28,6 +28,8 @@ abstract class API {
 	 *
 	 * @param string $endpoint The specific endpoint/action for the request.
 	 * @param array  $data     Optional The data to send in the request.
+	 * @param array  $headers  Optional A list of custom headers to pass.
+	 * @param string $method   Optional The method to use for the request.
 	 *
 	 * @return array The headers array and body string.
 	 */
