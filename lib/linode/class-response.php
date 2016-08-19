@@ -23,7 +23,7 @@ class Response extends \BoxSpawner\Response_JSON {
 	/**
 	 * Get the results of the request.
 	 *
-	 * Return an array contianing all headers (parsed) and the body.
+	 * Return the JSON decoded DATA of the body.
 	 *
 	 * @since 1.0.0
 	 */
