@@ -160,3 +160,4 @@ trait Dependable {
 
 		throw new Exception( sprintf( 'Invalid method "%s" for class "%s"', $name, get_class( $this ) ) );
 	}
+}
