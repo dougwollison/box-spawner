@@ -19,6 +19,6 @@ namespace BoxSpawner\CloudFlare;
  *
  * @since 1.0.0
  */
-class Response extends \BoxSpawner\JSON_Response {
+class Response extends \BoxSpawner\REST_Response {
 	// to be written
 }
