@@ -43,9 +43,11 @@ class Response {
 	/**
 	 * Get the results of the request.
 	 *
-	 * Return an array contianing all headers (parsed) and the body.
-	 *
 	 * @since 1.0.0
+	 *
+	 * @return array The parsed response.
+	 *     @option array  "headers" The response headers.
+	 *     @option string "body"    The response body.
 	 */
 	public function result() {
 		$handler = $this->request->get_curl_handle();

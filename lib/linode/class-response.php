@@ -23,9 +23,9 @@ class Response extends \BoxSpawner\Response_JSON {
 	/**
 	 * Get the results of the request.
 	 *
-	 * Return the JSON decoded DATA of the body.
-	 *
 	 * @since 1.0.0
+	 *
+	 * @return array The JSON decoded DATA.
 	 */
 	public function result() {
 		// Get the decoded result
