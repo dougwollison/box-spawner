@@ -79,7 +79,8 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $options The create request parameters.
+	 * @param string $type    The type of object to load.
+	 * @param array  $options Optional The create request parameters.
 	 *
 	 * @return API_Object The new object.
 	 */
@@ -119,14 +120,11 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	 * @param int|string $id   The ID of the object to get.
 	 */
 	protected function get_child( $type, $id ) {
-		// Get the class name for the child object
-		$class = get_class( $this ) . '_' . ucwords( $type );
-
 		if ( isset( $this->{"{$type}s"}[ $id ] ) ) {
 			return $this->{"{$type}s"}[ $id ];
+		} else {
+			return $this->load_child( $type, $id );
 		}
-
-		return false;
 	}
 
 	/**
@@ -135,6 +133,8 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 	 * All returned objects will be added to the matching list.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param string $type The type of object to load.
 	 */
 	public function load_children( $type ) {
 		// Get the class name for the child object
@@ -153,6 +153,32 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 
 			$this->{"{$type}s"}[ $object->id ] = $object;
 		}
+	}
+
+	/**
+	 * Load a specific child object of a type for this object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type The type of object to load.
+	 * @param int    $id   The ID of the object to load.
+	 */
+	public function load_child( $type, $id ) {
+		// Get the class name for the child object
+		$class = get_class( $this ) . '_' . ucwords( $type );
+
+		$id_attr = $class::ID_ATTRIBUTE;
+
+		$entries = $class::all( array(
+			$id_attr => $id,
+			static::ID_ATTRIBUTE => $this->id,
+		) );
+
+		$object = new $class( $id, $entry );
+
+		$this->{"{$type}s"}[ $object->id ] = $object;
+
+		return $object;
 	}
 
 	/**
@@ -182,6 +208,9 @@ abstract class API_Object extends \BoxSpawner\API_Object {
 		} else
 		if ( preg_match( '/^load_(\w+)s$/', $name, $match ) ) {
 			return $this->load_children( $match[1], $arg );
+		} else
+		if ( preg_match( '/^load_(\w+)$/', $name, $match ) ) {
+			return $this->load_child( $match[1], $arg );
 		}
 
 		throw new Exception( sprintf( 'Invalid method "%s" for class "%s"', $name, get_class( $this ) ) );
