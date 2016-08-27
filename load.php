@@ -10,6 +10,8 @@
 
 namespace BoxSpawner;
 
+define( __NAMESPACE__ . '\\BASEDIR', __DIR__ );
+
 /**
  * The class autoloader.
  *
@@ -29,17 +31,25 @@ function autoload( $fullname ) {
 	// Remove the root namespace
 	$name = substr( $fullname, strlen( __NAMESPACE__ ) + 1 );
 
+	// Default to framework directory
+	$basesdir = BASEDIR . '/framework/';
+
+	// Switch to vendor directory if there's a sub-namespace
+	if ( strpos( $name, '\\' ) !== false ) {
+		$basesdir = BASEDIR . '/vendor/';
+	}
+
 	// Convert to lowercase, hyphenated form
-	$name = preg_replace( '/[^a-z\\\]+/', '-', strtolower( $name ) );
+	$name = preg_replace( '/[^\w+\\\]+/', '-', strtolower( $name ) );
 
 	// Loop through each class type and try to load it
 	$types = array( 'abstract', 'class', 'interface', 'trait' );
 	foreach ( $types as $type ) {
 		// Prefix the last part of the name with the type
-		$file = preg_replace( '/([a-z\-]+)$/', "{$type}-$1", $name );
+		$file = preg_replace( '/([\w\-]+)$/', "{$type}-$1", $name );
 
 		// Create the full path
-		$file = __DIR__ . '/lib/' . str_replace( '\\', DIRECTORY_SEPARATOR, $file ) . '.php';
+		$file = $basesdir . str_replace( '\\', DIRECTORY_SEPARATOR, $file ) . '.php';
 
 		// Test if the file exists, load if so
 		if ( file_exists( $file ) ) {
