@@ -12,6 +12,9 @@ namespace BoxSpawner;
 
 define( __NAMESPACE__ . '\\BASEDIR', __DIR__ );
 
+// Load the register_vendor utility
+require( BASEDIR . '/register.php' );
+
 /**
  * The class autoloader.
  *
