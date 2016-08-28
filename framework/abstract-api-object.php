@@ -35,7 +35,7 @@ abstract class API_Object {
 	 *
 	 * @var BoxSpawner\API
 	 */
-	public $api;
+	protected $api;
 
 	/**
 	 * The ID of the object.
@@ -65,6 +65,60 @@ abstract class API_Object {
 	 * @param int|array      $data Either the attributes for an already fetched one, or the options for creating one.
 	 */
 	public function __construct( API $api, $id, array $data = array() ) {
-		// to be written
+		// Store the API
+		$this->api = $api;
+
+		if ( is_null( $id ) ) {
+			$this->create( $data );
+		} elseif ( empty( $data ) ) {
+			$this->load( $id );
+		} else {
+			$this->id = $id;
+			$this->attributes = $data;
+		}
+	}
+
+	/**
+	 * Issue a create request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the create request.
+	 */
+	public function create( array $data ) {
+		throw new NotSupportedException( sprintf( 'The class "%s" does not support create requests.', get_class( $this ) ) );
+	}
+
+	/**
+	 * Issue a create request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the create request.
+	 */
+	public function load( array $data ) {
+		throw new NotSupportedException( sprintf( 'The class "%s" does not support load requests.', get_class( $this ) ) );
+	}
+
+	/**
+	 * Issue a create request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the create request.
+	 */
+	public function update( array $data ) {
+		throw new NotSupportedException( sprintf( 'The class "%s" does not support update requests.', get_class( $this ) ) );
+	}
+
+	/**
+	 * Issue a create request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the create request.
+	 */
+	public function delete( array $data ) {
+		throw new NotSupportedException( sprintf( 'The class "%s" does not support delete requests.', get_class( $this ) ) );
 	}
 }
