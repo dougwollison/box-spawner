@@ -80,9 +80,9 @@ class API extends \BoxSpawner\JSON_API {
 	 * @return array The headers for the request.
 	 */
 	protected function get_request_headers( $data, $options ) {
-		$headers = parent::get_request_headers( $data, $options );
-
-		$headers[] = 'Authorization: Basic ' . base64_encode( "api_key:{$this->api_key}" );
+		$headers = array(
+			'Authorization: Basic ' . base64_encode( "api_key:{$this->api_key}" ),
+		);
 
 		return $headers;
 	}
