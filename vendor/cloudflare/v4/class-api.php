@@ -71,7 +71,7 @@ class API extends \BoxSpawner\API {
 	 *
 	 * @return array The headers for the request.
 	 */
-	protected function get_request_headers( $curl, $options, $data ) {
+	protected function get_request_headers( $data, $options ) {
 		$headers = parent::get_request_headers( $data, $options );
 
 		$headers[] = 'X-Auth-Email: ' . $this->api_email;
