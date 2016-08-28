@@ -1,0 +1,114 @@
+<?php
+/**
+ * The root API Framework.
+ *
+ * @package Box_Spawner
+ * @subpackage Framework
+ *
+ * @since 1.0.0
+ */
+namespace BoxSpawner;
+
+/**
+ * The JSON API class.
+ *
+ * The base for all API classes that rely on a JSON request/response body.
+ *
+ * @internal Extended by other API classes.
+ *
+ * @since 1.0.0
+ */
+abstract class JSON_API {
+	/**
+	 * A reference of JSON deconding errors.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private $json_errors = array(
+		JSON_ERROR_NONE             => 'No error has occurred',
+		JSON_ERROR_DEPTH            => 'The maximum stack depth has been exceeded',
+		JSON_ERROR_STATE_MISMATCH   => 'Invalid or malformed JSON',
+		JSON_ERROR_CTRL_CHAR        => 'Control character error, possibly incorrectly encoded',
+		JSON_ERROR_SYNTAX           => 'Syntax error',
+		JSON_ERROR_UTF8             => 'Malformed UTF-8 characters, possibly incorrectly encoded',
+		JSON_ERROR_RECURSION        => 'One or more recursive references in the value to be encoded',
+		JSON_ERROR_INF_OR_NAN       => 'One or more NAN or INF values in the value to be encoded',
+		JSON_ERROR_UNSUPPORTED_TYPE => 'A value of a type that cannot be encoded was given',
+	);
+
+	/**
+	 * Set the headers of the request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param resource     $curl    The cURL handle of the request.
+	 * @param array        $options The options of the request.
+	 * @param string|array $data    The data to send in the request. (unused)
+	 */
+	protected function set_request_headers( $curl, $options, $data ) {
+		$headers = array(
+			'Content-Type: application/json',
+			'Content-Length: ' . strlen( json_encode( $data ) ),
+		);
+
+		if ( isset( $options['headers'] ) ) {
+			foreach ( $options['headers'] as $header => $value ) {
+				if ( is_int( $header ) ) {
+					$headers[] = $value;
+				} else {
+					$headers[] = "$header: $value";
+				}
+			}
+		}
+
+		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+	}
+
+	/**
+	 * Prepare the body of the request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|array $data    The data to prepare as the body.
+	 * @param resource     $curl    The cURL handle of the request.
+	 * @param array        $options The options of the request.
+	 *
+	 * @return string|array The prepared body.
+	 */
+	protected function prepare_request_body( $data, $options, $curl ) {
+		return json_encode( $data );
+	}
+
+	/**
+	 * Parse the results.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed        $result  The result of the request.
+	 * @param resource     $curl    The cURL handle of the request.
+	 * @param array        $options The options of the request. (unused)
+	 * @param string|array $data    The data to send in the request. (unused)
+	 *
+	 * @throws Exception If there is an error with the cURL request.
+	 *
+	 * @return mixed The parsed result.
+	 *     @option array  "headers" The list of response headers.
+	 *     @option string "body"    The body of the response.
+	 */
+	protected function parse_result( $result, $curl, $options, $data ) {
+		$result = parent::parse_result( $result, $curl, $options, $data );
+
+		$data = json_decode( $result['body'], true );
+
+		$error = json_last_error();
+		if ( $error !== JSON_ERROR_NONE ) {
+			throw new ResourceException( 'JSON Decoding Error: ' . self::$json_errors[ $error ] );
+		}
+
+		$result['body'] = $data;
+
+		return $result;
+	}
+}
