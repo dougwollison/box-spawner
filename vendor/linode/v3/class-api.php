@@ -26,7 +26,7 @@ class API extends \BoxSpawner\JSON_API {
 	 *
 	 * @var string
 	 */
-	protected static $api_key;
+	protected $api_key;
 
 	/**
 	 * Make the request, return it's result.

@@ -35,7 +35,7 @@ class API extends \BoxSpawner\API {
 	 *
 	 * @var string
 	 */
-	protected static $api_email;
+	protected $api_email;
 
 	/**
 	 * The API key for all requests.
@@ -44,7 +44,7 @@ class API extends \BoxSpawner\API {
 	 *
 	 * @var string
 	 */
-	protected static $api_key;
+	protected $api_key;
 
 	/**
 	 * The constructor.
