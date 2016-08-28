@@ -31,3 +31,17 @@ class NotSupportedException extends \Exception {}
  * @since 1.0.0
  */
 class ResourceException extends \Exception {}
+
+/**
+ * For invalid responses...
+ *
+ * @since 1.0.0
+ */
+class InvalidResponseException extends \Exception {}
+
+/**
+ * For API response errors...
+ *
+ * @since 1.0.0
+ */
+class ErrorRepsonseException extends \Exception {}
