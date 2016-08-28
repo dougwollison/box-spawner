@@ -65,26 +65,32 @@ abstract class API {
 		// Initialize a cURL handle
 		$curl = curl_init();
 
-		// Set the URL for the request
-		$this->set_request_url( $curl, $options, $data );
+		$curl_options = array();
 
-		// Set the method for the request
-		$this->set_request_method( $curl, $options, $data );
+		// Get the URL for the request
+		$curl_options[ CURLOPT_URL ] = $this->get_request_url( $data, $options );
 
-		// Set the headers for the request
-		$this->set_request_headers( $curl, $options, $data );
+		// Get the method for the request
+		$curl_options[ CURLOPT_CUSTOMREQUEST ] = $this->get_request_method( $data, $options );
 
-		// Set the body for the request
-		$this->set_request_body( $curl, $options, $data );
+		// Get the headers for the request
+		$curl_options[ CURLOPT_HTTPHEADER ] = $this->get_request_headers( $data, $options );
 
-		// Set any additional options for the request
-		$this->set_request_options( $curl, $options, $data );
+		// Get the body for the request
+		$curl_options[ CURLOPT_POSTFIELDS ] = $this->get_request_body( $data, $options );
+
+		// Get any additional options for the request
+		$extra_options = $this->get_request_options( $data, $options );
+
+		// Merge them into the main options, set them
+		$curl_options = array_merge( $curl_options, $extra_options );
+		curl_setopt_array( $curl, $curl_options );
 
 		// Get the result
 		$result = curl_exec( $curl );
 
 		// Parse the result
-		$result = $this->parse_result( $result, $curl, $options, $data );
+		$result = $this->parse_result( $result, $curl, $data, $options );
 
 		// We're done here
 		curl_close( $curl );
@@ -93,95 +99,76 @@ abstract class API {
 	}
 
 	/**
-	 * Set the URL of the request.
+	 * Determine the URL of the request.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param resource     $curl    The cURL handle of the request.
+	 * @param string|array $data    The data to send in the request.
 	 * @param array        $options The options of the request.
-	 * @param string|array $data    The data to send in the request. (unused)
+	 *
+	 * @return string The URL for the request.
 	 */
-	protected function set_request_url( $curl, $options, $data ) {
+	protected function get_request_url( $data, $options ) {
 		$url = static::ENDPOINT_BASE;
 
 		if ( isset( $options['endpoint'] ) ) {
 			$url .= $options['endpoint'];
 		}
 
-		curl_setopt( $curl, CURLOPT_URL, $url );
+		return $url;
 	}
 
 	/**
-	 * Set the method of the request.
+	 * Determine the method of the request.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param resource     $curl    The cURL handle of the request.
+	 * @param string|array $data    The data to send in the request.
 	 * @param array        $options The options of the request.
-	 * @param string|array $data    The data to send in the request. (unused)
+	 *
+	 * @return string The method for the request.
 	 */
-	protected function set_request_method( $curl, $options, $data ) {
+	protected function get_request_method( $data, $options ) {
 		$method = 'GET';
 
 		if ( isset( $options['method'] ) ) {
 			$method = $options['method'];
 		}
 
-		curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, $method );
+		return $method;
 	}
 
 	/**
-	 * Set the headers of the request.
+	 * Determine the headers of the request.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param resource     $curl    The cURL handle of the request.
+	 * @param string|array $data    The data to send in the request.
 	 * @param array        $options The options of the request.
-	 * @param string|array $data    The data to send in the request. (unused)
+	 *
+	 * @return array The headers for the request.
 	 */
-	protected function set_request_headers( $curl, $options, $data ) {
+	protected function get_request_headers( $data, $options ) {
 		$headers = array();
 
 		if ( isset( $options['headers'] ) ) {
-			foreach ( $options['headers'] as $header => $value ) {
-				if ( is_int( $header ) ) {
-					$headers[] = $value;
-				} else {
-					$headers[] = "$header: $value";
-				}
-			}
+			$headers = $options['headers'];
 		}
 
-		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+		return $headers;
 	}
 
 	/**
-	 * Set the body of the request.
+	 * Determine the body of the request.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param resource     $curl    The cURL handle of the request.
-	 * @param array        $options The options of the request. (unused)
 	 * @param string|array $data    The data to send in the request.
-	 */
-	protected function set_request_body( $curl, $options, $data ) {
-		$body = $this->prepare_request_body( $data, $options, $curl );
-
-		curl_setopt( $curl, CURLOPT_POSTFIELDS, $body );
-	}
-
-	/**
-	 * Prepare the body of the request.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string|array $data    The data to prepare as the body.
-	 * @param resource     $curl    The cURL handle of the request.
 	 * @param array        $options The options of the request.
 	 *
-	 * @return string|array The prepared body.
+	 * @return string|array The body for the request.
 	 */
-	protected function prepare_request_body( $data, $options, $curl ) {
+	protected function get_request_body( $data, $options ) {
 		return $data;
 	}
 
@@ -190,11 +177,12 @@ abstract class API {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param resource     $curl    The cURL handle of the request.
+	 * @param string|array $data    The data to send in the request.
 	 * @param array        $options The options of the request.
-	 * @param string|array $data    The data to prepare as the body. (unused)
+	 *
+	 * @return array The cURL options for the request.
 	 */
-	protected function set_request_options( $curl, $options, $data ) {
+	protected function get_request_options( $data, $options ) {
 		$curl_options = array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_VERBOSE        => true,
@@ -205,7 +193,7 @@ abstract class API {
 			$curl_options = array_merge( $curl_options, $options['curl'] );
 		}
 
-		curl_setopt_array( $curl, $curl_options );
+		return $curl_options;
 	}
 
 	/**
@@ -215,8 +203,8 @@ abstract class API {
 	 *
 	 * @param mixed        $result  The result of the request.
 	 * @param resource     $curl    The cURL handle of the request.
-	 * @param array        $options The options of the request. (unused)
 	 * @param string|array $data    The data to send in the request. (unused)
+	 * @param array        $options The options of the request. (unused)
 	 *
 	 * @throws Exception If there is an error with the cURL request.
 	 *
@@ -224,7 +212,7 @@ abstract class API {
 	 *     @option array  "headers" The list of response headers.
 	 *     @option string "body"    The body of the response.
 	 */
-	protected function parse_result( $result, $curl, $options, $data ) {
+	protected function parse_result( $result, $curl, $data, $options ) {
 		// Throw exception if there was an error
 		if ( $result === false ) {
 			throw new ResourceException( 'cURL Request Error: ' . curl_error( $curl ) );

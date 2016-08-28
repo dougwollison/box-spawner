@@ -20,6 +20,15 @@ namespace BoxSpawner\Linode\V3;
  */
 class API extends \BoxSpawner\JSON_API {
 	/**
+	 * The API key for all requests.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	protected static $api_key;
+
+	/**
 	 * Make the request, return it's result.
 	 *
 	 * @since 1.0.0
@@ -30,6 +39,7 @@ class API extends \BoxSpawner\JSON_API {
 	 * @return mixed The result of the request.
 	 */
 	public function request( $endpoint, $data = array() ) {
+		$data['api_key'] = $this->api_key;
 		$data['api_action'] = $endpoint;
 
 		return parent::request( $data );
@@ -42,8 +52,8 @@ class API extends \BoxSpawner\JSON_API {
 	 *
 	 * @param resource     $curl    The cURL handle of the request.
 	 */
-	protected function set_request_url( $curl ) {
-		curl_setopt( $curl, CURLOPT_URL, 'https://api.linode.com/' );
+	protected function get_request_url( $curl ) {
+		return 'https://api.linode.com/';
 	}
 
 	/**
@@ -53,8 +63,8 @@ class API extends \BoxSpawner\JSON_API {
 	 *
 	 * @param resource     $curl    The cURL handle of the request.
 	 */
-	protected function set_request_method( $curl ) {
-		curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, 'POST' );
+	protected function get_request_method( $curl ) {
+		return 'POST';
 	}
 
 	/**
@@ -64,8 +74,8 @@ class API extends \BoxSpawner\JSON_API {
 	 *
 	 * @param mixed        $result  The result of the request.
 	 * @param resource     $curl    The cURL handle of the request.
-	 * @param array        $options The options of the request. (unused)
 	 * @param string|array $data    The data to send in the request. (unused)
+	 * @param array        $options The options of the request. (unused)
 	 *
 	 * @throws InvalidResponseException If the result is missing the DATA section.
 	 * @throws ErrorRepsonseException   If the API returned an error.
@@ -74,9 +84,9 @@ class API extends \BoxSpawner\JSON_API {
 	 *     @option array  "headers" The list of response headers.
 	 *     @option string "body"    The body of the response.
 	 */
-	protected function parse_result( $result, $curl, $options, $data ) {
+	protected function parse_result( $result, $curl, $data, $options ) {
 		// Get the result
-		$result = parent::parse_result( $result, $curl, $options, $data );
+		$result = parent::parse_result( $result, $curl, $data, $options );
 
 		$json = $result['body'];
 

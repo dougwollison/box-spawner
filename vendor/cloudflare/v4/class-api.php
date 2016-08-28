@@ -62,30 +62,21 @@ class API extends \BoxSpawner\API {
 	}
 
 	/**
-	 * Set the headers of the request.
+	 * Determine the headers of the request.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param resource     $curl    The cURL handle of the request.
+	 * @param string|array $data    The data to send in the request.
 	 * @param array        $options The options of the request.
-	 * @param string|array $data    The data to send in the request. (unused)
+	 *
+	 * @return array The headers for the request.
 	 */
-	protected function set_request_headers( $curl, $options, $data ) {
-		$headers = array(
-			'X-Auth-Email: ' . $this->api_email,
-			'X-Auth-Key: '   . $this->api_key,
-		);
+	protected function get_request_headers( $curl, $options, $data ) {
+		$headers = parent::get_request_headers( $data, $options );
 
-		if ( isset( $options['headers'] ) ) {
-			foreach ( $options['headers'] as $header => $value ) {
-				if ( is_int( $header ) ) {
-					$headers[] = $value;
-				} else {
-					$headers[] = "$header: $value";
-				}
-			}
-		}
+		$headers[] = 'X-Auth-Email: ' . $this->api_email;
+		$headers[] = 'X-Auth-Key: '   . $this->api_key;
 
-		curl_setopt( $curl, CURLOPT_HTTPHEADER, $headers );
+		return $headers;
 	}
 }
