@@ -18,7 +18,7 @@ namespace BoxSpawner;
  *
  * @since 1.0.0
  */
-abstract class JSON_API {
+abstract class JSON_API extends API {
 	/**
 	 * A reference of JSON deconding errors.
 	 *
