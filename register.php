@@ -38,8 +38,8 @@ function register( $namespace, $info ) {
 
 	// Assume stable is second last version, otherwise same as latest
 	$stable = $versions ? array_pop( $versions ) : $latest;
-	if ( isset( $info['stable'] ) ) {
-		$latest = $info['stable'];
+	if ( isset( $info['latest'] ) ) {
+		$latest = $info['latest'];
 	}
 
 	// Define the latest and stable flags
