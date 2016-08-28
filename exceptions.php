@@ -44,4 +44,4 @@ class InvalidResponseException extends \Exception {}
  *
  * @since 1.0.0
  */
-class ErrorRepsonseException extends \Exception {}
+class ErrorResponseException extends \Exception {}
