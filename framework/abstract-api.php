@@ -218,6 +218,8 @@ abstract class API {
 	 * @param array        $options The options of the request. (unused)
 	 * @param string|array $data    The data to send in the request. (unused)
 	 *
+	 * @throws Exception If there is an error with the cURL request.
+	 *
 	 * @return mixed The parsed result.
 	 *     @option array  "headers" The list of response headers.
 	 *     @option string "body"    The body of the response.
@@ -225,7 +227,7 @@ abstract class API {
 	protected function parse_result( $result, $curl, $options, $data ) {
 		// Throw exception if there was an error
 		if ( $result === false ) {
-			throw new Exception( 'cURL Error: ' . curl_error( $curl ) );
+			throw new ResourceException( sprintf( 'Unexpected cURL error: "%s".', curl_error( $curl ) ) );
 		}
 
 		// Separate the headers and body
