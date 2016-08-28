@@ -227,7 +227,7 @@ abstract class API {
 	protected function parse_result( $result, $curl, $options, $data ) {
 		// Throw exception if there was an error
 		if ( $result === false ) {
-			throw new ResourceException( sprintf( 'Unexpected cURL error: "%s".', curl_error( $curl ) ) );
+			throw new ResourceException( 'cURL Request Error: ' . curl_error( $curl ) );
 		}
 
 		// Separate the headers and body
