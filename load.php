@@ -46,13 +46,13 @@ function autoload( $fullname ) {
 	}
 
 	// Convert to lowercase, hyphenated form
-	$name = preg_replace( '/[^\w+\\\]+/', '-', strtolower( $name ) );
+	$name = preg_replace( '/[^a-z0-9\\\]+/i', '-', strtolower( $name ) );
 
 	// Loop through each class type and try to load it
 	$types = array( 'abstract', 'class', 'interface', 'trait' );
 	foreach ( $types as $type ) {
 		// Prefix the last part of the name with the type
-		$file = preg_replace( '/([\w\-]+)$/', "{$type}-$1", $name );
+		$file = preg_replace( '/([a-z0-9\-]+)$/i', "{$type}-$1", $name );
 
 		// Create the full path
 		$file = $basesdir . str_replace( '\\', DIRECTORY_SEPARATOR, $file ) . '.php';
