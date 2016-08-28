@@ -19,5 +19,12 @@ namespace BoxSpawner\CloudFlare\V4;
  * @since 1.0.0
  */
 class API extends \BoxSpawner\API {
-	// to be written
+	/**
+	 * The base endpoint URL.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	const ENDPOINT_BASE = 'https://api.cloudflare.com/client/v4/';
 }
