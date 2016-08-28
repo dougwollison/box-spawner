@@ -83,7 +83,11 @@ abstract class API {
 		$extra_options = $this->get_request_options( $data, $options );
 
 		// Merge them into the main options, set them
-		$curl_options = array_merge( $curl_options, $extra_options );
+		foreach ( $extra_options as $option => $value ) {
+			// foreach loop because numeric keys
+			$curl_options[ $option ] = $value;
+		}
+
 		curl_setopt_array( $curl, $curl_options );
 
 		// Get the result
