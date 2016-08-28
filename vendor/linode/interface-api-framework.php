@@ -10,7 +10,7 @@
 namespace BoxSpawner\Linode;
 
 /**
- * The API interface.
+ * The API Framework interface.
  *
  * The base framework for Linode API classes.
  *
@@ -395,18 +395,6 @@ interface API_Framework {
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function modify_linode_ip( $linode_id, $ip_id, array $data );
-
-	/**
-	 * Delete an existing ip for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int   $linode_id The ID of the linode the ip belongs to.
-	 * @param int   $ip_id     The ID of the ip to delete.
-	 *
-	 * @return bool Wether or not the delete was successful.
-	 */
-	public function delete_linode_ip( $linode_id, $ip_id );
 
 	// =========================
 	// ! - Domain Objects
