@@ -39,7 +39,7 @@ class API extends \BoxSpawner\JSON_API {
 	 * @param int|string   $version Optional
 	 */
 	public function __construct( array $options ) {
-		$this->api_key   = $options['api_key'];
+		$this->api_key = $options['api_key'];
 	}
 
 	/**
