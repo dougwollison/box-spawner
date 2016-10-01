@@ -62,7 +62,7 @@ interface API_Framework {
 	 *
 	 * @return array The list of distributions.
 	 */
-	public function list_distribution( array $filter = array() );
+	public function list_distributions( array $filter = array() );
 
 	/**
 	 * Retrieve a single datacenter.
@@ -88,7 +88,7 @@ interface API_Framework {
 	 *
 	 * @return array The list of kernels.
 	 */
-	public function list_kernel( array $filter = array() );
+	public function list_kernels( array $filter = array() );
 
 	/**
 	 * Retrieve a single datacenter.
