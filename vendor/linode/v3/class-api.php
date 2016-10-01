@@ -497,7 +497,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Disk The disk object.
 	 */
 	public function create_linode_disk( $linode_id, $data ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+
+		return new Linode_Disk( $this, null, $data );
 	}
 
 	/**
@@ -512,7 +514,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_disk( $linode_id, $disk_id, array $data ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
+
+		return $this->request( 'linode.disk.update', $data );
 	}
 
 	/**
@@ -526,7 +531,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_linode_disk( $linode_id, $disk_id ) {
-		// to be written
+		return $this->request( 'linode.disk.update', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::ID_ATTRIBUTE => $disk_id,
+		) );
 	}
 
 	/**
@@ -541,7 +549,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function resize_linode_disk( $linode_id, $disk_id, $size ) {
-		// to be written
+		return $this->request( 'linode.disk.update', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::ID_ATTRIBUTE => $disk_id,
+			'size' => $size,
+		) );
 	}
 
 	// =========================
@@ -600,7 +612,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config The config object.
 	 */
 	public function create_linode_config( $linode_id, $data ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+
+		return new Linode_Config( $this, null, $data );
 	}
 
 	/**
@@ -615,7 +629,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_config( $linode_id, $config_id, array $data ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
+
+		return $this->request( 'linode.config.update', $data );
 	}
 
 	/**
@@ -629,7 +646,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_linode_config( $linode_id, $config_id ) {
-		// to be written
+		return $this->request( 'linode.config.update', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Config::ID_ATTRIBUTE => $config_id,
+		) );
 	}
 
 	// =========================
@@ -688,11 +708,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_IP The ip object.
 	 */
 	public function create_linode_ip( $linode_id, $data ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+
+		return new Linode_IP( $this, null, $data );
 	}
 
 	/**
 	 * Update an existing ip for a linode.
+	 *
+	 * Just directs to setrnds endpoint.
 	 *
 	 * @since 1.0.0
 	 *
@@ -703,7 +727,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_ip( $linode_id, $ip_id, array $data ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_IP::ID_ATTRIBUTE ] = $ip_id;
+
+		return $this->request( 'linode.ip.setrdns', $data );
 	}
 
 	// =========================
