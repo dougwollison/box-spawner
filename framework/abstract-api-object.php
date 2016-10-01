@@ -90,33 +90,33 @@ abstract class API_Object {
 	}
 
 	/**
-	 * Issue a create request for a new object.
+	 * Issue a load request for a new object.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The data for the create request.
+	 * @param string $id The id of the object to request.
 	 */
-	public function load( array $data ) {
+	public function load( $id ) {
 		throw new NotSupportedException( sprintf( 'The class "%s" does not support load requests.', get_class( $this ) ) );
 	}
 
 	/**
-	 * Issue a create request for a new object.
+	 * Issue a update request for a new object.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The data for the create request.
+	 * @param array $data The data for the update request.
 	 */
 	public function update( array $data ) {
 		throw new NotSupportedException( sprintf( 'The class "%s" does not support update requests.', get_class( $this ) ) );
 	}
 
 	/**
-	 * Issue a create request for a new object.
+	 * Issue a delete request for a new object.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The data for the create request.
+	 * @param array $data The data for the delete request.
 	 */
 	public function delete( array $data ) {
 		throw new NotSupportedException( sprintf( 'The class "%s" does not support delete requests.', get_class( $this ) ) );
