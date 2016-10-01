@@ -77,7 +77,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @param array $data The data for the update request.
 	 */
 	public function update( array $data ) {
-		$this->api->modify_linode( $this->id, $data );
+		$this->api->update_linode( $this->id, $data );
 	}
 
 	/**
