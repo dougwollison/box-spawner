@@ -39,7 +39,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 *
 	 * @param array $data The data for the create request.
 	 */
-	public function create( array $data ) {
+	protected function create( array $data ) {
 		if ( ! isset( $data['DatacenterID'] ) ) {
 			throw new Exception( 'DatacenterID required when creating a linode.' );
 		}
@@ -49,11 +49,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 
 		$result = $this->api->request( 'linode.create', $data );
 
-		$this->id = $result[ $this::ID_ATTRIBUTE ];
-
-		$this->load( array(
-			$this::ID_ATTRIBUTE => $result[ $this::ID_ATTRIBUTE ],
-		) );
+		$this->load( $result[ $this::ID_ATTRIBUTE ] );
 	}
 
 	/**
@@ -63,8 +59,8 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 *
 	 * @param string $id The id of the object to load.
 	 */
-	public function load( $id ) {
-		$this->id = $data[ static::ID_ATTRIBUTE ];
+	protected function load( $id ) {
+		$this->id = $id;
 
 		$data = $this->api->request( 'linode.list', array(
 			$this::ID_ATTRIBUTE => $this->id

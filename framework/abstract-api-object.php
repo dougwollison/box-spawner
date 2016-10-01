@@ -85,7 +85,7 @@ abstract class API_Object {
 	 *
 	 * @param array $data The data for the create request.
 	 */
-	public function create( array $data ) {
+	protected function create( array $data ) {
 		throw new NotSupportedException( sprintf( 'The class "%s" does not support create requests.', get_class( $this ) ) );
 	}
 
@@ -96,7 +96,7 @@ abstract class API_Object {
 	 *
 	 * @param string $id The id of the object to request.
 	 */
-	public function load( $id ) {
+	protected function load( $id ) {
 		throw new NotSupportedException( sprintf( 'The class "%s" does not support load requests.', get_class( $this ) ) );
 	}
 
