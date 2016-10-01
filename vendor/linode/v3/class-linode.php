@@ -1,6 +1,6 @@
 <?php
 /**
- * The Linode API (version 3).
+ * The Linode Object (version 3).
  *
  * @package Box_Spawner
  * @subpackage Linode
@@ -10,9 +10,9 @@
 namespace BoxSpawner\Linode\V3;
 
 /**
- * The API class.
+ * The Linode object class.
  *
- * The interface for all API requests.
+ * The an absraction of the Linode api object.
  *
  * @api
  *
@@ -77,7 +77,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @param array $data The data for the update request.
 	 */
 	public function update( array $data ) {
-
+		$this->api->modify_linode( $this->id, $data );
 	}
 
 	/**
@@ -88,7 +88,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @param array $data The data for the delete request.
 	 */
 	public function delete( array $data ) {
-
+		$this->api->delete_linode( $this->id, $data );
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @param int $config_id Optional the ID of a config to boot with.
 	 */
 	public function boot( $config_id = null ) {
-
+		$this->api->boot_linode( $this->id, $config_id );
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @since 1.0.0
 	 */
 	public function shutdown() {
-
+		$this->api->shutdown_linode( $this->id );
 	}
 
 	/**
@@ -119,6 +119,6 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @param int $config_id Optional the ID of a config to boot with.
 	 */
 	public function reboot( $config_id = null ) {
-
+		$this->api->reboot_linode( $this->id, $config_id );
 	}
 }
