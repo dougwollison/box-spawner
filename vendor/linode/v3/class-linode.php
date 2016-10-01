@@ -63,7 +63,7 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 		$this->id = $id;
 
 		$data = $this->api->request( 'linode.list', array(
-			$this::ID_ATTRIBUTE => $this->id
+			$this::ID_ATTRIBUTE => $this->id,
 		) );
 
 		$this->attributes = $data;
