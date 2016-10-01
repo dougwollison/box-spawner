@@ -142,15 +142,25 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		// Get the response data
 		$response = $json['DATA'];
 
-		// Standardize the keys of the DATA entries to uppercase
+		// Standardize the keys of the results to uppercase
 		$formatted = array();
-		foreach ( $response as $entry ) {
-			// Convert all keys to uppercase
-			$keys = array_map( 'strtoupper', array_keys( $entry ) );
-			$values = array_values( $entry );
 
-			$formatted[] = array_combine( $keys, $values );
+		if ( array_keys( $response ) === range( 0, count( $response ) - 1 ) ) {
+			// Response is a list, loop through and standardies entries
+			foreach ( $response as $entry ) {
+				// Convert all keys to uppercase
+				$keys = array_map( 'strtoupper', array_keys( $entry ) );
+				$values = array_values( $entry );
+
+				$formatted[] = array_combine( $keys, $values );
+			}
+		} else {
+			$keys = array_map( 'strtoupper', array_keys( $response ) );
+			$values = array_values( $response );
+
+			$formatted = array_combine( $keys, $values );
 		}
+
 		$response = $formatted;
 
 		return $response;
@@ -487,7 +497,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode_disk( $linode_id, $disk_id, array $data ) {
+	public function update_linode_disk( $linode_id, $disk_id, array $data ) {
 		// to be written
 	}
 
@@ -577,7 +587,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode_config( $linode_id, $config_id, array $data ) {
+	public function update_linode_config( $linode_id, $config_id, array $data ) {
 		// to be written
 	}
 
@@ -652,7 +662,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode_ip( $linode_id, $ip_id, array $data ) {
+	public function update_linode_ip( $linode_id, $ip_id, array $data ) {
 		// to be written
 	}
 
@@ -723,7 +733,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_domain( $domain_id, array $data ) {
+	public function update_domain( $domain_id, array $data ) {
 		// to be written
 	}
 
@@ -797,7 +807,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_domain_record( $domain_id, $record_id, array $data ) {
+	public function update_domain_record( $domain_id, $record_id, array $data ) {
 		// to be written
 	}
 
@@ -868,7 +878,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_stackscript( $stackscript_id, array $data ) {
+	public function update_stackscript( $stackscript_id, array $data ) {
 		// to be written
 	}
 

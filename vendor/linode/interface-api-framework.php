@@ -251,7 +251,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode_disk( $linode_id, $disk_id, array $data );
+	public function update_linode_disk( $linode_id, $disk_id, array $data );
 
 	/**
 	 * Delete an existing disk for a linode.
@@ -329,7 +329,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode_config( $linode_id, $config_id, array $data );
+	public function update_linode_config( $linode_id, $config_id, array $data );
 
 	/**
 	 * Delete an existing config for a linode.
@@ -394,7 +394,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode_ip( $linode_id, $ip_id, array $data );
+	public function update_linode_ip( $linode_id, $ip_id, array $data );
 
 	// =========================
 	// ! - Domain Objects
@@ -443,7 +443,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_domain( $domain_id, array $data );
+	public function update_domain( $domain_id, array $data );
 
 	/**
 	 * Delete an existing domain.
@@ -507,7 +507,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_domain_record( $domain_id, $record_id, array $data );
+	public function update_domain_record( $domain_id, $record_id, array $data );
 
 	/**
 	 * Delete an existing record for a domain.
@@ -568,7 +568,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_stackscript( $stackscript_id, array $data );
+	public function update_stackscript( $stackscript_id, array $data );
 
 	/**
 	 * Delete an existing stackscript.
