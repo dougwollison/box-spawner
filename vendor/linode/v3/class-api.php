@@ -371,11 +371,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode to delete.
+	 * @param int   $linode_id The ID of the linode to delete.
+	 * @param array $data      Optional The options for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_linode( $linode_id ) {
+	public function delete_linode( $linode_id, array $data = array() ) {
 		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
 
 		return $this->request( 'linode.delete', $data );

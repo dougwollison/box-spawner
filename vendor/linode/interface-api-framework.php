@@ -159,11 +159,12 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode to delete.
+	 * @param int   $linode_id The ID of the linode to delete.
+	 * @param array $data      Optional The options for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_linode( $linode_id );
+	public function delete_linode( $linode_id, array $data = array() );
 
 	/**
 	 * Issue a boot request for a linode.
