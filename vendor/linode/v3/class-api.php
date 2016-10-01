@@ -320,8 +320,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode( $linode_id, array $data ) {
-		// to be written
+	public function update_linode( $linode_id, array $data ) {
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+
+		return $this->request( 'linode.update', $data );
 	}
 
 	/**
@@ -334,7 +336,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_linode( $linode_id ) {
-		// to be written
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+
+		return $this->request( 'linode.delete', $data );
 	}
 
 	/**
@@ -348,7 +352,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the boot request was successful.
 	 */
 	public function boot_linode( $linode_id, $config_id = null ) {
-		// to be written
+		$data = array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+		);
+
+		if ( ! is_null( $config_id ) ) {
+			$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
+		}
+
+		return $this->request( 'linode.boot', $data );
 	}
 
 	/**
@@ -361,7 +373,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the boot request was successful.
 	 */
 	public function shutdown_linode( $linode_id ) {
-		// to be written
+		return $this->request( 'linode.shutdown', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+		) );
 	}
 
 	/**
@@ -375,7 +389,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the boot request was successful.
 	 */
 	public function reboot_linode( $linode_id, $config_id = null ) {
-		// to be written
+		$data = array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+		);
+
+		if ( ! is_null( $config_id ) ) {
+			$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
+		}
+
+		return $this->request( 'linode.reboot', $data );
 	}
 
 	// =========================
