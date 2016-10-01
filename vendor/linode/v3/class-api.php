@@ -169,12 +169,16 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $filter Optional Arguments for filtering the list request.
+	 * @param array $filter UNUSED.
 	 *
-	 * @return array The list of datacenter.
+	 * @return array The list of datacenters.
 	 */
 	public function list_datacenters( array $filter = array() ) {
-		// to be written
+		if ( ! isset( $this->cache['datacenters'] ) ) {
+			$this->cache['datacenters'] = $this->request( 'avail.datacenters' );
+		}
+
+		return $this->cache['datacenters'];
 	}
 
 	/**
@@ -187,7 +191,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The datacenter information.
 	 */
 	public function get_datacenter( $datacenter_id ) {
-		// to be written
+		$datacenters = $this->list_datacenters();
+
+		foreach ( $datacenters as $datacenter ) {
+			if ( $datacenter['DATACENTERID'] == $datacenter_id ) {
+				return $datacenter;
+			}
+		}
+
+		return false;
 	}
 
 	// =========================
@@ -203,8 +215,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return array The list of distributions.
 	 */
-	public function list_distribution( array $filter = array() ) {
-		// to be written
+	public function list_distributions( array $filter = array() ) {
+		if ( ! isset( $this->cache['distributions'] ) ) {
+			$this->cache['distributions'] = $this->request( 'avail.distributions', $filter );
+		}
+
+		return $this->cache['distributions'];
 	}
 
 	/**
@@ -217,7 +233,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The distribution information.
 	 */
 	public function get_distribution( $distribution_id ) {
-		// to be written
+		$results = $this->list_distributions( array(
+			'DISTRIBUTIONID' => $distribution_id,
+		) );
+
+		return $results[0];
 	}
 
 	// =========================
@@ -233,8 +253,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @return array The list of kernels.
 	 */
-	public function list_kernel( array $filter = array() ) {
-		// to be written
+	public function list_kernels( array $filter = array() ) {
+		if ( ! isset( $this->cache['kernels'] ) ) {
+			$this->cache['kernels'] = $this->request( 'avail.kernels', $filter );
+		}
+
+		return $this->cache['kernels'];
 	}
 
 	/**
@@ -247,7 +271,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The kernel information.
 	 */
 	public function get_kernel( $kernel_id ) {
-		// to be written
+		$kernels = $this->list_kernels();
+
+		foreach ( $kernels as $kernel ) {
+			if ( $kernels['KERNELID'] == $kernel_id ) {
+				return $kernel;
+			}
+		}
+
+		return false;
 	}
 
 	// ==================================================
