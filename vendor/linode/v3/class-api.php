@@ -357,11 +357,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int $linode_id The ID of the linode to boot.
-	 * @param int $config_id Optional The ID of the config to reboot with.
 	 *
 	 * @return bool Wether or not the boot request was successful.
 	 */
-	public function shutdown_linode( $linode_id, $config_id = null ) {
+	public function shutdown_linode( $linode_id ) {
 		// to be written
 	}
 
@@ -371,10 +370,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int $linode_id The ID of the linode to boot.
+	 * @param int $config_id Optional The ID of the config to reboot with.
 	 *
 	 * @return bool Wether or not the boot request was successful.
 	 */
-	public function reboot_linode( $linode_id ) {
+	public function reboot_linode( $linode_id, $config_id = null ) {
 		// to be written
 	}
 
