@@ -270,7 +270,14 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode objects.
 	 */
 	public function list_linodes( array $filter = array() ) {
-		// to be written
+		$data = $this->request( 'linode.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Linode::ID_ATTRIBUTE ];
+			$data[ $i ] = new Linode( $this, $id, $entry );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -283,7 +290,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode The linode object.
 	 */
 	public function get_linode( $linode_id ) {
-		// to be written
+		$data = $this->request( 'linode.list', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+		) );
+
+		return new Linode( $this, $linode_id, $data[0] );
 	}
 
 	/**
@@ -296,7 +307,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode The linode object.
 	 */
 	public function create_linode( $data ) {
-		// to be written
+		return new Linode( $this, null, $data[0] );
 	}
 
 	/**
