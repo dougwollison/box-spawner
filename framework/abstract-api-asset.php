@@ -42,9 +42,9 @@ abstract class API_Asset extends API_Object {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param BoxSpawner\API $api    The API to use for this object.
-	 * @param int|string     $id     Either an ID of an existing one, or NULL to create one.
-	 * @param int|array      $data   Either the attributes for an already fetched one, or the options for creating one.
+	 * @param BoxSpawner\API $api       The API to use for this object.
+	 * @param int|string     $id        Either an ID of an existing one, or NULL to create one.
+	 * @param int|array      $data      Either the attributes for an already fetched one, or the options for creating one.
 	 * @param int|string     $parent_id The parent object to tie to.
 	 */
 	public function __construct( API $api, $id, array $data = array(), $parent_id = null ) {
