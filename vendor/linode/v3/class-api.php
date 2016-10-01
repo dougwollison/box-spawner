@@ -179,7 +179,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $filter UNUSED.
+	 * @param array $filter Optional UNUSED.
 	 *
 	 * @return array The list of datacenters.
 	 */
