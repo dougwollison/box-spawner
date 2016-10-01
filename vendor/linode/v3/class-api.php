@@ -347,7 +347,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode The linode object.
 	 */
 	public function create_linode( $data ) {
-		return new Linode( $this, null, $data[0] );
+		return new Linode( $this, null, $data );
 	}
 
 	/**
@@ -456,7 +456,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of disk objects.
 	 */
 	public function list_linode_disks( $linode_id, array $filter = array() ) {
-		// to be written
+		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data = $this->request( 'linode.disk.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Linode_Disk::ID_ATTRIBUTE ];
+			$data[ $i ] = new Linode_Disk( $this, $id, $entry, $linode_id );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -470,7 +478,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Disk The disk object.
 	 */
 	public function get_linode_disk( $linode_id, $disk_id ) {
-		// to be written
+		$data = $this->request( 'linode.disk.list', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::ID_ATTRIBUTE => $disk_id,
+		) );
+
+		return new Linode_Disk( $this, $disk_id, $data[0], $linode_id );
 	}
 
 	/**
@@ -546,7 +559,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode_Config objects.
 	 */
 	public function list_linode_configs( $linode_id, array $filter = array() ) {
-		// to be written
+		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data = $this->request( 'linode.config.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Linode_Config::ID_ATTRIBUTE ];
+			$data[ $i ] = new Linode_Config( $this, $id, $entry, $linode_id );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -560,7 +581,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config The config object.
 	 */
 	public function get_linode_config( $linode_id, $config_id ) {
-		// to be written
+		$data = $this->request( 'linode.config.list', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Config::ID_ATTRIBUTE => $config_id,
+		) );
+
+		return new Linode_Config( $this, $config_id, $data[0], $linode_id );
 	}
 
 	/**
@@ -621,7 +647,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode_IP objects.
 	 */
 	public function list_linode_ips( $linode_id, array $filter = array() ) {
-		// to be written
+		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data = $this->request( 'linode.ip.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Linode_IP::ID_ATTRIBUTE ];
+			$data[ $i ] = new Linode_IP( $this, $id, $entry, $linode_id );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -635,7 +669,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_IP The ip object.
 	 */
 	public function get_linode_ip( $linode_id, $ip_id ) {
-		// to be written
+		$data = $this->request( 'linode.ip.list', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_IP::ID_ATTRIBUTE => $ip_id,
+		) );
+
+		return new Linode_IP( $this, $ip_id, $data[0], $linode_id );
 	}
 
 	/**
