@@ -27,4 +27,15 @@ class Linode_Disk extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Li
 	 * @var string
 	 */
 	const ID_ATTRIBUTE = 'DISKID';
+
+	/**
+	 * Resize the disk
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $size The desired size of the disk (MB).
+	 */
+	public function resize( $size ) {
+		return $this->api->resize_linode_disk( $this->parent_id, $this->id, $size );
+	}
 }
