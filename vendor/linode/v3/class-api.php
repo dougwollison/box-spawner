@@ -596,8 +596,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int   $linode_id The ID of the linode the config belongs to.
-	 * @param int   $config_id The ID of the config to delete.
+	 * @param int $linode_id The ID of the linode the config belongs to.
+	 * @param int $config_id The ID of the config to delete.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
@@ -663,20 +663,6 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_ip( $linode_id, $ip_id, array $data ) {
-		// to be written
-	}
-
-	/**
-	 * Delete an existing ip for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int   $linode_id The ID of the linode the ip belongs to.
-	 * @param int   $ip_id     The ID of the ip to delete.
-	 *
-	 * @return bool Wether or not the delete was successful.
-	 */
-	public function delete_linode_ip( $linode_id, $ip_id ) {
 		// to be written
 	}
 

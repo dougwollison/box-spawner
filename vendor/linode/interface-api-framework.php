@@ -336,8 +336,8 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int   $linode_id The ID of the linode the config belongs to.
-	 * @param int   $config_id The ID of the config to delete.
+	 * @param int $linode_id The ID of the linode the config belongs to.
+	 * @param int $config_id The ID of the config to delete.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
