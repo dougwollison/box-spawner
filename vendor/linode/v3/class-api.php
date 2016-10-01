@@ -142,18 +142,16 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		// Get the response data
 		$response = $json['DATA'];
 
-		// Standardize the keys of the DATA entries if needed
-		if ( $json['ACTION'] == 'linode.config.list' ) {
-			$formatted = array();
-			foreach ( $response as $entry ) {
-				// Convert all keys to uppercase
-				$keys = array_map( 'strtoupper', array_keys( $entry ) );
-				$values = array_values( $entry );
+		// Standardize the keys of the DATA entries to uppercase
+		$formatted = array();
+		foreach ( $response as $entry ) {
+			// Convert all keys to uppercase
+			$keys = array_map( 'strtoupper', array_keys( $entry ) );
+			$values = array_values( $entry );
 
-				$formatted[] = array_combine( $keys, $values );
-			}
-			$response = $formatted;
+			$formatted[] = array_combine( $keys, $values );
 		}
+		$response = $formatted;
 
 		return $response;
 	}
