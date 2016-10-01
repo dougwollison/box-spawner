@@ -152,7 +152,7 @@ interface API_Framework {
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
-	public function modify_linode( $linode_id, array $data );
+	public function update_linode( $linode_id, array $data );
 
 	/**
 	 * Delete an existing linode.
