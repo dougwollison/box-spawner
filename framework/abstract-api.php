@@ -38,6 +38,15 @@ abstract class API {
 	protected $options = array();
 
 	/**
+	 * Internal instance-specific cache.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	protected $cache = array();
+
+	/**
 	 * The constructor.
 	 *
 	 * Initializes the API, taking a version number and options.
