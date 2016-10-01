@@ -116,9 +116,9 @@ abstract class API_Object {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The data for the delete request.
+	 * @param array $data Optional The data for the delete request.
 	 */
-	public function delete( array $data ) {
+	public function delete( array $data = array() ) {
 		throw new NotSupportedException( sprintf( 'The class "%s" does not support delete requests.', get_class( $this ) ) );
 	}
 }
