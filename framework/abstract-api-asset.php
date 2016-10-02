@@ -53,6 +53,8 @@ abstract class API_Asset extends API_Object {
 			$this->parent_id = $parent_id;
 		} else if ( isset( $data[ $this::PARENT_ID_ATTRIBUTE ] ) ) {
 			$this->parent_id = $data[ $this::PARENT_ID_ATTRIBUTE ];
+		} else {
+			throw new Exception( sprintf( '%s must have it’s parent ID passed as an argument or provided in the $data argument.', get_called_class() ) );
 		}
 
 		parent::__construct( $api, $id, $data );
