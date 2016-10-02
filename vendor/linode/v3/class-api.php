@@ -292,6 +292,48 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		return false;
 	}
 
+	// =========================
+	// ! - Plans
+	// =========================
+
+	/**
+	 * Retrieve a list of plans.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter Optional Arguments for filtering the list request.
+	 *
+	 * @return array The list of plans.
+	 */
+	public function list_plans( array $filter = array() ) {
+		if ( ! isset( $this->cache['plans'] ) ) {
+			$this->cache['plans'] = $this->request( 'avail.linodeplans', $filter );
+		}
+
+		return $this->cache['plans'];
+	}
+
+	/**
+	 * Retrieve a single plan.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $kernel_id The ID of the kernel to retrieve.
+	 *
+	 * @return array The plan information.
+	 */
+	public function get_plan( $plan_id ) {
+		$plans = $this->list_plans();
+
+		foreach ( $plans as $plan ) {
+			if ( $plans['PLANID'] == $plan_id ) {
+				return $plan;
+			}
+		}
+
+		return false;
+	}
+
 	// ==================================================
 	// ! Editable Objects
 	// ==================================================
