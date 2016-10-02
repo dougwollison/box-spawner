@@ -398,16 +398,16 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function create_linode( $data, $format = 'object' ) {
 		if ( ! isset( $data['DATACENTERID'] ) ) {
-			throw new Exception( 'DatacenterID required when creating a linode.' );
+			throw new \BoxSpawner\MissingParameterException( 'DatacenterID required when creating a linode.' );
 		}
 		if ( ! isset( $data['PLANID'] ) ) {
-			throw new Exception( 'PlanID required when creating a linode.' );
+			throw new \BoxSpawner\MissingParameterException( 'PlanID required when creating a linode.' );
 		}
 
-		$result = $this->api->request( 'linode.create', $data );
+		$result = $this->request( 'linode.create', $data );
 
 		if ( $format == 'object' ) {
-			return new Linode( $this, $data[ Linode::ID_ATTRIBUTE ], $result[0] );
+			return new Linode( $this, $result[ Linode::ID_ATTRIBUTE ] );
 		} else {
 			return $result;
 		}
@@ -522,7 +522,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 			'PAYMENTTERM' => $payment_term,
 		);
 
-		return $this->api->request( 'linode.clone', $data );
+		return $this->request( 'linode.clone', $data );
 	}
 
 	/**
@@ -531,7 +531,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 */
 	public function kvmify_linode( $linode_id ) {
-		return $this->api->request( 'linode.clone', array(
+		return $this->request( 'linode.clone', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 		) );
 	}
@@ -542,7 +542,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 */
 	public function mutate_linode( $linode_id ) {
-		return $this->api->request( 'linode.mutate', array(
+		return $this->request( 'linode.mutate', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 		) );
 	}
@@ -627,7 +627,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 
 		foreach ( $required as $key ) {
 			if ( ! isset( $data[ $key ] ) ) {
-				throw new Exception( "{$key} is required when creating a linode disk" . ( $type ?  " from a {$type}" : '' ) . "." );
+				throw new \BoxSpawner\MissingParameterException( "{$key} is required when creating a linode disk" . ( $type ?  " from a {$type}" : '' ) . "." );
 			}
 		}
 
@@ -635,7 +635,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 
 		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
 
-		$result = $this->api->request( 'linode.disk.' . $method, $data );
+		$result = $this->request( 'linode.disk.' . $method, $data );
 
 		if ( $format == 'object' ) {
 			return new Linode_Disk( $this, $result[ Linode_Disk::ID_ATTRIBUTE ], null, $linode_id );
@@ -710,7 +710,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return int The ID of the job handling the request.
 	 */
 	public function duplicate_linode_disk( $linode_id, $disk_id ) {
-		$result = $this->api->request( 'linode.disk.duplicate', array(
+		$result = $this->request( 'linode.disk.duplicate', array(
 			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		) );
@@ -729,7 +729,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
 
-		$result = $this->api->request( 'linode.disk.imageize', $data );
+		$result = $this->request( 'linode.disk.imageize', $data );
 
 		return $result['JOBID'];
 	}
@@ -799,18 +799,18 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
 		if ( ! isset( $data['KERNELID'] ) ) {
-			throw new Exception( 'KERNELID is required when creating a linode config.' );
+			throw new \BoxSpawner\MissingParameterException( 'KERNELID is required when creating a linode config.' );
 		}
 		if ( ! isset( $data['LABEL'] ) ) {
-			throw new Exception( 'LABEL is required when creating a linode config.' );
+			throw new \BoxSpawner\MissingParameterException( 'LABEL is required when creating a linode config.' );
 		}
 		if ( ! isset( $data['DISKLIST'] ) ) {
-			throw new Exception( 'DISKLIST is required when creating a linode config.' );
+			throw new \BoxSpawner\MissingParameterException( 'DISKLIST is required when creating a linode config.' );
 		}
 
 		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
 
-		$result = $this->api->request( 'linode.config.create', $data );
+		$result = $this->request( 'linode.config.create', $data );
 
 		if ( $format == 'object' ) {
 			return new Linode_Config( $this, $result[ Linode_Config::ID_ATTRIBUTE ], null, $linode_id );
@@ -919,14 +919,14 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function create_linode_ip( $linode_id, $data, $format = 'object' ) {
 		if ( ! isset( $data['TYPE'] ) ) {
-			throw new Exception( 'TYPE is required when adding a linode ip.' );
+			throw new \BoxSpawner\MissingParameterException( 'TYPE is required when adding a linode ip.' );
 		} else if ( ! in_array( $data['TYPE'], array( 'public', 'private' ) ) ) {
-			throw new Exception( 'TYPE must be "public" or "private" when adding a linode ip.' );
+			throw new \BoxSpawner\InvalidParameterException( 'TYPE must be "public" or "private" when adding a linode ip.' );
 		}
 
 		$method = 'add' . $data['TYPE'];
 
-		$result = $this->api->request( 'linode.ip.' . $method, array(
+		$result = $this->request( 'linode.ip.' . $method, array(
 			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
 		) );
 
