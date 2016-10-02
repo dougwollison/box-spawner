@@ -91,4 +91,80 @@ class Linode_IP extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Lino
 	public function update( array $data ) {
 		return $this->api->update_linode_ip( $this->parent_id, $this->id, $data );
 	}
+
+	// =========================
+	// ! Specialty Actions
+	// =========================
+
+	/**
+	 * Set the rDNS name of the ip.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $hostname The hostname ot set the rDNS to.
+	 */
+	public function set_rdns( $hostname ) {
+		return $this->api->update_linode_ip( $this->parent_id, $this->id, array(
+			'Hostname' => $this->id,
+		) );
+	}
+
+	/**
+	 * Helper for swap_with() and transfer_to().
+	 *
+	 * Handle's updating the parent_id on success.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the swap request.
+	 *
+	 * @return array The new relationships between the IPs.
+	 */
+	protected function swap( $data ) {
+		$data[ $this::ID_ATTRIBUTE ] = $this->id;
+
+		$result = $this->api->request( 'linode.ip.swap', $data );
+
+		foreach ( $result as $ip ) {
+			if ( $ip[ $this::ID_ATTRIBUTE ] == $this->id ) {
+				$this->parent_id = $ip[ $this::PARENT_ID_ATTRIBUTE ];
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Exchange the IP with another IP.
+	 *
+	 * Will update it's parent_id on success.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $ip_id The ID of the IP address to swap with.
+	 *
+	 * @return array The new relationships between the IPs.
+	 */
+	public function swap_with( $ip_id ) {
+		return $this->swap( array(
+			'withIPAddressID' => $ip_id,
+		) );
+	}
+
+	/**
+	 * Transfer the IP to another Linode.
+	 *
+	 * Will update it's parent_id on success.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $linode_id The ID of the linode to transfer to.
+	 *
+	 * @return array The new relationships between the IPs.
+	 */
+	public function transfer_to( $linode_id ) {
+		return $this->swap( array(
+			'toLinodeID' => $linode_id,
+		) );
+	}
 }
