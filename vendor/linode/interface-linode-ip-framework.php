@@ -16,5 +16,12 @@ namespace BoxSpawner\Linode;
  *  @since 1.0.0
  */
 interface Linode_IP_Framework {
-	// nothing special
+	/**
+	 * Set the rDNS name of the ip.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $hostname The hostname ot set the rDNS to.
+	 */
+	public function set_rdns( $hostname );
 }
