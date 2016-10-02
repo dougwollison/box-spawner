@@ -50,21 +50,34 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 */
 	protected function create( array $data ) {
 		if ( ! $this->parent_id ) {
-			throw new Exception( 'LinodeID required when creating a linode disk.' );
+			throw new Exception( 'LINODEID required when creating a linode disk.' );
 		}
-		if ( ! isset( $data['LABEL'] ) ) {
-			throw new Exception( 'Label required when creating a linode disk.' );
+
+		$type = null;
+		if ( isset( $data['DISTRIBUTIONID'] ) ) {
+			$type = 'distribution';
+			$required = array( 'DISTRIBUTIONID', 'LABEL', 'SIZE', 'ROOTPASS' );
+		} else if ( isset( $data['IMAGEID'] ) ) {
+			$type = 'image';
+			$required = array( 'IMAGEID' );
+		} else if ( isset( $data['STACKSCRIPTID'] ) ) {
+			$type = 'stackscript';
+			$required = array( 'STACKSCRIPTID', 'STACKSCRIPTUDFRESPONSES', 'LABEL', 'SIZE', 'ROOTPASS' );
+		} else {
+			$required = array( 'LABEL', 'TYPE', 'SIZE' );
 		}
-		if ( ! isset( $data['TYPE'] ) ) {
-			throw new Exception( 'Type required when creating a linode disk.' );
+
+		foreach ( $required as $key ) {
+			if ( ! isset( $data[ $key ] ) ) {
+				throw new Exception( "{$key} is required when creating a linode disk" . ( $type ?  " from a {$type}" : '' ) . "." );
+			}
 		}
-		if ( ! isset( $data['SIZE'] ) ) {
-			throw new Exception( 'Size required when creating a linode disk.' );
-		}
+
+		$method = 'create' . ( $type ? "from{$type}" : '' );
 
 		$data[ $this::PARENT_ID_ATTRIBUTE ] = $this->parent_id;
 
-		$result = $this->api->request( 'linode.disk.create', $data );
+		$result = $this->api->request( 'linode.disk.' . $method, $data );
 
 		$this->load( $result[ $this::ID_ATTRIBUTE ] );
 	}

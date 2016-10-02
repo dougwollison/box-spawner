@@ -46,12 +46,12 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 */
 	protected function create( array $data ) {
 		if ( ! $this->parent_id ) {
-			throw new Exception( 'LinodeID required when adding a linode ip.' );
+			throw new Exception( 'LINODEID is required when adding a linode ip.' );
 		}
 		if ( ! isset( $data['TYPE'] ) ) {
-			throw new Exception( 'Type required when adding a linode ip.' );
+			throw new Exception( 'TYPE is required when adding a linode ip.' );
 		} else if ( ! in_array( $data['TYPE'], array( 'public', 'private' ) ) ) {
-			throw new Exception( 'Type must be "public" or "private" when adding a linode ip.' );
+			throw new Exception( 'TYPE must be "public" or "private" when adding a linode ip.' );
 		}
 
 		$method = 'add' . $data['TYPE'];
