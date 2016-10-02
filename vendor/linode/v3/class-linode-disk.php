@@ -49,35 +49,7 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 * @param array $data The data for the create request.
 	 */
 	protected function create( array $data ) {
-		if ( ! $this->parent_id ) {
-			throw new Exception( 'LINODEID required when creating a linode disk.' );
-		}
-
-		$type = null;
-		if ( isset( $data['DISTRIBUTIONID'] ) ) {
-			$type = 'distribution';
-			$required = array( 'DISTRIBUTIONID', 'LABEL', 'SIZE', 'ROOTPASS' );
-		} else if ( isset( $data['IMAGEID'] ) ) {
-			$type = 'image';
-			$required = array( 'IMAGEID' );
-		} else if ( isset( $data['STACKSCRIPTID'] ) ) {
-			$type = 'stackscript';
-			$required = array( 'STACKSCRIPTID', 'STACKSCRIPTUDFRESPONSES', 'LABEL', 'SIZE', 'ROOTPASS' );
-		} else {
-			$required = array( 'LABEL', 'TYPE', 'SIZE' );
-		}
-
-		foreach ( $required as $key ) {
-			if ( ! isset( $data[ $key ] ) ) {
-				throw new Exception( "{$key} is required when creating a linode disk" . ( $type ?  " from a {$type}" : '' ) . "." );
-			}
-		}
-
-		$method = 'create' . ( $type ? "from{$type}" : '' );
-
-		$data[ $this::PARENT_ID_ATTRIBUTE ] = $this->parent_id;
-
-		$result = $this->api->request( 'linode.disk.' . $method, $data );
+		$result = $this->api->create_linode_disk( $this->parent_id, $data, 'array' );
 
 		$this->load( $result[ $this::ID_ATTRIBUTE ] );
 	}
@@ -90,14 +62,8 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 * @param string $id The id of the object to load.
 	 */
 	protected function load( $id ) {
-		$this->id = $data[ static::ID_ATTRIBUTE ];
-
-		$data = $this->api->request( 'linode.disk.list', array(
-			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,
-			$this::ID_ATTRIBUTE => $this->id,
-		) );
-
-		$this->attributes = $data;
+		$this->id = $id;
+		$this->attributes = $this->api->get_linode_disk( $this->parent_id, $id, 'array' );
 	}
 
 	/**

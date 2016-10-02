@@ -40,14 +40,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @param array $data The data for the create request.
 	 */
 	protected function create( array $data ) {
-		if ( ! isset( $data['DATACENTERID'] ) ) {
-			throw new Exception( 'DatacenterID required when creating a linode.' );
-		}
-		if ( ! isset( $data['PLANID'] ) ) {
-			throw new Exception( 'PlanID required when creating a linode.' );
-		}
-
-		$result = $this->api->request( 'linode.create', $data );
+		$result = $this->api->create_linode( $data, 'array' );
 
 		$this->load( $result[ $this::ID_ATTRIBUTE ] );
 	}
@@ -61,12 +54,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 */
 	protected function load( $id ) {
 		$this->id = $id;
-
-		$data = $this->api->request( 'linode.list', array(
-			$this::ID_ATTRIBUTE => $this->id,
-		) );
-
-		$this->attributes = $data;
+		$this->attributes = $this->api->get_linode( $id, 'array' );
 	}
 
 	/**
@@ -152,6 +140,8 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * Upgrade to it's next generation.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return bool
 	 */
 	public function mutate() {
 		return $this->api->mutate_linode( $this->id );

@@ -348,15 +348,21 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param array $filter Optional Arguments for filtering the list request.
+	 * @param bool  $format Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of Linode objects.
 	 */
-	public function list_linodes( array $filter = array() ) {
+	public function list_linodes( array $filter = array(), $format = 'object' ) {
 		$data = $this->request( 'linode.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
 			$id = $entry[ Linode::ID_ATTRIBUTE ];
-			$data[ $i ] = new Linode( $this, $id, $entry );
+
+			if ( $format == 'object' ) {
+				$entry = new Linode( $this, $id, $entry );
+			}
+
+			$data[ $i ] = $entry;
 		}
 
 		return $data;
@@ -367,16 +373,17 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode to retrieve.
+	 * @param int  $linode_id The ID of the linode to retrieve.
+	 * @param bool $format    Optional The format to return (Linode object or attributes array).
 	 *
-	 * @return Linode The linode object.
+	 * @return Linode|array The linode object.
 	 */
-	public function get_linode( $linode_id ) {
-		$data = $this->request( 'linode.list', array(
+	public function get_linode( $linode_id, $format = 'object' ) {
+		$result = $this->list_linodes( array(
 			Linode::ID_ATTRIBUTE => $linode_id,
-		) );
+		), $format );
 
-		return new Linode( $this, $linode_id, $data[0] );
+		return $result[0];
 	}
 
 	/**
@@ -384,12 +391,26 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The properties of the new Linode.
+	 * @param array $data   The properties of the new Linode.
+	 * @param bool  $format Optional The format to return (Linode object or attributes array).
 	 *
-	 * @return Linode The linode object.
+	 * @return Linode|array The linode object.
 	 */
-	public function create_linode( $data ) {
-		return new Linode( $this, null, $data );
+	public function create_linode( $data, $format = 'object' ) {
+		if ( ! isset( $data['DATACENTERID'] ) ) {
+			throw new Exception( 'DatacenterID required when creating a linode.' );
+		}
+		if ( ! isset( $data['PLANID'] ) ) {
+			throw new Exception( 'PlanID required when creating a linode.' );
+		}
+
+		$result = $this->api->request( 'linode.create', $data );
+
+		if ( $format == 'object' ) {
+			return new Linode( $this, $data[ Linode::ID_ATTRIBUTE ], $result[0] );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -537,16 +558,22 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int   $linode_id The ID of the linode to get disks from.
 	 * @param array $filter    Optional Arguments for filtering the list request.
+	 * @param bool  $format    Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of disk objects.
 	 */
-	public function list_linode_disks( $linode_id, array $filter = array() ) {
+	public function list_linode_disks( $linode_id, array $filter = array(), $format = 'object' ) {
 		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
 		$data = $this->request( 'linode.disk.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
 			$id = $entry[ Linode_Disk::ID_ATTRIBUTE ];
-			$data[ $i ] = new Linode_Disk( $this, $id, $entry, $linode_id );
+
+			if ( $format == 'object' ) {
+				$entry = new Linode_Disk( $this, $id, $entry, $linode_id );
+			}
+
+			$data[ $i ] = $entry;
 		}
 
 		return $data;
@@ -557,18 +584,19 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the disk belongs to.
-	 * @param int $disk_id   The ID of the disk to retrieve.
+	 * @param int  $linode_id The ID of the linode the disk belongs to.
+	 * @param int  $disk_id   The ID of the disk to retrieve.
+	 * @param bool $format    Optional The format to return (Linode_Disk object or attributes array).
 	 *
-	 * @return Linode_Disk The disk object.
+	 * @return Linode_Disk|array The disk object.
 	 */
-	public function get_linode_disk( $linode_id, $disk_id ) {
-		$data = $this->request( 'linode.disk.list', array(
+	public function get_linode_disk( $linode_id, $disk_id, $format = 'object' ) {
+		$result = $this->list_linodes( array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
-		) );
+		), $format );
 
-		return new Linode_Disk( $this, $disk_id, $data[0], $linode_id );
+		return $result[0];
 	}
 
 	/**
@@ -578,13 +606,42 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int   $linode_id The ID of the linode to create the disk for.
 	 * @param array $data      The properties of the new disk.
+	 * @param bool  $format    Optional The format to return (Linode_Disk object or attributes array).
 	 *
-	 * @return Linode_Disk The disk object.
+	 * @return Linode_Disk|array The disk object.
 	 */
-	public function create_linode_disk( $linode_id, $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+	public function create_linode_disk( $linode_id, $data, $format = 'object' ) {
+		$type = null;
+		if ( isset( $data['DISTRIBUTIONID'] ) ) {
+			$type = 'distribution';
+			$required = array( 'DISTRIBUTIONID', 'LABEL', 'SIZE', 'ROOTPASS' );
+		} else if ( isset( $data['IMAGEID'] ) ) {
+			$type = 'image';
+			$required = array( 'IMAGEID' );
+		} else if ( isset( $data['STACKSCRIPTID'] ) ) {
+			$type = 'stackscript';
+			$required = array( 'STACKSCRIPTID', 'STACKSCRIPTUDFRESPONSES', 'LABEL', 'SIZE', 'ROOTPASS' );
+		} else {
+			$required = array( 'LABEL', 'TYPE', 'SIZE' );
+		}
 
-		return new Linode_Disk( $this, null, $data );
+		foreach ( $required as $key ) {
+			if ( ! isset( $data[ $key ] ) ) {
+				throw new Exception( "{$key} is required when creating a linode disk" . ( $type ?  " from a {$type}" : '' ) . "." );
+			}
+		}
+
+		$method = 'create' . ( $type ? "from{$type}" : '' );
+
+		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
+
+		$result = $this->api->request( 'linode.disk.' . $method, $data );
+
+		if ( $format == 'object' ) {
+			return new Linode_Disk( $this, $result[ Linode_Disk::ID_ATTRIBUTE ], null, $linode_id );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -688,16 +745,22 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int   $linode_id The ID of the linode to get configs from.
 	 * @param array $filter    Optional Arguments for filtering the list request.
+	 * @param bool  $format    Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of Linode_Config objects.
 	 */
-	public function list_linode_configs( $linode_id, array $filter = array() ) {
+	public function list_linode_configs( $linode_id, array $filter = array(), $format = 'object' ) {
 		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
 		$data = $this->request( 'linode.config.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
 			$id = $entry[ Linode_Config::ID_ATTRIBUTE ];
-			$data[ $i ] = new Linode_Config( $this, $id, $entry, $linode_id );
+
+			if ( $format == 'object' ) {
+				$entry = new Linode_Config( $this, $id, $entry, $linode_id );
+			}
+
+			$data[ $i ] = $entry;
 		}
 
 		return $data;
@@ -708,18 +771,19 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the config belongs to.
-	 * @param int $config_id The ID of the config to retrieve.
+	 * @param int  $linode_id The ID of the linode the config belongs to.
+	 * @param int  $config_id The ID of the config to retrieve.
+	 * @param bool $format    Optional The format to return (Linode_Config object or attributes array).
 	 *
-	 * @return Linode_Config The config object.
+	 * @return Linode_Config|array The config object.
 	 */
-	public function get_linode_config( $linode_id, $config_id ) {
-		$data = $this->request( 'linode.config.list', array(
+	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
+		$result = $this->list_linodes( array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 			Linode_Config::ID_ATTRIBUTE => $config_id,
-		) );
+		), $format );
 
-		return new Linode_Config( $this, $config_id, $data[0], $linode_id );
+		return $result[0];
 	}
 
 	/**
@@ -729,13 +793,30 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int   $linode_id The ID of the linode to create the config for.
 	 * @param array $data      The properties of the new config.
+	 * @param bool  $format    Optional The format to return (Linode_Config object or attributes array).
 	 *
-	 * @return Linode_Config The config object.
+	 * @return Linode_Config|array The config object.
 	 */
-	public function create_linode_config( $linode_id, $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
+		if ( ! isset( $data['KERNELID'] ) ) {
+			throw new Exception( 'KERNELID is required when creating a linode config.' );
+		}
+		if ( ! isset( $data['LABEL'] ) ) {
+			throw new Exception( 'LABEL is required when creating a linode config.' );
+		}
+		if ( ! isset( $data['DISKLIST'] ) ) {
+			throw new Exception( 'DISKLIST is required when creating a linode config.' );
+		}
 
-		return new Linode_Config( $this, null, $data );
+		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
+
+		$result = $this->api->request( 'linode.config.create', $data );
+
+		if ( $format == 'object' ) {
+			return new Linode_Config( $this, $result[ Linode_Config::ID_ATTRIBUTE ], null, $linode_id );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -784,16 +865,22 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int   $linode_id The ID of the linode to get ips from.
 	 * @param array $filter    Optional Arguments for filtering the list request.
+	 * @param bool  $format    Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of Linode_IP objects.
 	 */
-	public function list_linode_ips( $linode_id, array $filter = array() ) {
+	public function list_linode_ips( $linode_id, array $filter = array(), $format = 'object' ) {
 		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
 		$data = $this->request( 'linode.ip.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
 			$id = $entry[ Linode_IP::ID_ATTRIBUTE ];
-			$data[ $i ] = new Linode_IP( $this, $id, $entry, $linode_id );
+
+			if ( $format == 'object' ) {
+				$entry = new Linode_IP( $this, $id, $entry, $linode_id );
+			}
+
+			$data[ $i ] = $entry;
 		}
 
 		return $data;
@@ -804,18 +891,19 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the ip belongs to.
-	 * @param int $ip_id     The ID of the ip to retrieve.
+	 * @param int  $linode_id The ID of the linode the ip belongs to.
+	 * @param int  $ip_id     The ID of the ip to retrieve.
+	 * @param bool $format    Optional The format to return (Linode_IP object or attributes array).
 	 *
-	 * @return Linode_IP The ip object.
+	 * @return Linode_IP|array The ip object.
 	 */
-	public function get_linode_ip( $linode_id, $ip_id ) {
-		$data = $this->request( 'linode.ip.list', array(
+	public function get_linode_ip( $linode_id, $ip_id, $format = 'object' ) {
+		$result = $this->list_linodes( array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 			Linode_IP::ID_ATTRIBUTE => $ip_id,
-		) );
+		), $format );
 
-		return new Linode_IP( $this, $ip_id, $data[0], $linode_id );
+		return $result[0];
 	}
 
 	/**
@@ -825,13 +913,28 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int   $linode_id The ID of the linode to create the ip for.
 	 * @param array $data      The properties of the new ip.
+	 * @param bool  $format    Optional The format to return (Linode_IP object or attributes array).
 	 *
-	 * @return Linode_IP The ip object.
+	 * @return Linode_IP|array The ip object.
 	 */
-	public function create_linode_ip( $linode_id, $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+	public function create_linode_ip( $linode_id, $data, $format = 'object' ) {
+		if ( ! isset( $data['TYPE'] ) ) {
+			throw new Exception( 'TYPE is required when adding a linode ip.' );
+		} else if ( ! in_array( $data['TYPE'], array( 'public', 'private' ) ) ) {
+			throw new Exception( 'TYPE must be "public" or "private" when adding a linode ip.' );
+		}
 
-		return new Linode_IP( $this, null, $data );
+		$method = 'add' . $data['TYPE'];
+
+		$result = $this->api->request( 'linode.ip.' . $method, array(
+			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
+		) );
+
+		if ( $format == 'object' ) {
+			return new Linode_IP( $this, $result[ Linode_IP::ID_ATTRIBUTE ], null, $linode_id );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -919,10 +1022,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param array $filter Optional Arguments for filtering the list request.
+	 * @param bool  $format Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of Domain objects.
 	 */
-	public function list_domains( array $filter = array() ) {
+	public function list_domains( array $filter = array(), $format = 'object' ) {
 		// to be written
 	}
 
@@ -931,11 +1035,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $domain_id The ID of the domain to retrieve.
+	 * @param int  $domain_id The ID of the domain to retrieve.
+	 * @param bool $format    Optional The format to return (Domain object or attributes array).
 	 *
-	 * @return Domain The domain object.
+	 * @return Domain|array The domain object.
 	 */
-	public function get_domain( $domain_id ) {
+	public function get_domain( $domain_id, $format = 'object' ) {
 		// to be written
 	}
 
@@ -944,11 +1049,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The properties of the new Domain.
+	 * @param array $data   The properties of the new Domain.
+	 * @param bool  $format Optional The format to return (Domain object or attributes array).
 	 *
-	 * @return Domain The domain object.
+	 * @return Domain|array The domain object.
 	 */
-	public function create_domain( $data ) {
+	public function create_domain( $data, $format = 'object' ) {
 		// to be written
 	}
 
@@ -989,11 +1095,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int   $domain_id The ID of the domain to get records from.
-	 * @param array $filter  Optional Arguments for filtering the list request.
+	 * @param array $filter    Optional Arguments for filtering the list request.
+	 * @param bool  $format    Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of Domain_Record objects.
 	 */
-	public function list_domain_records( $domain_id, array $filter = array() ) {
+	public function list_domain_records( $domain_id, array $filter = array(), $format = 'object' ) {
 		// to be written
 	}
 
@@ -1002,12 +1109,13 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $domain_id   The ID of the domain the record belongs to.
-	 * @param int $record_id The ID of the record to retrieve.
+	 * @param int  $domain_id The ID of the domain the record belongs to.
+	 * @param int  $record_id The ID of the record to retrieve.
+	 * @param bool $format    Optional The format to return (Domain_Record object or attributes array).
 	 *
-	 * @return Domain_Record The record object.
+	 * @return Domain_Record|array The record object.
 	 */
-	public function get_domain_record( $domain_id, $record_id ) {
+	public function get_domain_record( $domain_id, $record_id, $format = 'object' ) {
 		// to be written
 	}
 
@@ -1017,11 +1125,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int   $domain_id The ID of the domain to create the record for.
-	 * @param array $data    The properties of the new record.
+	 * @param array $data      The properties of the new record.
+	 * @param bool  $format    Optional The format to return (Domain_Record object or attributes array).
 	 *
-	 * @return Domain_Record The record object.
+	 * @return Domain_Record|array The record object.
 	 */
-	public function create_domain_record( $domain_id, $data ) {
+	public function create_domain_record( $domain_id, $data, $format = 'object' ) {
 		// to be written
 	}
 
@@ -1064,10 +1173,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param array $filter Optional Arguments for filtering the list request.
+	 * @param bool  $format Optional The format to return (Linode object or attributes array).
 	 *
 	 * @return array The list of StackScript objects.
 	 */
-	public function list_stackscripts( array $filter = array() ) {
+	public function list_stackscripts( array $filter = array(), $format = 'object' ) {
 		// to be written
 	}
 
@@ -1076,11 +1186,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $stackscript_id The ID of the stackscript to retrieve.
+	 * @param int  $stackscript_id The ID of the stackscript to retrieve.
+	 * @param bool $format         Optional The format to return (Linode object or attributes array).
 	 *
-	 * @return StackScript The stackscript object.
+	 * @return StackScript|array The stackscript object.
 	 */
-	public function get_stackscript( $stackscript_id ) {
+	public function get_stackscript( $stackscript_id, $format = 'object' ) {
 		// to be written
 	}
 
@@ -1089,11 +1200,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The properties of the new StackScript.
+	 * @param array $data   The properties of the new StackScript.
+	 * @param bool  $format Optional The format to return (Linode object or attributes array).
 	 *
-	 * @return StackScript The stackscript object.
+	 * @return StackScript|array The stackscript object.
 	 */
-	public function create_stackscript( $data ) {
+	public function create_stackscript( $data, $format = 'object' ) {
 		// to be written
 	}
 

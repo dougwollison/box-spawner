@@ -45,20 +45,7 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 * @param array $data The data for the create request.
 	 */
 	protected function create( array $data ) {
-		if ( ! $this->parent_id ) {
-			throw new Exception( 'LINODEID is required when adding a linode ip.' );
-		}
-		if ( ! isset( $data['TYPE'] ) ) {
-			throw new Exception( 'TYPE is required when adding a linode ip.' );
-		} else if ( ! in_array( $data['TYPE'], array( 'public', 'private' ) ) ) {
-			throw new Exception( 'TYPE must be "public" or "private" when adding a linode ip.' );
-		}
-
-		$method = 'add' . $data['TYPE'];
-
-		$result = $this->api->request( 'linode.ip.' . $method, array(
-			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,
-		) );
+		$result = $this->api->create_linode_ip( $this->parent_id, $data, 'array' );
 
 		$this->load( $result[ $this::ID_ATTRIBUTE ] );
 	}
@@ -71,14 +58,8 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 * @param string $id The id of the object to load.
 	 */
 	protected function load( $id ) {
-		$this->id = $data[ static::ID_ATTRIBUTE ];
-
-		$data = $this->api->request( 'linode.ip.list', array(
-			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,
-			$this::ID_ATTRIBUTE => $this->id,
-		) );
-
-		$this->attributes = $data;
+		$this->id = $id;
+		$this->attributes = $this->api->get_linode_ip( $this->parent_id, $id, 'array' );
 	}
 
 	/**
