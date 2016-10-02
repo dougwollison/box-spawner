@@ -591,7 +591,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Disk|array The disk object.
 	 */
 	public function get_linode_disk( $linode_id, $disk_id, $format = 'object' ) {
-		$result = $this->list_linodes( array(
+		$result = $this->get_linode_disk( array(
 			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		), $format );
@@ -778,7 +778,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config|array The config object.
 	 */
 	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
-		$result = $this->list_linodes( array(
+		$result = $this->list_linode_configs( array(
 			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Config::ID_ATTRIBUTE => $config_id,
 		), $format );
@@ -898,7 +898,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_IP|array The ip object.
 	 */
 	public function get_linode_ip( $linode_id, $ip_id, $format = 'object' ) {
-		$result = $this->list_linodes( array(
+		$result = $this->list_linode_ips( array(
 			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_IP::ID_ATTRIBUTE => $ip_id,
 		), $format );
@@ -1027,7 +1027,19 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Domain objects.
 	 */
 	public function list_domains( array $filter = array(), $format = 'object' ) {
-		// to be written
+		$data = $this->request( 'domain.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Domain::ID_ATTRIBUTE ];
+
+			if ( $format == 'object' ) {
+				$entry = new Domain( $this, $id, $entry );
+			}
+
+			$data[ $i ] = $entry;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -1041,7 +1053,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain|array The domain object.
 	 */
 	public function get_domain( $domain_id, $format = 'object' ) {
-		// to be written
+		$result = $this->list_domains( array(
+			Domain::ID_ATTRIBUTE => $domain_id,
+		), $format );
+
+		return $result[0];
 	}
 
 	/**
@@ -1069,7 +1085,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_domain( $domain_id, array $data ) {
-		// to be written
+		$data[ Domain::ID_ATTRIBUTE ] = $linode_id;
+
+		return $this->request( 'domain.update', $data );
 	}
 
 	/**
@@ -1082,7 +1100,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_domain( $domain_id ) {
-		// to be written
+		$data[ Domain::ID_ATTRIBUTE ] = $linode_id;
+
+		return $this->request( 'domain.delete', $data );
 	}
 
 	// =========================
@@ -1101,7 +1121,20 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Domain_Record objects.
 	 */
 	public function list_domain_records( $domain_id, array $filter = array(), $format = 'object' ) {
-		// to be written
+		$filter[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $linode_id;
+		$data = $this->request( 'domain.resource.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Domain_Record::ID_ATTRIBUTE ];
+
+			if ( $format == 'object' ) {
+				$entry = new Domain_Record( $this, $id, $entry, $linode_id );
+			}
+
+			$data[ $i ] = $entry;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -1116,7 +1149,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain_Record|array The record object.
 	 */
 	public function get_domain_record( $domain_id, $record_id, $format = 'object' ) {
-		// to be written
+		$result = $this->list_domain_records( array(
+			Domain_Record::PARENT_ID_ATTRIBUTE => $domain_id,
+			Domain_Record::ID_ATTRIBUTE => $record_id,
+		), $format );
+
+		return $result[0];
 	}
 
 	/**
@@ -1146,7 +1184,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_domain_record( $domain_id, $record_id, array $data ) {
-		// to be written
+		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
+		$data[ Domain_Record::ID_ATTRIBUTE ] = $record_id;
+
+		return $this->request( 'domain.resource.update', $data );
 	}
 
 	/**
@@ -1160,7 +1201,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_domain_record( $domain_id, $record_id ) {
-		// to be written
+		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
+		$data[ Domain_Record::ID_ATTRIBUTE ] = $record_id;
+
+		return $this->request( 'domain.resource.delete', $data );
 	}
 
 	// =========================
@@ -1178,7 +1222,19 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of StackScript objects.
 	 */
 	public function list_stackscripts( array $filter = array(), $format = 'object' ) {
-		// to be written
+		$data = $this->request( 'stackscript.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ StackScript::ID_ATTRIBUTE ];
+
+			if ( $format == 'object' ) {
+				$entry = new StackScript( $this, $id, $entry );
+			}
+
+			$data[ $i ] = $entry;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -1192,7 +1248,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return StackScript|array The stackscript object.
 	 */
 	public function get_stackscript( $stackscript_id, $format = 'object' ) {
-		// to be written
+		$result = $this->list_stackscripts( array(
+			StackScript::ID_ATTRIBUTE => $stackscript_id,
+		), $format );
+
+		return $result[0];
 	}
 
 	/**
@@ -1220,7 +1280,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_stackscript( $stackscript_id, array $data ) {
-		// to be written
+		$data[ StackScript::ID_ATTRIBUTE ] = $linode_id;
+
+		return $this->request( 'stackscript.update', $data );
 	}
 
 	/**
@@ -1233,6 +1295,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_stackscript( $stackscript_id ) {
-		// to be written
+		$data[ StackScript::ID_ATTRIBUTE ] = $linode_id;
+
+		return $this->request( 'stackscript.delete', $data );
 	}
 }
