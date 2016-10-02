@@ -563,7 +563,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of disk objects.
 	 */
 	public function list_linode_disks( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$filter[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data = $this->request( 'linode.disk.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
@@ -592,7 +592,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function get_linode_disk( $linode_id, $disk_id, $format = 'object' ) {
 		$result = $this->list_linodes( array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		), $format );
 
@@ -656,7 +656,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_disk( $linode_id, $disk_id, array $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
 
 		return $this->request( 'linode.disk.update', $data );
@@ -674,7 +674,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function delete_linode_disk( $linode_id, $disk_id ) {
 		$result = $this->request( 'linode.disk.update', array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		) );
 
@@ -694,7 +694,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function resize_linode_disk( $linode_id, $disk_id, $size ) {
 		$result = $this->request( 'linode.disk.update', array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 			'size' => $size,
 		) );
@@ -711,7 +711,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function duplicate_linode_disk( $linode_id, $disk_id ) {
 		$result = $this->api->request( 'linode.disk.duplicate', array(
-			Linode::PARENT_ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		) );
 
@@ -726,7 +726,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return int The ID of the image created.
 	 */
 	public function imagize_linode_disk( $linode_id, $disk_id, $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
 
 		$result = $this->api->request( 'linode.disk.imageize', $data );
@@ -750,7 +750,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode_Config objects.
 	 */
 	public function list_linode_configs( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$filter[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data = $this->request( 'linode.config.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
@@ -779,7 +779,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
 		$result = $this->list_linodes( array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Config::ID_ATTRIBUTE => $config_id,
 		), $format );
 
@@ -831,7 +831,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_config( $linode_id, $config_id, array $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
 
 		return $this->request( 'linode.config.update', $data );
@@ -849,7 +849,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function delete_linode_config( $linode_id, $config_id ) {
 		return $this->request( 'linode.config.update', array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Config::ID_ATTRIBUTE => $config_id,
 		) );
 	}
@@ -870,7 +870,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode_IP objects.
 	 */
 	public function list_linode_ips( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$filter[ Linode_IP::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data = $this->request( 'linode.ip.list', $filter );
 
 		foreach ( $data as $i => $entry ) {
@@ -899,7 +899,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function get_linode_ip( $linode_id, $ip_id, $format = 'object' ) {
 		$result = $this->list_linodes( array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_IP::ID_ATTRIBUTE => $ip_id,
 		), $format );
 
@@ -951,7 +951,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_ip( $linode_id, $ip_id, array $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_IP::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_IP::ID_ATTRIBUTE ] = $ip_id;
 
 		return $this->request( 'linode.ip.setrdns', $data );
@@ -987,7 +987,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function swap_linode_ip_with( $linode_id, $ip_id, $target_ip_id ) {
 		return $this->request( 'linode.ip.swap', array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_IP::ID_ATTRIBUTE => $ip_id,
 			'withIPAddressID' => $target_ip_id,
 		) );
@@ -1006,7 +1006,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function transfer_linode_ip_to( $linode_id, $ip_id, $target_linode_id ) {
 		return $this->request( 'linode.ip.swap', array(
-			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_IP::ID_ATTRIBUTE => $ip_id,
 			'toLinodeID' => $target_linode_id,
 		) );
