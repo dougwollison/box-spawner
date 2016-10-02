@@ -8,12 +8,12 @@
 namespace BoxSpawner\Linode;
 
 /**
- *  The Linode Config Object Framework interface.
- *  The base framework for the Linode_Config object classes.
+ * The Linode Config Object Framework interface.
+ * The base framework for the Linode_Config object classes.
  *
- *  @api
+ * @api
  *
- *  @since 1.0.0
+ * @since 1.0.0
  */
 interface Linode_Config_Framework {
 	// nothing special

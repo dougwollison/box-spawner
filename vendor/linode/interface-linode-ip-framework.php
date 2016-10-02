@@ -8,12 +8,12 @@
 namespace BoxSpawner\Linode;
 
 /**
- *  The Linode IP Object Framework interface.
- *  The base framework for the Linode_IP object classes.
+ * The Linode IP Object Framework interface.
+ * The base framework for the Linode_IP object classes.
  *
- *  @api
+ * @api
  *
- *  @since 1.0.0
+ * @since 1.0.0
  */
 interface Linode_IP_Framework {
 	/**

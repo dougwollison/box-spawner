@@ -8,12 +8,12 @@
 namespace BoxSpawner\Linode;
 
 /**
- *  The Linode Disk Object Framework interface.
- *  The base framework for the Linode_Disk object classes.
+ * The Linode Disk Object Framework interface.
+ * The base framework for the Linode_Disk object classes.
  *
- *  @api
+ * @api
  *
- *  @since 1.0.0
+ * @since 1.0.0
  */
 interface Linode_Disk_Framework {
 	/**
