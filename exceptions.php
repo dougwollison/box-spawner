@@ -19,6 +19,20 @@ namespace BoxSpawner;
 class Exception extends \Exception {}
 
 /**
+ * For required but missing paramters...
+ *
+ * @since 1.0.0
+ */
+class MissingParameterException extends \Exception {}
+
+/**
+ * For invalid paramters...
+ *
+ * @since 1.0.0
+ */
+class InvalidParameterException extends \Exception {}
+
+/**
  * For actions that are not supported...
  *
  * @since 1.0.0
