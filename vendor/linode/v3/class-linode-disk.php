@@ -26,16 +26,86 @@ class Linode_Disk extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Li
 	 *
 	 * @var string
 	 */
-	const ID_ATTRIBUTE = 'DISKID';
+	const PARENT_ID_ATTRIBUTE = Linode::ID_ATTRIBUTE;
 
 	/**
-	 * Resize the disk
+	 * The name of the option to assign the ID to.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $size The desired size of the disk (MB).
+	 * @var string
 	 */
-	public function resize( $size ) {
-		return $this->api->resize_linode_disk( $this->parent_id, $this->id, $size );
+	const ID_ATTRIBUTE = 'DISKID';
+
+	// =========================
+	// ! Main Object Actions
+	// =========================
+
+	/**
+	 * Issue a create request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the create request.
+	 */
+	protected function create( array $data ) {
+		if ( ! $this->parent_id ) {
+			throw new Exception( 'LinodeID required when creating a linode disk.' );
+		}
+		if ( ! isset( $data['Label'] ) ) {
+			throw new Exception( 'Label required when creating a linode disk.' );
+		}
+		if ( ! isset( $data['Type'] ) ) {
+			throw new Exception( 'Type required when creating a linode disk.' );
+		}
+		if ( ! isset( $data['Size'] ) ) {
+			throw new Exception( 'Size required when creating a linode disk.' );
+		}
+
+		$data[ $this::PARENT_ID_ATTRIBUTE ] = $this->parent_id;
+
+		$result = $this->api->request( 'linode.disk.create', $data );
+
+		$this->load( $result[ $this::ID_ATTRIBUTE ] );
+	}
+
+	/**
+	 * Issue a load request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $id The id of the object to load.
+	 */
+	protected function load( $id ) {
+		$this->id = $data[ static::ID_ATTRIBUTE ];
+
+		$data = $this->api->request( 'linode.disk.list', array(
+			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,
+			$this::ID_ATTRIBUTE => $this->id,
+		) );
+
+		$this->attributes = $data;
+	}
+
+	/**
+	 * Issue a update request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The data for the update request.
+	 */
+	public function update( array $data ) {
+		return $this->api->update_linode_disk( $this->parent_id, $this->id, $data );
+	}
+
+	/**
+	 * Issue a delete request for a new object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data Optional UNUSED.
+	 */
+	public function delete( array $data = array() ) {
+		return $this->api->delete_linode_disk( $this->parent_id, $this->id );
 	}
 }
