@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Domain_Record extends API_Asset implements \BoxSpawner\Linode\Domain_Record_Framework {
+class Domain_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Domain_Record_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *

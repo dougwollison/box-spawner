@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Stackscript extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
+class Stackscript extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Stackscript_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
