@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Linode_IP extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Linode_IP_Framework {
+class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -48,13 +48,13 @@ class Linode_IP extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Lino
 		if ( ! $this->parent_id ) {
 			throw new Exception( 'LinodeID required when adding a linode ip.' );
 		}
-		if ( ! isset( $data['Type'] ) ) {
+		if ( ! isset( $data['TYPE'] ) ) {
 			throw new Exception( 'Type required when adding a linode ip.' );
-		} else if ( ! in_array( $data['Type'], array( 'public', 'private' ) ) ) {
+		} else if ( ! in_array( $data['TYPE'], array( 'public', 'private' ) ) ) {
 			throw new Exception( 'Type must be "public" or "private" when adding a linode ip.' );
 		}
 
-		$method = 'add' . $data['Type'];
+		$method = 'add' . $data['TYPE'];
 
 		$result = $this->api->request( 'linode.ip.' . $method, array(
 			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,

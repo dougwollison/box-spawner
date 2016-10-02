@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Linode_Config extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Linode_Config_Framework {
+class Linode_Config extends API_Asset implements \BoxSpawner\Linode\Linode_Config_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -48,13 +48,13 @@ class Linode_Config extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\
 		if ( ! $this->parent_id ) {
 			throw new Exception( 'LinodeID required when creating a linode config.' );
 		}
-		if ( ! isset( $data['KernelID'] ) ) {
+		if ( ! isset( $data['KERNELID'] ) ) {
 			throw new Exception( 'KernelID required when creating a linode config.' );
 		}
-		if ( ! isset( $data['Label'] ) ) {
+		if ( ! isset( $data['LABEL'] ) ) {
 			throw new Exception( 'Label required when creating a linode config.' );
 		}
-		if ( ! isset( $data['DiskList'] ) ) {
+		if ( ! isset( $data['DISKLIST'] ) ) {
 			throw new Exception( 'DiskList required when creating a linode config.' );
 		}
 

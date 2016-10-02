@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Linode_Disk extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Linode_Disk_Framework {
+class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -52,13 +52,13 @@ class Linode_Disk extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Li
 		if ( ! $this->parent_id ) {
 			throw new Exception( 'LinodeID required when creating a linode disk.' );
 		}
-		if ( ! isset( $data['Label'] ) ) {
+		if ( ! isset( $data['LABEL'] ) ) {
 			throw new Exception( 'Label required when creating a linode disk.' );
 		}
-		if ( ! isset( $data['Type'] ) ) {
+		if ( ! isset( $data['TYPE'] ) ) {
 			throw new Exception( 'Type required when creating a linode disk.' );
 		}
-		if ( ! isset( $data['Size'] ) ) {
+		if ( ! isset( $data['SIZE'] ) ) {
 			throw new Exception( 'Size required when creating a linode disk.' );
 		}
 

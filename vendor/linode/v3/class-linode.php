@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode_Framework {
+class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
@@ -40,10 +40,10 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @param array $data The data for the create request.
 	 */
 	protected function create( array $data ) {
-		if ( ! isset( $data['DatacenterID'] ) ) {
+		if ( ! isset( $data['DATACENTERID'] ) ) {
 			throw new Exception( 'DatacenterID required when creating a linode.' );
 		}
-		if ( ! isset( $data['PlanID'] ) ) {
+		if ( ! isset( $data['PLANID'] ) ) {
 			throw new Exception( 'PlanID required when creating a linode.' );
 		}
 

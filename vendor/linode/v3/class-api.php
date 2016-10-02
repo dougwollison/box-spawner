@@ -57,7 +57,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return mixed The result of the request.
 	 */
 	public function request( $endpoint, array $data = array() ) {
-		$data['api_action'] = $endpoint;
+		$data['API_ACTION'] = $endpoint;
 
 		return parent::request( $data );
 	}
