@@ -245,6 +245,33 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 		return $this->api->resize_linode_disk( $this->id, $disk_id, $size );
 	}
 
+	/**
+	 * Duplicate the disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $disk_id The ID of the disk to duplicate.
+	 *
+	 * @return int The ID of the job handling the request.
+	 */
+	public function duplicate_disk() {
+		return $this->api->duplicate_linode_disk( $this->parent_id, $disk_id );
+	}
+
+	/**
+	 * Create an image from the disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int   $disk_id The ID of the disk to delete.
+	 * @param array $data    Optional The label/description for the image.
+	 *
+	 * @return int The ID of the image created.
+	 */
+	public function imagize_disk( $disk_id, $data = array() ) {
+		return $this->api->imagize_linode_disk( $this->id, $disk_id, $data );
+	}
+
 	// =========================
 	// ! - Config Assets
 	// =========================
