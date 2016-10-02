@@ -183,7 +183,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return Linode_Disk The disk object.
 	 */
 	public function create_disk( $data ) {
-		// to be written
+		return $this->api->create_linode_disk( $this->id, $data );
 	}
 
 	/**
@@ -197,7 +197,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_disk( $disk_id, array $data ) {
-		// to be written
+		return $this->api->update_linode_disk( $this->id, $disk_id, $data );
 	}
 
 	/**
@@ -210,7 +210,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_disk( $disk_id ) {
-		// to be written
+		return $this->api->delete_linode_disk( $this->id, $disk_id );
 	}
 
 	/**
@@ -224,7 +224,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function resize_disk( $disk_id, $size ) {
-		// to be written
+		return $this->api->resize_linode_disk( $this->id, $disk_id, $size );
 	}
 
 	// =========================
@@ -267,7 +267,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return Linode_Config The config object.
 	 */
 	public function create_config( $data ) {
-		// to be written
+		return $this->api->create_linode_config( $this->id, $data );
 	}
 
 	/**
@@ -281,7 +281,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_config( $config_id, array $data ) {
-		// to be written
+		return $this->api->update_linode_config( $this->id, $config_id, $data );
 	}
 
 	/**
@@ -294,7 +294,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_config( $config_id ) {
-		// to be written
+		return $this->api->delete_linode_config( $this->id, $config_id );
 	}
 
 	// =========================
@@ -337,7 +337,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return Linode_IP The ip object.
 	 */
 	public function create_ip( $data ) {
-		// to be written
+		return $this->api->create_linode_ip( $this->id, $data );
 	}
 
 	/**
@@ -351,6 +351,6 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_ip( $ip_id, array $data ) {
-		// to be written
+		return $this->api->update_linode_ip( $this->id, $ip_id, $data );
 	}
 }
