@@ -166,7 +166,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	// =========================
 
 	/**
-	 * Retrieve a list of disks for a linode.
+	 * Retrieve a list of disks.
 	 *
 	 * @since 1.0.0
 	 *
@@ -179,7 +179,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Retrieve a single disk for a linode.
+	 * Retrieve a single disk.
 	 *
 	 * @since 1.0.0
 	 *
@@ -192,7 +192,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Create a new disk for a linode.
+	 * Create a new disk.
 	 *
 	 * @since 1.0.0
 	 *
@@ -205,7 +205,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Update an existing disk for a linode.
+	 * Update an existing disk.
 	 *
 	 * @since 1.0.0
 	 *
@@ -219,7 +219,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Delete an existing disk for a linode.
+	 * Delete an existing disk.
 	 *
 	 * @since 1.0.0
 	 *
@@ -232,7 +232,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Delete an existing disk for a linode.
+	 * Delete an existing disk.
 	 *
 	 * @since 1.0.0
 	 *
@@ -250,7 +250,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	// =========================
 
 	/**
-	 * Retrieve a list of configs for a linode.
+	 * Retrieve a list of configs.
 	 *
 	 * @since 1.0.0
 	 *
@@ -263,7 +263,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Retrieve a single config for a linode.
+	 * Retrieve a single config.
 	 *
 	 * @since 1.0.0
 	 *
@@ -276,7 +276,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Create a new config for a linode.
+	 * Create a new config.
 	 *
 	 * @since 1.0.0
 	 *
@@ -289,7 +289,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Update an existing config for a linode.
+	 * Update an existing config.
 	 *
 	 * @since 1.0.0
 	 *
@@ -303,7 +303,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Delete an existing config for a linode.
+	 * Delete an existing config.
 	 *
 	 * @since 1.0.0
 	 *
@@ -320,7 +320,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	// =========================
 
 	/**
-	 * Retrieve a list of ips for a linode.
+	 * Retrieve a list of ips.
 	 *
 	 * @since 1.0.0
 	 *
@@ -333,7 +333,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Retrieve a single ip for a linode.
+	 * Retrieve a single ip.
 	 *
 	 * @since 1.0.0
 	 *
@@ -346,7 +346,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Create a new ip for a linode.
+	 * Create a new ip.
 	 *
 	 * @since 1.0.0
 	 *
@@ -359,7 +359,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	}
 
 	/**
-	 * Update an existing ip for a linode.
+	 * Update an existing ip.
 	 *
 	 * @since 1.0.0
 	 *
