@@ -398,10 +398,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function create_linode( $data, $format = 'object' ) {
 		if ( ! isset( $data['DATACENTERID'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'DatacenterID required when creating a linode.' );
+			throw new \BoxSpawner\MissingParameterException( 'DATACENTERID required when creating a linode.' );
 		}
 		if ( ! isset( $data['PLANID'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'PlanID required when creating a linode.' );
+			throw new \BoxSpawner\MissingParameterException( 'PLANID required when creating a linode.' );
 		}
 
 		$result = $this->request( 'linode.create', $data );
@@ -1075,7 +1075,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 			throw new \BoxSpawner\MissingParameterException( 'DOMAIN required when creating a domain.' );
 		}
 		if ( ! isset( $data['TYPE'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'PlanID required when creating a domain.' );
+			throw new \BoxSpawner\MissingParameterException( 'TYPE required when creating a domain.' );
 		} else if ( ! in_array( $data['TYPE'], array( 'master', 'slave' ) ) ) {
 			throw new \BoxSpawner\InvalidParameterException( 'TYPE must be "master" or "slave" when creating a domain.' );
 		}
@@ -1185,7 +1185,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function create_domain_record( $domain_id, $data, $format = 'object' ) {
 		if ( ! isset( $data['TYPE'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'PlanID required when creating a domain record.' );
+			throw new \BoxSpawner\MissingParameterException( 'TYPE required when creating a domain record.' );
 		} else if ( ! in_array( $data['TYPE'], array( 'NS', 'MX', 'A', 'AAAA', 'CNAME', 'TXT', 'SRV' ) ) ) {
 			throw new \BoxSpawner\InvalidParameterException( 'TYPE must be one of NS, MX, A, AAAA, CNAME, TXT, or SRV when creating a domain record.' );
 		}
