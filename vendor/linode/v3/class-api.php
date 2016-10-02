@@ -548,6 +548,126 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	}
 
 	// =========================
+	// ! -- Linode Config Objects
+	// =========================
+
+	/**
+	 * Retrieve a list of configs for a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int   $linode_id The ID of the linode to get configs from.
+	 * @param array $filter    Optional Arguments for filtering the list request.
+	 * @param bool  $format    Optional The format to return (Linode object or attributes array).
+	 *
+	 * @return array The list of Linode_Config objects.
+	 */
+	public function list_linode_configs( $linode_id, array $filter = array(), $format = 'object' ) {
+		$filter[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
+		$data = $this->request( 'linode.config.list', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Linode_Config::ID_ATTRIBUTE ];
+
+			if ( $format == 'object' ) {
+				$entry = new Linode_Config( $this, $id, $entry, $linode_id );
+			}
+
+			$data[ $i ] = $entry;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Retrieve a single config for a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int  $linode_id The ID of the linode the config belongs to.
+	 * @param int  $config_id The ID of the config to retrieve.
+	 * @param bool $format    Optional The format to return (Linode_Config object or attributes array).
+	 *
+	 * @return Linode_Config|array The config object.
+	 */
+	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
+		$result = $this->list_linode_configs( array(
+			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
+			Linode_Config::ID_ATTRIBUTE => $config_id,
+		), $format );
+
+		return $result[0];
+	}
+
+	/**
+	 * Create a new config for a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int   $linode_id The ID of the linode to create the config for.
+	 * @param array $data      The properties of the new config.
+	 * @param bool  $format    Optional The format to return (Linode_Config object or attributes array).
+	 *
+	 * @return Linode_Config|array The config object.
+	 */
+	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
+		if ( ! isset( $data['KERNELID'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'KERNELID is required when creating a linode config.' );
+		}
+		if ( ! isset( $data['LABEL'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'LABEL is required when creating a linode config.' );
+		}
+		if ( ! isset( $data['DISKLIST'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'DISKLIST is required when creating a linode config.' );
+		}
+
+		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
+
+		$result = $this->request( 'linode.config.create', $data );
+
+		if ( $format == 'object' ) {
+			return new Linode_Config( $this, $result[ Linode_Config::ID_ATTRIBUTE ], null, $linode_id );
+		} else {
+			return $result;
+		}
+	}
+
+	/**
+	 * Update an existing config for a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int   $linode_id The ID of the linode the config belongs to.
+	 * @param int   $config_id The ID of the config to update.
+	 * @param array $data      The properties of the new Linode.
+	 *
+	 * @return bool Wether or not the update was successful.
+	 */
+	public function update_linode_config( $linode_id, $config_id, array $data ) {
+		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
+
+		return $this->request( 'linode.config.update', $data );
+	}
+
+	/**
+	 * Delete an existing config for a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $linode_id The ID of the linode the config belongs to.
+	 * @param int $config_id The ID of the config to delete.
+	 *
+	 * @return bool Wether or not the delete was successful.
+	 */
+	public function delete_linode_config( $linode_id, $config_id ) {
+		return $this->request( 'linode.config.update', array(
+			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
+			Linode_Config::ID_ATTRIBUTE => $config_id,
+		) );
+	}
+
+	// =========================
 	// ! -- Linode Disk Objects
 	// =========================
 
@@ -732,126 +852,6 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$result = $this->request( 'linode.disk.imageize', $data );
 
 		return $result['JOBID'];
-	}
-
-	// =========================
-	// ! -- Linode Config Objects
-	// =========================
-
-	/**
-	 * Retrieve a list of configs for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int   $linode_id The ID of the linode to get configs from.
-	 * @param array $filter    Optional Arguments for filtering the list request.
-	 * @param bool  $format    Optional The format to return (Linode object or attributes array).
-	 *
-	 * @return array The list of Linode_Config objects.
-	 */
-	public function list_linode_configs( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data = $this->request( 'linode.config.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Linode_Config::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Linode_Config( $this, $id, $entry, $linode_id );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Retrieve a single config for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int  $linode_id The ID of the linode the config belongs to.
-	 * @param int  $config_id The ID of the config to retrieve.
-	 * @param bool $format    Optional The format to return (Linode_Config object or attributes array).
-	 *
-	 * @return Linode_Config|array The config object.
-	 */
-	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
-		$result = $this->list_linode_configs( array(
-			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_Config::ID_ATTRIBUTE => $config_id,
-		), $format );
-
-		return $result[0];
-	}
-
-	/**
-	 * Create a new config for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int   $linode_id The ID of the linode to create the config for.
-	 * @param array $data      The properties of the new config.
-	 * @param bool  $format    Optional The format to return (Linode_Config object or attributes array).
-	 *
-	 * @return Linode_Config|array The config object.
-	 */
-	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
-		if ( ! isset( $data['KERNELID'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'KERNELID is required when creating a linode config.' );
-		}
-		if ( ! isset( $data['LABEL'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'LABEL is required when creating a linode config.' );
-		}
-		if ( ! isset( $data['DISKLIST'] ) ) {
-			throw new \BoxSpawner\MissingParameterException( 'DISKLIST is required when creating a linode config.' );
-		}
-
-		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
-
-		$result = $this->request( 'linode.config.create', $data );
-
-		if ( $format == 'object' ) {
-			return new Linode_Config( $this, $result[ Linode_Config::ID_ATTRIBUTE ], null, $linode_id );
-		} else {
-			return $result;
-		}
-	}
-
-	/**
-	 * Update an existing config for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int   $linode_id The ID of the linode the config belongs to.
-	 * @param int   $config_id The ID of the config to update.
-	 * @param array $data      The properties of the new Linode.
-	 *
-	 * @return bool Wether or not the update was successful.
-	 */
-	public function update_linode_config( $linode_id, $config_id, array $data ) {
-		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
-
-		return $this->request( 'linode.config.update', $data );
-	}
-
-	/**
-	 * Delete an existing config for a linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $linode_id The ID of the linode the config belongs to.
-	 * @param int $config_id The ID of the config to delete.
-	 *
-	 * @return bool Wether or not the delete was successful.
-	 */
-	public function delete_linode_config( $linode_id, $config_id ) {
-		return $this->request( 'linode.config.update', array(
-			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_Config::ID_ATTRIBUTE => $config_id,
-		) );
 	}
 
 	// =========================

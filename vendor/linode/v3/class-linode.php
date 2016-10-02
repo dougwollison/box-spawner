@@ -152,6 +152,76 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	// ==================================================
 
 	// =========================
+	// ! - Config Assets
+	// =========================
+
+	/**
+	 * Retrieve a list of configs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter Optional Arguments for filtering the list request.
+	 *
+	 * @return array The list of Linode_Config objects.
+	 */
+	public function list_configs( array $filter = array() ) {
+		return $this->api->list_linode_configs( $this->id, $filter );
+	}
+
+	/**
+	 * Retrieve a single config.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $config_id The ID of the config to retrieve.
+	 *
+	 * @return Linode_Config The config object.
+	 */
+	public function get_config( $config_id ) {
+		return $this->api->get_linode_config( $this->id, $config_id );
+	}
+
+	/**
+	 * Create a new config.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The properties of the new config.
+	 *
+	 * @return Linode_Config The config object.
+	 */
+	public function create_config( $data ) {
+		return $this->api->create_linode_config( $this->id, $data );
+	}
+
+	/**
+	 * Update an existing config.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int   $config_id The ID of the config to update.
+	 * @param array $data      The properties of the new Linode.
+	 *
+	 * @return bool Wether or not the update was successful.
+	 */
+	public function update_config( $config_id, array $data ) {
+		return $this->api->update_linode_config( $this->id, $config_id, $data );
+	}
+
+	/**
+	 * Delete an existing config.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $config_id The ID of the config to delete.
+	 *
+	 * @return bool Wether or not the delete was successful.
+	 */
+	public function delete_config( $config_id ) {
+		return $this->api->delete_linode_config( $this->id, $config_id );
+	}
+
+	// =========================
 	// ! - Disk Assets
 	// =========================
 
@@ -260,76 +330,6 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 */
 	public function imagize_disk( $disk_id, $data = array() ) {
 		return $this->api->imagize_linode_disk( $this->id, $disk_id, $data );
-	}
-
-	// =========================
-	// ! - Config Assets
-	// =========================
-
-	/**
-	 * Retrieve a list of configs.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $filter Optional Arguments for filtering the list request.
-	 *
-	 * @return array The list of Linode_Config objects.
-	 */
-	public function list_configs( array $filter = array() ) {
-		return $this->api->list_linode_configs( $this->id, $filter );
-	}
-
-	/**
-	 * Retrieve a single config.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $config_id The ID of the config to retrieve.
-	 *
-	 * @return Linode_Config The config object.
-	 */
-	public function get_config( $config_id ) {
-		return $this->api->get_linode_config( $this->id, $config_id );
-	}
-
-	/**
-	 * Create a new config.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $data The properties of the new config.
-	 *
-	 * @return Linode_Config The config object.
-	 */
-	public function create_config( $data ) {
-		return $this->api->create_linode_config( $this->id, $data );
-	}
-
-	/**
-	 * Update an existing config.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int   $config_id The ID of the config to update.
-	 * @param array $data      The properties of the new Linode.
-	 *
-	 * @return bool Wether or not the update was successful.
-	 */
-	public function update_config( $config_id, array $data ) {
-		return $this->api->update_linode_config( $this->id, $config_id, $data );
-	}
-
-	/**
-	 * Delete an existing config.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $config_id The ID of the config to delete.
-	 *
-	 * @return bool Wether or not the delete was successful.
-	 */
-	public function delete_config( $config_id ) {
-		return $this->api->delete_linode_config( $this->id, $config_id );
 	}
 
 	// =========================
