@@ -1071,7 +1071,22 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain|array The domain object.
 	 */
 	public function create_domain( $data, $format = 'object' ) {
-		// to be written
+		if ( ! isset( $data['DOMAIN'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'DOMAIN required when creating a domain.' );
+		}
+		if ( ! isset( $data['TYPE'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'PlanID required when creating a domain.' );
+		} else if ( ! in_array( $data['TYPE'], array( 'master', 'slave' ) ) ) {
+			throw new \BoxSpawner\InvalidParameterException( 'TYPE must be "master" or "slave" when creating a domain.' );
+		}
+
+		$result = $this->request( 'domain.create', $data );
+
+		if ( $format == 'object' ) {
+			return new Domain( $this, $result[ Domain::ID_ATTRIBUTE ] );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -1169,7 +1184,21 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain_Record|array The record object.
 	 */
 	public function create_domain_record( $domain_id, $data, $format = 'object' ) {
-		// to be written
+		if ( ! isset( $data['TYPE'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'PlanID required when creating a domain record.' );
+		} else if ( ! in_array( $data['TYPE'], array( 'NS', 'MX', 'A', 'AAAA', 'CNAME', 'TXT', 'SRV' ) ) ) {
+			throw new \BoxSpawner\InvalidParameterException( 'TYPE must be one of NS, MX, A, AAAA, CNAME, TXT, or SRV when creating a domain record.' );
+		}
+
+		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
+
+		$result = $this->request( 'domain.resource.create', $data );
+
+		if ( $format == 'object' ) {
+			return new Linode_Config( $this, $result[ Domain_Record::ID_ATTRIBUTE ], null, $domain_id );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -1266,7 +1295,23 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return StackScript|array The stackscript object.
 	 */
 	public function create_stackscript( $data, $format = 'object' ) {
-		// to be written
+		if ( ! isset( $data['LABEL'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'LABEL required when creating a stackscript.' );
+		}
+		if ( ! isset( $data['DISTRIBUTIONIDLIST'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'DatacenterID required when creating a stackscript.' );
+		}
+		if ( ! isset( $data['SCRIPT'] ) ) {
+			throw new \BoxSpawner\MissingParameterException( 'SCRIPT required when creating a stackscript.' );
+		}
+
+		$result = $this->request( 'stackscript.create', $data );
+
+		if ( $format == 'object' ) {
+			return new StackScript( $this, $result[ StackScript::ID_ATTRIBUTE ] );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
