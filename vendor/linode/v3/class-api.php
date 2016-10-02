@@ -812,6 +812,61 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		return $this->request( 'linode.ip.setrdns', $data );
 	}
 
+	/**
+	 * Set the rDNS name of a linode ip.
+	 *
+	 * Just an easier version of update_linode_ip().
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int    $linode_id The ID of the linode the ip belongs to.
+	 * @param int    $ip_id     The ID of the ip to swap.
+	 * @param string $hostname  The hostname ot set the rDNS to.
+	 */
+	public function set_linode_ip_rdns( $linode_id, $ip_id, $hostname ) {
+		return $this->update_linode_ip( $linode_id, $ip_id, array(
+			'Hostname' => $this->id,
+		) );
+	}
+
+	/**
+	 * Exchange a linode IP with another IP.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $linode_id    The ID of the linode the ip belongs to.
+	 * @param int $ip_id        The ID of the ip to swap.
+	 * @param int $target_ip_id The ID of the IP address to swap with.
+	 *
+	 * @return array The new relationships between the IPs.
+	 */
+	public function swap_linode_ip_with( $linode_id, $ip_id, $target_ip_id ) {
+		return $this->request( 'linode.ip.swap', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_IP::ID_ATTRIBUTE => $ip_id,
+			'withIPAddressID' => $target_ip_id,
+		) );
+	}
+
+	/**
+	 * Transfer a linode IP to another Linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $linode_id         The ID of the linode the ip belongs to.
+	 * @param int $ip_id             The ID of the ip to transfer.
+	 * @param int $$target_linode_id The ID of the linode to transfer to.
+	 *
+	 * @return array The new relationships between the IPs.
+	 */
+	public function transfer_linode_ip_to( $linode_id, $ip_id, $target_linode_id ) {
+		return $this->request( 'linode.ip.swap', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+			Linode_IP::ID_ATTRIBUTE => $ip_id,
+			'toLinodeID' => $target_linode_id,
+		) );
+	}
+
 	// =========================
 	// ! - Domain Objects
 	// =========================

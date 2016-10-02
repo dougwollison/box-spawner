@@ -104,9 +104,7 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 * @param string $hostname The hostname ot set the rDNS to.
 	 */
 	public function set_rdns( $hostname ) {
-		return $this->api->update_linode_ip( $this->parent_id, $this->id, array(
-			'Hostname' => $this->id,
-		) );
+		$result = $this->api->set_linode_ip_rdns( $this->parent_id, $this->id, $hostname );
 	}
 
 	/**
@@ -120,11 +118,7 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 *
 	 * @return array The new relationships between the IPs.
 	 */
-	protected function swap( $data ) {
-		$data[ $this::ID_ATTRIBUTE ] = $this->id;
-
-		$result = $this->api->request( 'linode.ip.swap', $data );
-
+	protected function handle_swap_result( $result ) {
 		foreach ( $result as $ip ) {
 			if ( $ip[ $this::ID_ATTRIBUTE ] == $this->id ) {
 				$this->parent_id = $ip[ $this::PARENT_ID_ATTRIBUTE ];
@@ -146,9 +140,9 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 * @return array The new relationships between the IPs.
 	 */
 	public function swap_with( $ip_id ) {
-		return $this->swap( array(
-			'withIPAddressID' => $ip_id,
-		) );
+		$result = $this->api->swap_linode_ip_with( $this->parent_id, $this->id, $ip_id );
+
+		return $this->handle_swap_result( $result );
 	}
 
 	/**
@@ -163,8 +157,8 @@ class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framew
 	 * @return array The new relationships between the IPs.
 	 */
 	public function transfer_to( $linode_id ) {
-		return $this->swap( array(
-			'toLinodeID' => $linode_id,
-		) );
+		$result = $this->api->transfer_linode_ip_to( $this->parent_id, $this->id, $linode_id );
+
+		return $this->handle_swap_result( $result );
 	}
 }
