@@ -89,6 +89,8 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @since 1.0.0
 	 *
 	 * @param int $config_id Optional the ID of a config to boot with.
+	 *
+	 * @return int The ID of the job handling the request.
 	 */
 	public function boot( $config_id = null ) {
 		return $this->api->boot_linode( $this->id, $config_id );
@@ -98,6 +100,8 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * Issue a shutdown job for the linode.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return int The ID of the job handling the request.
 	 */
 	public function shutdown() {
 		return $this->api->shutdown_linode( $this->id );
@@ -109,6 +113,8 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @since 1.0.0
 	 *
 	 * @param int $config_id Optional the ID of a config to boot with.
+	 *
+	 * @return int The ID of the job handling the request.
 	 */
 	public function reboot( $config_id = null ) {
 		return $this->api->reboot_linode( $this->id, $config_id );
@@ -122,6 +128,8 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @param int $datacenter_id The datacenter to place the linode.
 	 * @param int $plan_id       The plan for the linode.
 	 * @param int $payment_term  Optional The subscription term.
+	 *
+	 * @return bool Wether or not the cloning was successful.
 	 */
 	public function duplicate( $datacenter_id, $plan_id, $payment_term = null ) {
 		return $this->api->duplicate_linode( $this->id, $datacenter_id, $plan_id, $payment_term );
@@ -133,7 +141,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @since 1.0.0
 	 */
 	public function kvmify() {
-		return $this->api->kvmify_linode( $this->id );
+		$this->api->kvmify_linode( $this->id );
 	}
 
 	/**
@@ -144,7 +152,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @return bool
 	 */
 	public function mutate() {
-		return $this->api->mutate_linode( $this->id );
+		$this->api->mutate_linode( $this->id );
 	}
 
 	// ==================================================
@@ -285,7 +293,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 *
 	 * @param int $disk_id The ID of the disk to delete.
 	 *
-	 * @return bool Wether or not the delete was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function delete_disk( $disk_id ) {
 		return $this->api->delete_linode_disk( $this->id, $disk_id );
@@ -299,7 +307,7 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 	 * @param int $disk_id The ID of the disk to delete.
 	 * @param int $size    The new size of the disk in MB.
 	 *
-	 * @return bool Wether or not the delete was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function resize_disk( $disk_id, $size ) {
 		return $this->api->resize_linode_disk( $this->id, $disk_id, $size );

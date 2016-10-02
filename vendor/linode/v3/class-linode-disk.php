@@ -72,6 +72,8 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 * @since 1.0.0
 	 *
 	 * @param array $data The data for the update request.
+	 *
+	 * @return bool Wether or not the update was successful.
 	 */
 	public function update( array $data ) {
 		return $this->api->update_linode_disk( $this->parent_id, $this->id, $data );
@@ -83,6 +85,8 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 * @since 1.0.0
 	 *
 	 * @param array $data Optional UNUSED.
+	 *
+	 * @return int The ID of the job handling the request.
 	 */
 	public function delete( array $data = array() ) {
 		return $this->api->delete_linode_disk( $this->parent_id, $this->id );

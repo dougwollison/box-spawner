@@ -426,7 +426,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	public function update_linode( $linode_id, array $data ) {
 		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
 
-		return $this->request( 'linode.update', $data );
+		$result = $this->request( 'linode.update', $data );
+
+		return $result[ Linode::ID_ATTRIBUTE ] == $linode_id;
 	}
 
 	/**
@@ -442,7 +444,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	public function delete_linode( $linode_id, array $data = array() ) {
 		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
 
-		return $this->request( 'linode.delete', $data );
+		$result = $this->request( 'linode.delete', $data );
+
+		return $result[ Linode::ID_ATTRIBUTE ] == $linode_id;
 	}
 
 	/**
@@ -453,7 +457,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param int $linode_id The ID of the linode to boot.
 	 * @param int $config_id Optional The ID of the config to boot with.
 	 *
-	 * @return bool Wether or not the boot request was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function boot_linode( $linode_id, $config_id = null ) {
 		$data = array(
@@ -464,7 +468,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 			$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
 		}
 
-		return $this->request( 'linode.boot', $data );
+		$result = $this->request( 'linode.boot', $data );
+
+		return $result['JOBID'];
 	}
 
 	/**
@@ -474,12 +480,14 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @param int $linode_id The ID of the linode to boot.
 	 *
-	 * @return bool Wether or not the boot request was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function shutdown_linode( $linode_id ) {
-		return $this->request( 'linode.shutdown', array(
+		$result = $this->request( 'linode.shutdown', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 		) );
+
+		return $result['JOBID'];
 	}
 
 	/**
@@ -490,7 +498,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param int $linode_id The ID of the linode to boot.
 	 * @param int $config_id Optional The ID of the config to reboot with.
 	 *
-	 * @return bool Wether or not the boot request was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function reboot_linode( $linode_id, $config_id = null ) {
 		$data = array(
@@ -501,7 +509,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 			$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
 		}
 
-		return $this->request( 'linode.reboot', $data );
+		$result = $this->request( 'linode.reboot', $data );
+
+		return $result['JOBID'];
 	}
 
 	/**
@@ -513,16 +523,20 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param int $datacenter_id The datacenter to place the linode.
 	 * @param int $plan_id       The plan for the linode.
 	 * @param int $payment_term  Optional The subscription term.
+	 *
+	 * @return bool Wether or not the cloning was successful.
 	 */
 	public function duplicate_linode( $linode_id, $datacenter_id, $plan_id, $payment_term = null ) {
 		$data = array(
-			$this::ID_ATTRIBUTE => $linode_id,
+			Linode::ID_ATTRIBUTE => $linode_id,
 			'DATACENTERID' => $datacenter_id,
 			'PLANID' => $plan_id,
 			'PAYMENTTERM' => $payment_term,
 		);
 
-		return $this->request( 'linode.clone', $data );
+		$result = $this->request( 'linode.clone', $data );
+
+		return $result[ Linode::ID_ATTRIBUTE ] == $linode_id;
 	}
 
 	/**
@@ -531,7 +545,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 */
 	public function kvmify_linode( $linode_id ) {
-		return $this->request( 'linode.clone', array(
+		$this->request( 'linode.kvmify', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 		) );
 	}
@@ -542,7 +556,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 */
 	public function mutate_linode( $linode_id ) {
-		return $this->request( 'linode.mutate', array(
+		$this->request( 'linode.mutate', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 		) );
 	}
@@ -647,7 +661,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
 
-		return $this->request( 'linode.config.update', $data );
+		$result = $this->request( 'linode.config.update', $data );
+
+		return $result[ Linode_Config::ID_ATTRIBUTE ] == $config_id;
 	}
 
 	/**
@@ -661,10 +677,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_linode_config( $linode_id, $config_id ) {
-		return $this->request( 'linode.config.update', array(
+		$result = $this->request( 'linode.config.delete', array(
 			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Config::ID_ATTRIBUTE => $config_id,
 		) );
+
+		return $result[ Linode_Config::ID_ATTRIBUTE ] == $config_id;
 	}
 
 	// =========================
@@ -779,7 +797,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
 
-		return $this->request( 'linode.disk.update', $data );
+		$result = $this->request( 'linode.disk.update', $data );
+
+		return $result[ Linode_Disk::ID_ATTRIBUTE ] == $disk_id;
 	}
 
 	/**
@@ -793,7 +813,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return int The ID of the job handling the request.
 	 */
 	public function delete_linode_disk( $linode_id, $disk_id ) {
-		$result = $this->request( 'linode.disk.update', array(
+		$result = $this->request( 'linode.disk.delete', array(
 			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		) );
@@ -813,7 +833,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return int The ID of the job handling the request.
 	 */
 	public function resize_linode_disk( $linode_id, $disk_id, $size ) {
-		$result = $this->request( 'linode.disk.update', array(
+		$result = $this->request( 'linode.disk.resize', array(
 			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 			'size' => $size,
@@ -954,7 +974,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$data[ Linode_IP::PARENT_ID_ATTRIBUTE ] = $linode_id;
 		$data[ Linode_IP::ID_ATTRIBUTE ] = $ip_id;
 
-		return $this->request( 'linode.ip.setrdns', $data );
+		$result = $this->request( 'linode.ip.setrdns', $data );
+
+		return $result[ Linode_IP::ID_ATTRIBUTE ] == $ip_id;
 	}
 
 	/**
@@ -1102,7 +1124,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	public function update_domain( $domain_id, array $data ) {
 		$data[ Domain::ID_ATTRIBUTE ] = $linode_id;
 
-		return $this->request( 'domain.update', $data );
+		$result = $this->request( 'domain.update', $data );
+
+		return $result[ Domain::ID_ATTRIBUTE ] == $domain_id;
 	}
 
 	/**
@@ -1115,9 +1139,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_domain( $domain_id ) {
-		$data[ Domain::ID_ATTRIBUTE ] = $linode_id;
+		$result = $this->request( 'domain.delete', array(
+			Domain::ID_ATTRIBUTE => $domain_id,
+		) );
 
-		return $this->request( 'domain.delete', $data );
+		return $result[ Domain::ID_ATTRIBUTE ] == $domain_id;
 	}
 
 	// =========================
@@ -1216,7 +1242,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
 		$data[ Domain_Record::ID_ATTRIBUTE ] = $record_id;
 
-		return $this->request( 'domain.resource.update', $data );
+		$result = $this->request( 'domain.resource.update', $data );
+
+		return $result[ Domain_Record::ID_ATTRIBUTE ] == $record_id;
 	}
 
 	/**
@@ -1233,7 +1261,9 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
 		$data[ Domain_Record::ID_ATTRIBUTE ] = $record_id;
 
-		return $this->request( 'domain.resource.delete', $data );
+		$result = $this->request( 'domain.resource.delete', $data );
+
+		return $result[ Domain_Record::ID_ATTRIBUTE ] == $record_id;
 	}
 
 	// =========================
@@ -1325,9 +1355,11 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_stackscript( $stackscript_id, array $data ) {
-		$data[ StackScript::ID_ATTRIBUTE ] = $linode_id;
+		$data[ StackScript::ID_ATTRIBUTE ] = $stackscript_id;
 
-		return $this->request( 'stackscript.update', $data );
+		$result = $this->request( 'stackscript.update', $data );
+
+		return $result[ StackScript::ID_ATTRIBUTE ] == $stackscript_id;
 	}
 
 	/**
@@ -1340,8 +1372,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_stackscript( $stackscript_id ) {
-		$data[ StackScript::ID_ATTRIBUTE ] = $linode_id;
+		$result = $this->request( 'stackscript.delete', array(
+			StackScript::ID_ATTRIBUTE => $stackscript_id,
+		) );
 
-		return $this->request( 'stackscript.delete', $data );
+		return $result[ StackScript::ID_ATTRIBUTE ] == $stackscript_id;
 	}
 }

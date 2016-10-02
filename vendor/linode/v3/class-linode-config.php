@@ -68,6 +68,8 @@ class Linode_Config extends API_Asset implements \BoxSpawner\Linode\Linode_Confi
 	 * @since 1.0.0
 	 *
 	 * @param array $data The data for the update request.
+	 *
+	 * @return bool Wether or not the update was successful.
 	 */
 	public function update( array $data ) {
 		return $this->api->update_linode_config( $this->parent_id, $this->id, $data );
@@ -79,6 +81,8 @@ class Linode_Config extends API_Asset implements \BoxSpawner\Linode\Linode_Confi
 	 * @since 1.0.0
 	 *
 	 * @param array $data Optional UNUSED.
+	 *
+	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete( array $data = array() ) {
 		return $this->api->delete_linode_config( $this->parent_id, $this->id );
