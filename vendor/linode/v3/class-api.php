@@ -603,6 +603,38 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		return $response['JOBID'];
 	}
 
+	/**
+	 * Duplicate a disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int The ID of the job handling the request.
+	 */
+	public function duplicate_linode_disk( $linode_id, $disk_id ) {
+		$result = $this->api->request( 'linode.disk.duplicate', array(
+			Linode::PARENT_ID_ATTRIBUTE => $linode_id,
+			Linode_Disk::ID_ATTRIBUTE => $disk_id,
+		) );
+
+		return $result['JOBID'];
+	}
+
+	/**
+	 * Create an image from a linode disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int The ID of the image created.
+	 */
+	public function imagize_linode_disk( $linode_id, $disk_id, $data ) {
+		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
+
+		$result = $this->api->request( 'linode.disk.imageize', $data );
+
+		return $result['JOBID'];
+	}
+
 	// =========================
 	// ! -- Linode Config Objects
 	// =========================

@@ -147,12 +147,7 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 * @return int The ID of the job handling the request.
 	 */
 	public function duplicate() {
-		$result = $this->api->request( 'linode.disk.duplicate', array(
-			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,
-			$this::ID_ATTRIBUTE => $this->id,
-		) );
-
-		return $result['JOBID'];
+		return $this->api->duplicate_linode_disk( $this->parent_id, $this->id );
 	}
 
 	/**
@@ -160,14 +155,9 @@ class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Fr
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return int The ID of the job handling the request.
+	 * @return int The ID of the image created.
 	 */
 	public function imagize( $data ) {
-		$data[ $this::PARENT_ID_ATTRIBUTE ] = $this->parent_id;
-		$data[ $this::ID_ATTRIBUTE ] = $this->id;
-
-		$result = $this->api->request( 'linode.disk.imageize', $data );
-
-		return $result['JOBID'];
+		return $this->api->imagize_linode_disk( $this->parent_id, $this->id );
 	}
 }
