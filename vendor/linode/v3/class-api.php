@@ -441,6 +441,27 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		return $this->request( 'linode.reboot', $data );
 	}
 
+	/**
+	 * Clone a linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $linode_id     The ID of the linode to clone.
+	 * @param int $datacenter_id The datacenter to place the linode.
+	 * @param int $plan_id       The plan for the linode.
+	 * @param int $payment_term  Optional The subscription term.
+	 */
+	public function duplicate( $linode_id, $datacenter_id, $plan_id, $payment_term = null ) {
+		$data = array(
+			$this::ID_ATTRIBUTE => $linode_id,
+			'DATACENTERID' => $datacenter_id,
+			'PLANID' => $plan_id,
+			'PAYMENTTERM' => $payment_term,
+		);
+
+		return $this->api->request( 'linode.clone', $data );
+	}
+
 	// =========================
 	// ! -- Linode Disk Objects
 	// =========================

@@ -126,6 +126,19 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 		return $this->api->reboot_linode( $this->id, $config_id );
 	}
 
+	/**
+	 * Clone the linode.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $datacenter_id The datacenter to place the linode.
+	 * @param int $plan_id       The plan for the linode.
+	 * @param int $payment_term  Optional The subscription term.
+	 */
+	public function duplicate( $datacenter_id, $plan_id, $payment_term = null ) {
+		return $this->api->duplicate_linode( $this->id, $datacenter_id, $plan_id, $payment_term );
+	}
+
 	// ==================================================
 	// ! Asset Actions
 	// ==================================================
