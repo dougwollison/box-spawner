@@ -528,13 +528,15 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param int $linode_id The ID of the linode the disk belongs to.
 	 * @param int $disk_id   The ID of the disk to delete.
 	 *
-	 * @return bool Wether or not the delete was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function delete_linode_disk( $linode_id, $disk_id ) {
-		return $this->request( 'linode.disk.update', array(
+		$result = $this->request( 'linode.disk.update', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 		) );
+
+		return $response['JOBID'];
 	}
 
 	/**
@@ -546,14 +548,16 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param int $disk_id   The ID of the disk to delete.
 	 * @param int $size      The new size of the disk in MB.
 	 *
-	 * @return bool Wether or not the delete was successful.
+	 * @return int The ID of the job handling the request.
 	 */
 	public function resize_linode_disk( $linode_id, $disk_id, $size ) {
-		return $this->request( 'linode.disk.update', array(
+		$result = $this->request( 'linode.disk.update', array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 			Linode_Disk::ID_ATTRIBUTE => $disk_id,
 			'size' => $size,
 		) );
+
+		return $response['JOBID'];
 	}
 
 	// =========================
