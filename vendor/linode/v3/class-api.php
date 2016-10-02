@@ -451,7 +451,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param int $plan_id       The plan for the linode.
 	 * @param int $payment_term  Optional The subscription term.
 	 */
-	public function duplicate( $linode_id, $datacenter_id, $plan_id, $payment_term = null ) {
+	public function duplicate_linode( $linode_id, $datacenter_id, $plan_id, $payment_term = null ) {
 		$data = array(
 			$this::ID_ATTRIBUTE => $linode_id,
 			'DATACENTERID' => $datacenter_id,
@@ -460,6 +460,28 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		);
 
 		return $this->api->request( 'linode.clone', $data );
+	}
+
+	/**
+	 * Convert a linode's hpyervisor from Xen to KVM.
+	 *
+	 * @since 1.0.0
+	 */
+	public function kvmify_linode( $linode_id ) {
+		return $this->api->request( 'linode.clone', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+		) );
+	}
+
+	/**
+	 * Convert a linode's hpyervisor from Xen to KVM.
+	 *
+	 * @since 1.0.0
+	 */
+	public function mutate_linode( $linode_id ) {
+		return $this->api->request( 'linode.mutate', array(
+			Linode::ID_ATTRIBUTE => $linode_id,
+		) );
 	}
 
 	// =========================

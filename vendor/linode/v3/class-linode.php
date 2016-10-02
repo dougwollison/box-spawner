@@ -139,6 +139,24 @@ class Linode extends API_Object implements \BoxSpawner\Linode\Linode_Framework {
 		return $this->api->duplicate_linode( $this->id, $datacenter_id, $plan_id, $payment_term );
 	}
 
+	/**
+	 * Convert the hpyervisor from Xen to KVM.
+	 *
+	 * @since 1.0.0
+	 */
+	public function kvmify() {
+		return $this->api->kvmify_linode( $this->id );
+	}
+
+	/**
+	 * Upgrade to it's next generation.
+	 *
+	 * @since 1.0.0
+	 */
+	public function mutate() {
+		return $this->api->mutate_linode( $this->id );
+	}
+
 	// ==================================================
 	// ! Asset Actions
 	// ==================================================
