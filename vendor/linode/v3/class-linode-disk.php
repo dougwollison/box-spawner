@@ -108,4 +108,53 @@ class Linode_Disk extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Li
 	public function delete( array $data = array() ) {
 		return $this->api->delete_linode_disk( $this->parent_id, $this->id );
 	}
+
+	// =========================
+	// ! Specialty Actions
+	// =========================
+
+	/**
+	 * Resize the disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $size The desired size of the disk (MB).
+	 *
+	 * @return int The ID of the job handling the request.
+	 */
+	public function resize( $size ) {
+		return $this->api->resize_linode_disk( $this->parent_id, $this->id, $size );
+	}
+
+	/**
+	 * Duplicate the disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int The ID of the job handling the request.
+	 */
+	public function duplicate() {
+		$result = $this->api->request( 'linode.disk.duplicate', array(
+			$this::PARENT_ID_ATTRIBUTE => $this->parent_id,
+			$this::ID_ATTRIBUTE => $this->id,
+		) );
+
+		return $result['JOBID'];
+	}
+
+	/**
+	 * Create an image from the disk.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int The ID of the job handling the request.
+	 */
+	public function imagize( $data ) {
+		$data[ $this::PARENT_ID_ATTRIBUTE ] = $this->parent_id;
+		$data[ $this::ID_ATTRIBUTE ] = $this->id;
+
+		$result = $this->api->request( 'linode.disk.imageize', $data );
+
+		return $result['JOBID'];
+	}
 }
