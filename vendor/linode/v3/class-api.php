@@ -851,12 +851,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_config( $linode_id, $config_id, array $data ) {
-		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data[ Linode_Config::ID_ATTRIBUTE ] = $config_id;
-
-		$result = $this->request( 'linode.config.update', $data );
-
-		return $result[ Linode_Config::ID_ATTRIBUTE ] == $config_id;
+		return $this->update_asset( 'linod.config', 'Linode_Config', $linode_id, $config_id, $data );
 	}
 
 	/**
@@ -864,18 +859,14 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the config belongs to.
-	 * @param int $config_id The ID of the config to delete.
+	 * @param int   $linode_id The ID of the linode the config belongs to.
+	 * @param int   $config_id The ID of the config to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_linode_config( $linode_id, $config_id ) {
-		$result = $this->request( 'linode.config.delete', array(
-			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_Config::ID_ATTRIBUTE => $config_id,
-		) );
-
-		return $result[ Linode_Config::ID_ATTRIBUTE ] == $config_id;
+	public function delete_linode_config( $linode_id, $config_id, array $data = array() ) {
+		return $this->delete_asset( 'linod.config', 'Linode_Config', $linode_id, $config_id, $data );
 	}
 
 	// =========================
@@ -968,16 +959,17 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the disk belongs to.
-	 * @param int $disk_id   The ID of the disk to delete.
+	 * @param int   $linode_id The ID of the linode the disk belongs to.
+	 * @param int   $disk_id   The ID of the disk to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return int The ID of the job handling the request.
 	 */
-	public function delete_linode_disk( $linode_id, $disk_id ) {
-		$result = $this->request( 'linode.disk.delete', array(
-			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_Disk::ID_ATTRIBUTE => $disk_id,
-		) );
+	public function delete_linode_disk( $linode_id, $disk_id, array $data = array() ) {
+		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
+		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
+
+		$result = $this->request( 'linode.disk.delete', $data );
 
 		return $response['JOBID'];
 	}
@@ -1307,7 +1299,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int   $domain_id   The ID of the domain the record belongs to.
+	 * @param int   $domain_id The ID of the domain the record belongs to.
 	 * @param int   $record_id The ID of the record to update.
 	 * @param array $data      The properties of the new Domain.
 	 *
@@ -1322,12 +1314,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $domain_id   The ID of the domain the record belongs to.
+	 * @param int $domain_id The ID of the domain the record belongs to.
 	 * @param int $record_id The ID of the record to delete.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_domain_record( $domain_id, $record_id ) {
+	public function delete_domain_record( $domain_id, $record_id, array $data = array() ) {
 		return $this->delete_asset( 'domain.resource', 'Domain_Record', $domain_id, $record_id, $data );
 	}
 
