@@ -1124,7 +1124,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int    $linode_id The ID of the linode the ip belongs to.
-	 * @param int    $ip_id     The ID of the ip to swap.
+	 * @param int    $ip_id     The ID of the ip to update.
 	 * @param string $hostname  The hostname ot set the rDNS to.
 	 */
 	public function set_linode_ip_rdns( $linode_id, $ip_id, $hostname ) {
