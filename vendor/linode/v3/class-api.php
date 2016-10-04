@@ -43,7 +43,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	}
 
 	// =========================
-	// ! Utilities
+	// ! Helpers
 	// =========================
 
 	/**
