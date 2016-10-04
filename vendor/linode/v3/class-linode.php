@@ -434,6 +434,6 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 * @return array The new relationships between the IPs.
 	 */
 	public function transfer_to( $ip_id, $target_linode_id ) {
-		return$this->api->transfer_linode_ip_to( $this->parent_id, $ip_id,, $target_linode_id );
+		return $this->api->transfer_linode_ip_to( $this->parent_id, $ip_id, $target_linode_id );
 	}
 }
