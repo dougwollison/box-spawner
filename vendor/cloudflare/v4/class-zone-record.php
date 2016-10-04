@@ -62,7 +62,8 @@ class Zone_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\CloudFlar
 	 * @param array $data The data for the update request.
 	 */
 	public function update( array $data ) {
-		return $this->api->update_domain_record( $this->parent_id, $this->id, $data );
+		$this->attributes = $this->api->update_domain_record( $this->parent_id, $this->id, $data );
+		return true;
 	}
 
 	/**

@@ -53,7 +53,8 @@ class Zone extends \BoxSpawner\API_Object implements \BoxSpawner\CloudFlare\Zone
 	 * @param array $data The data for the update request.
 	 */
 	public function update( array $data ) {
-		return $this->api->update_zone( $this->id, $data );
+		$this->attributes = $this->api->update_zone( $this->id, $data );
+		return true;
 	}
 
 	/**
