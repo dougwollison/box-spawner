@@ -40,6 +40,62 @@ abstract class REST_API extends JSON_API {
 	}
 
 	/**
+	 * Perform a GET request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The the endpoint for the request.
+	 * @param array  $data     The data of the request.
+	 *
+	 * @return array The result of the request.
+	 */
+	public function get( $endpoint, $data ) {
+		return $this->request( 'GET', $endpoint, $data );
+	}
+
+	/**
+	 * Perform a POST request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The the endpoint for the request.
+	 * @param array  $data     The data of the request.
+	 *
+	 * @return array The result of the request.
+	 */
+	public function post( $endpoint, $data ) {
+		return $this->request( 'POST', $endpoint, $data );
+	}
+
+	/**
+	 * Perform a PUT request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The the endpoint for the request.
+	 * @param array  $data     The data of the request.
+	 *
+	 * @return array The result of the request.
+	 */
+	public function put( $endpoint, $data ) {
+		return $this->request( 'PUT', $endpoint, $data );
+	}
+
+	/**
+	 * Perform a DELETE request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The the endpoint for the request.
+	 * @param array  $data     The data of the request.
+	 *
+	 * @return array The result of the request.
+	 */
+	public function delete( $endpoint, $data ) {
+		return $this->request( 'DELETE', $endpoint, $data );
+	}
+
+	/**
 	 * Parse the results.
 	 *
 	 * @since 1.0.0
