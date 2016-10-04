@@ -311,10 +311,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$result = $this->request( $endpoint, $data );
 
 		if ( $format == 'object' ) {
-			return new $class( $this, $result[ $class::ID_ATTRIBUTE ] );
-		} else {
-			return $result;
+			$result = new $class( $this, $result[ $class::ID_ATTRIBUTE ] );
 		}
+
+		return $result;
 	}
 
 	/**
