@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Linode_IP extends API_Asset implements \BoxSpawner\Linode\Linode_IP_Framework {
+class Linode_IP extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Linode_IP_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *

@@ -18,7 +18,7 @@ namespace BoxSpawner\Linode\V3;
  *
  * @since 1.0.0
  */
-class Linode_Disk extends API_Asset implements \BoxSpawner\Linode\Linode_Disk_Framework {
+class Linode_Disk extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Linode_Disk_Framework {
 	/**
 	 * The name of the option to assign the ID to.
 	 *
