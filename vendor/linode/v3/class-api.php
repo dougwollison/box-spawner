@@ -43,6 +43,24 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	}
 
 	// =========================
+	// ! Utilities
+	// =========================
+
+	/**
+	 * Format the provided data, namely converting all keys to UPPERCASE.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array &$data The data to sanitize, by reference.
+	 */
+	public static function sanitize_data( &$data ) {
+		$keys = array_map( 'strtoupper', array_keys( $data ) );
+		$values = array_values( $data );
+
+		$data = array_combine( $keys, $values );
+	}
+
+	// =========================
 	// ! Request Handling
 	// =========================
 
@@ -143,25 +161,14 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$response = $json['DATA'];
 
 		// Standardize the keys of the results to uppercase
-		$formatted = array();
-
 		if ( array_keys( $response ) === range( 0, count( $response ) - 1 ) ) {
 			// Response is a list, loop through and standardies entries
 			foreach ( $response as $entry ) {
-				// Convert all keys to uppercase
-				$keys = array_map( 'strtoupper', array_keys( $entry ) );
-				$values = array_values( $entry );
-
-				$formatted[] = array_combine( $keys, $values );
+				self::sanitize_data( $entry );
 			}
 		} else {
-			$keys = array_map( 'strtoupper', array_keys( $response ) );
-			$values = array_values( $response );
-
-			$formatted = array_combine( $keys, $values );
+			self::sanitize_data( $response );
 		}
-
-		$response = $formatted;
 
 		return $response;
 	}
@@ -397,6 +404,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode|array The linode object.
 	 */
 	public function create_linode( $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		if ( ! isset( $data['DATACENTERID'] ) ) {
 			throw new \BoxSpawner\MissingParameterException( 'DATACENTERID required when creating a linode.' );
 		}
@@ -527,6 +536,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the cloning was successful.
 	 */
 	public function duplicate_linode( $linode_id, $datacenter_id, $plan_id, $payment_term = null ) {
+		self::sanitize_data( $data );
+
 		$data = array(
 			Linode::ID_ATTRIBUTE => $linode_id,
 			'DATACENTERID' => $datacenter_id,
@@ -625,6 +636,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config|array The config object.
 	 */
 	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		if ( ! isset( $data['KERNELID'] ) ) {
 			throw new \BoxSpawner\MissingParameterException( 'KERNELID is required when creating a linode config.' );
 		}
@@ -749,6 +762,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Disk|array The disk object.
 	 */
 	public function create_linode_disk( $linode_id, $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		$type = null;
 		if ( isset( $data['DISTRIBUTIONID'] ) ) {
 			$type = 'distribution';
@@ -938,6 +953,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_IP|array The ip object.
 	 */
 	public function create_linode_ip( $linode_id, $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		if ( ! isset( $data['TYPE'] ) ) {
 			throw new \BoxSpawner\MissingParameterException( 'TYPE is required when adding a linode ip.' );
 		} else if ( ! in_array( $data['TYPE'], array( 'public', 'private' ) ) ) {
@@ -1093,6 +1110,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain|array The domain object.
 	 */
 	public function create_domain( $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		if ( ! isset( $data['DOMAIN'] ) ) {
 			throw new \BoxSpawner\MissingParameterException( 'DOMAIN required when creating a domain.' );
 		}
@@ -1210,6 +1229,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain_Record|array The record object.
 	 */
 	public function create_domain_record( $domain_id, $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		if ( ! isset( $data['TYPE'] ) ) {
 			throw new \BoxSpawner\MissingParameterException( 'TYPE required when creating a domain record.' );
 		} else if ( ! in_array( $data['TYPE'], array( 'NS', 'MX', 'A', 'AAAA', 'CNAME', 'TXT', 'SRV' ) ) ) {
@@ -1325,6 +1346,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return StackScript|array The stackscript object.
 	 */
 	public function create_stackscript( $data, $format = 'object' ) {
+		self::sanitize_data( $data );
+
 		if ( ! isset( $data['LABEL'] ) ) {
 			throw new \BoxSpawner\MissingParameterException( 'LABEL required when creating a stackscript.' );
 		}
