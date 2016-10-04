@@ -136,9 +136,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @throws InvalidResponseException If the result is missing the DATA section.
 	 * @throws ErrorResponseException   If the API returned an error.
 	 *
-	 * @return mixed The parsed result.
-	 *     @option array  "headers" The list of response headers.
-	 *     @option string "body"    The body of the response.
+	 * @return array The "DATA" portion of the JSON response.
 	 */
 	protected function parse_result( $result, $curl, $data, $options ) {
 		// Get the result
