@@ -47,6 +47,19 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	// =========================
 
 	/**
+	 * Resolve a classname by prepending the namespace.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string &$class The class to resolve.
+	 */
+	public static function resolve_class( &$class ) {
+		if ( strpos( $class, '\\' ) === false ){
+			$class = __NAMESPACE__ . '\\' . $class;
+		}
+	}
+
+	/**
 	 * Format the provided data, namely converting all keys to UPPERCASE.
 	 *
 	 * @since 1.0.0
@@ -175,6 +188,46 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	// ! Read-only Information
 	// ==================================================
 
+	/**
+	 * Shared logic for avail.* list methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $list The type of objects (plural) to request.
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function list_avails( $list ) {
+		if ( ! isset( $this->cache[ $list ] ) ) {
+			$this->cache[ $list ] = $this->request( "avail.{$list}" );
+		}
+
+		return $this->cache[ $list ];
+	}
+
+	/**
+	 * Shared loginc for avail.* get methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $list    The list to use.
+	 * @param string $id_attr The ID attribute to use.
+	 * @param int    $id      The ID of the object to retrieve.
+	 *
+	 * @param array The object information.
+	 */
+	protected function get_avail( $list, $id_attr, $id ) {
+		$objects = $this->list_avails( $list );
+
+		foreach ( $objects as $object ) {
+			if ( $object[ $id_attr ] == $id ) {
+				return $object;
+			}
+		}
+
+		return false;
+	}
+
 	// =========================
 	// ! - Datacenters
 	// =========================
@@ -189,11 +242,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of datacenters.
 	 */
 	public function list_datacenters( array $filter = array() ) {
-		if ( ! isset( $this->cache['datacenters'] ) ) {
-			$this->cache['datacenters'] = $this->request( 'avail.datacenters' );
-		}
-
-		return $this->cache['datacenters'];
+		return $this->list_avails( 'datacenters' );
 	}
 
 	/**
@@ -206,15 +255,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The datacenter information.
 	 */
 	public function get_datacenter( $datacenter_id ) {
-		$datacenters = $this->list_datacenters();
-
-		foreach ( $datacenters as $datacenter ) {
-			if ( $datacenter['DATACENTERID'] == $datacenter_id ) {
-				return $datacenter;
-			}
-		}
-
-		return false;
+		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
 	}
 
 	// =========================
@@ -231,11 +272,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of distributions.
 	 */
 	public function list_distributions( array $filter = array() ) {
-		if ( ! isset( $this->cache['distributions'] ) ) {
-			$this->cache['distributions'] = $this->request( 'avail.distributions', $filter );
-		}
-
-		return $this->cache['distributions'];
+		return $this->list_avails( 'datacenters' );
 	}
 
 	/**
@@ -248,11 +285,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The distribution information.
 	 */
 	public function get_distribution( $distribution_id ) {
-		$results = $this->list_distributions( array(
-			'DISTRIBUTIONID' => $distribution_id,
-		) );
-
-		return $results[0];
+		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
 	}
 
 	// =========================
@@ -269,11 +302,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of kernels.
 	 */
 	public function list_kernels( array $filter = array() ) {
-		if ( ! isset( $this->cache['kernels'] ) ) {
-			$this->cache['kernels'] = $this->request( 'avail.kernels', $filter );
-		}
-
-		return $this->cache['kernels'];
+		return $this->list_avails( 'kernels' );
 	}
 
 	/**
@@ -286,15 +315,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The kernel information.
 	 */
 	public function get_kernel( $kernel_id ) {
-		$kernels = $this->list_kernels();
-
-		foreach ( $kernels as $kernel ) {
-			if ( $kernels['KERNELID'] == $kernel_id ) {
-				return $kernel;
-			}
-		}
-
-		return false;
+		return $this->get_avail( 'kernels', 'KERNELID', $datacenter_id );
 	}
 
 	// =========================
@@ -311,11 +332,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of plans.
 	 */
 	public function list_plans( array $filter = array() ) {
-		if ( ! isset( $this->cache['plans'] ) ) {
-			$this->cache['plans'] = $this->request( 'avail.linodeplans', $filter );
-		}
-
-		return $this->cache['plans'];
+		return $this->list_avails( 'plans' );
 	}
 
 	/**
@@ -328,20 +345,246 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The plan information.
 	 */
 	public function get_plan( $plan_id ) {
-		$plans = $this->list_plans();
-
-		foreach ( $plans as $plan ) {
-			if ( $plans['PLANID'] == $plan_id ) {
-				return $plan;
-			}
-		}
-
-		return false;
+		return $this->get_avail( 'plans', 'PLANID', $plan_id );
 	}
 
 	// ==================================================
 	// ! Editable Objects
 	// ==================================================
+
+	/**
+	 * Shared logic for object list methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The endpoint prefix.
+	 * @param string $class    The class to use.
+	 * @param array  $filter   Optional Arguments for filtering the list request.
+	 * @param bool   $format   Optional The format to return (Linode object or attributes array).
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function list_objects( $endpoint, $class, array $filter = array(), $format = 'object' ) {
+		self::resolve_class( $class );
+
+		$endpoint = "{$endpoint}.list";
+		$data = $this->request( $endpoint, $filter );
+
+		if ( $format == 'object' ) {
+			// Convert to list of objects
+			foreach ( $data as $i => $entry ) {
+				$id = $entry[ $class::ID_ATTRIBUTE ];
+				$entry = new $class( $this, $id, $entry );
+
+				$data[ $i ] = $entry;
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Shared logic for object get methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param string $object_id The id of the object to get.
+	 * @param bool   $format    Optional The format to return (objects or attribute arrays).
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function get_object( $endpoint, $class, $object_id, $format = 'object' ) {
+		self::resolve_class( $class );
+
+		// Call list_objects, filtering by object id
+		$result = $this->list_objects( $endpoint, $class, array(
+			$class::ID_ATTRIBUTE => $object_id,
+		), $format );
+
+		return $result[0];
+	}
+
+	/**
+	 * Shared logic for object create methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The endpoint prefix.
+	 * @param string $class    The class to use.
+	 * @param array  $data     The properties of the new object.
+	 * @param bool   $format   Optional The format to return (object or attributes array).
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function create_object( $endpoint, $class, array $data, $format = 'object' ) {
+		self::resolve_class( $class );
+
+		self::sanitize_data( $data );
+
+		$endpoint = "{$endpoint}.create";
+		$result = $this->request( $endpoint, $data );
+
+		if ( $format == 'object' ) {
+			return new $class( $this, $result[ $class::ID_ATTRIBUTE ] );
+		} else {
+			return $result;
+		}
+	}
+
+	/**
+	 * Shared logic for object update methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param string $object_id The id of the object to update.
+	 * @param array  $data      The properties to update.
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function update_object( $endpoint, $class, $object_id, array $data ) {
+		self::resolve_class( $class );
+
+		$data[ $class::ID_ATTRIBUTE ] = $linode_id;
+
+		$endpoint = "{$endpoint}.update";
+		$result = $this->request( $endpoint, $data );
+
+		return $result[ $class::ID_ATTRIBUTE ] == $linode_id;
+	}
+
+	/**
+	 * Shared logic for object delete methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param string $object_id The id of the object to update.
+	 * @param array  $data      The properties to update.
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function delete_object( $endpoint, $class, $object_id, array $data = array() ) {
+		self::resolve_class( $class );
+
+		$data[ $class::ID_ATTRIBUTE ] = $object_id;
+
+		$endpoint = "{$endpoint}.delete";
+		$result = $this->request( $endpoint, $data );
+
+		return $result[ $class::ID_ATTRIBUTE ] == $object_id;
+	}
+
+	/**
+	 * Shared logic for asset list methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param array  $filter    Optional Arguments for filtering the list request.
+	 * @param bool   $format    Optional The format to return (Linode asset or attributes array).
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function list_assets( $endpoint, $class, $parent_id, $filter, $format ) {
+		self::resolve_class( $class );
+
+		$filter[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
+
+		return $this->list_objects( $endpoint, $class, $filter, $format );
+	}
+
+	/**
+	 * Shared logic for asset get methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param string $asset_id  The id of the asset to get.
+	 * @param bool   $format    Optional The format to return (assets or attribute arrays).
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function get_asset( $endpoint, $class, $parent_id, $asset_id, $format = 'asset' ) {
+		self::resolve_class( $class );
+
+		$result = $this->list_assets( $endpoint, $class, $parent_id, array(
+			$class::ID_ATTRIBUTE => $disk_id,
+		), $format );
+
+		return $result[0];
+	}
+
+	/**
+	 * Shared logic for asset create methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param array  $data      The properties of the new asset.
+	 * @param bool   $format    Optional The format to return (asset or attributes array).
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function create_asset( $endpoint, $class, $parent_id, array $data, $format = 'asset' ) {
+		self::resolve_class( $class );
+
+		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
+
+		return $this->create_object( $endpoint, $class, $data, $format );
+	}
+
+	/**
+	 * Shared logic for asset update methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param string $asset_id  The id of the asset to update.
+	 * @param array  $data      The properties to update.
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function update_asset( $endpoint, $class, $parent_id, $asset_id, array $data ) {
+		self::resolve_class( $class );
+
+		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
+
+		return $this->update_object( $endpoint, $class, $asset_id, $data );
+	}
+
+	/**
+	 * Shared logic for asset delete methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param string $asset_id  The id of the asset to update.
+	 * @param array  $data      The properties to update.
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function delete_asset( $endpoint, $class, $parent_id, $asset_id, array $data = array() ) {
+		self::resolve_class( $class );
+
+		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
+
+		return $this->delete_object( $endpoint, $class, $asset_id, $data );
+	}
 
 	// =========================
 	// ! - Linode Objects
@@ -358,19 +601,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode objects.
 	 */
 	public function list_linodes( array $filter = array(), $format = 'object' ) {
-		$data = $this->request( 'linode.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Linode::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Linode( $this, $id, $entry );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_objects( 'linode', 'Linode', $filter, $format );
 	}
 
 	/**
@@ -384,11 +615,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode|array The linode object.
 	 */
 	public function get_linode( $linode_id, $format = 'object' ) {
-		$result = $this->list_linodes( array(
-			Linode::ID_ATTRIBUTE => $linode_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_object( 'linode', 'Linode', $linode_id, $format );
 	}
 
 	/**
@@ -402,15 +629,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode|array The linode object.
 	 */
 	public function create_linode( $data, $format = 'object' ) {
-		self::sanitize_data( $data );
-
-		$result = $this->request( 'linode.create', $data );
-
-		if ( $format == 'object' ) {
-			return new Linode( $this, $result[ Linode::ID_ATTRIBUTE ] );
-		} else {
-			return $result;
-		}
+		return $this->create_object( 'linode', 'Linode', $data, $format );
 	}
 
 	/**
@@ -424,11 +643,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode( $linode_id, array $data ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
-
-		$result = $this->request( 'linode.update', $data );
-
-		return $result[ Linode::ID_ATTRIBUTE ] == $linode_id;
+		return $this->update_object( 'linode', 'Linode', $linode_id, $data );
 	}
 
 	/**
@@ -442,11 +657,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_linode( $linode_id, array $data = array() ) {
-		$data[ Linode::ID_ATTRIBUTE ] = $linode_id;
-
-		$result = $this->request( 'linode.delete', $data );
-
-		return $result[ Linode::ID_ATTRIBUTE ] == $linode_id;
+		return $this->delete_object( 'linode', 'Linode', $linode_id, $data );
 	}
 
 	/**
@@ -579,20 +790,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode_Config objects.
 	 */
 	public function list_linode_configs( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data = $this->request( 'linode.config.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Linode_Config::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Linode_Config( $this, $id, $entry, $linode_id );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_assets( 'linode.config', 'Linode_Config', $linode_id, $filter, $format );
 	}
 
 	/**
@@ -607,12 +805,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config|array The config object.
 	 */
 	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
-		$result = $this->list_linode_configs( array(
-			Linode_Config::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_Config::ID_ATTRIBUTE => $config_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_asset( 'linode.config', 'Linode_Config', $linode_id, $format );
 	}
 
 	/**
@@ -627,17 +820,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config|array The config object.
 	 */
 	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
-		self::sanitize_data( $data );
-
-		$data[ Linode_Config::PARENT_ID_ATTRIBUTE ] = $linode_id;
-
-		$result = $this->request( 'linode.config.create', $data );
-
-		if ( $format == 'object' ) {
-			return new Linode_Config( $this, $result[ Linode_Config::ID_ATTRIBUTE ], null, $linode_id );
-		} else {
-			return $result;
-		}
+		return $this->create_asset( 'linod.config', 'Linode_Config', $linode_id, $data, $format );
 	}
 
 	/**
@@ -695,20 +878,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of disk objects.
 	 */
 	public function list_linode_disks( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data = $this->request( 'linode.disk.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Linode_Disk::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Linode_Disk( $this, $id, $entry, $linode_id );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_assets( 'linode.disk', 'Linode_Disk', $linode_id, $filter, $format );
 	}
 
 	/**
@@ -723,12 +893,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Disk|array The disk object.
 	 */
 	public function get_linode_disk( $linode_id, $disk_id, $format = 'object' ) {
-		$result = $this->get_linode_disk( array(
-			Linode_Disk::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_Disk::ID_ATTRIBUTE => $disk_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_asset( 'linode.disk', 'Linode_Disk', $linode_id, $format );
 	}
 
 	/**
@@ -779,12 +944,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_disk( $linode_id, $disk_id, array $data ) {
-		$data[ Linode_Disk::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data[ Linode_Disk::ID_ATTRIBUTE ] = $disk_id;
-
-		$result = $this->request( 'linode.disk.update', $data );
-
-		return $result[ Linode_Disk::ID_ATTRIBUTE ] == $disk_id;
+		return $this->delete_asset( 'linode.disk', 'Linode_Disk', $linode_id, $disk_id, $data );
 	}
 
 	/**
@@ -875,20 +1035,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Linode_IP objects.
 	 */
 	public function list_linode_ips( $linode_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Linode_IP::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data = $this->request( 'linode.ip.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Linode_IP::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Linode_IP( $this, $id, $entry, $linode_id );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_assets( 'linode.ip', 'Linode_IP', $linode_id, $filter, $format );
 	}
 
 	/**
@@ -903,12 +1050,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_IP|array The ip object.
 	 */
 	public function get_linode_ip( $linode_id, $ip_id, $format = 'object' ) {
-		$result = $this->list_linode_ips( array(
-			Linode_IP::PARENT_ID_ATTRIBUTE => $linode_id,
-			Linode_IP::ID_ATTRIBUTE => $ip_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_asset( 'linode.ip', 'Linode_IP', $linode_id, $format );
 	}
 
 	/**
@@ -1031,24 +1173,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param array $filter Optional Arguments for filtering the list request.
-	 * @param bool  $format Optional The format to return (Linode object or attributes array).
+	 * @param bool  $format Optional The format to return (Domain object or attributes array).
 	 *
 	 * @return array The list of Domain objects.
 	 */
 	public function list_domains( array $filter = array(), $format = 'object' ) {
-		$data = $this->request( 'domain.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Domain::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Domain( $this, $id, $entry );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_objects( 'domain', 'Domain', $filter, $format );
 	}
 
 	/**
@@ -1062,11 +1192,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain|array The domain object.
 	 */
 	public function get_domain( $domain_id, $format = 'object' ) {
-		$result = $this->list_domains( array(
-			Domain::ID_ATTRIBUTE => $domain_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_object( 'domain', 'Domain', $domain_id, $format );
 	}
 
 	/**
@@ -1080,15 +1206,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain|array The domain object.
 	 */
 	public function create_domain( $data, $format = 'object' ) {
-		self::sanitize_data( $data );
-
-		$result = $this->request( 'domain.create', $data );
-
-		if ( $format == 'object' ) {
-			return new Domain( $this, $result[ Domain::ID_ATTRIBUTE ] );
-		} else {
-			return $result;
-		}
+		return $this->create_object( 'domain', 'Domain', $data, $format );
 	}
 
 	/**
@@ -1097,16 +1215,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int   $domain_id The ID of the domain to update.
-	 * @param array $data    The properties of the new Domain.
+	 * @param array $data      The properties of the new Domain.
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_domain( $domain_id, array $data ) {
-		$data[ Domain::ID_ATTRIBUTE ] = $linode_id;
-
-		$result = $this->request( 'domain.update', $data );
-
-		return $result[ Domain::ID_ATTRIBUTE ] == $domain_id;
+		return $this->update_object( 'domain', 'Domain', $domain_id, $data );
 	}
 
 	/**
@@ -1114,16 +1228,13 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $domain_id The ID of the domain to delete.
+	 * @param int   $domain_id The ID of the domain to delete.
+	 * @param array $data      Optional The options for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_domain( $domain_id ) {
-		$result = $this->request( 'domain.delete', array(
-			Domain::ID_ATTRIBUTE => $domain_id,
-		) );
-
-		return $result[ Domain::ID_ATTRIBUTE ] == $domain_id;
+	public function delete_domain( $domain_id, array $data = array() ) {
+		return $this->delete_object( 'domain', 'Domain', $domain_id, $data );
 	}
 
 	// =========================
@@ -1142,20 +1253,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of Domain_Record objects.
 	 */
 	public function list_domain_records( $domain_id, array $filter = array(), $format = 'object' ) {
-		$filter[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $linode_id;
-		$data = $this->request( 'domain.resource.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Domain_Record::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Domain_Record( $this, $id, $entry, $linode_id );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_assets( 'domain.resource', 'Domain_Record', $domain_id, $filter, $format );
 	}
 
 	/**
@@ -1170,12 +1268,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain_Record|array The record object.
 	 */
 	public function get_domain_record( $domain_id, $record_id, $format = 'object' ) {
-		$result = $this->list_domain_records( array(
-			Domain_Record::PARENT_ID_ATTRIBUTE => $domain_id,
-			Domain_Record::ID_ATTRIBUTE => $record_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_asset( 'domain.resource', 'Domain_Record', $domain_id, $format );
 	}
 
 	/**
@@ -1190,17 +1283,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain_Record|array The record object.
 	 */
 	public function create_domain_record( $domain_id, $data, $format = 'object' ) {
-		self::sanitize_data( $data );
-
-		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
-
-		$result = $this->request( 'domain.resource.create', $data );
-
-		if ( $format == 'object' ) {
-			return new Linode_Config( $this, $result[ Domain_Record::ID_ATTRIBUTE ], null, $domain_id );
-		} else {
-			return $result;
-		}
+		return $this->create_asset( 'domain.resource', 'Domain_Record', $domain_id, $data, $format );
 	}
 
 	/**
@@ -1215,12 +1298,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_domain_record( $domain_id, $record_id, array $data ) {
-		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
-		$data[ Domain_Record::ID_ATTRIBUTE ] = $record_id;
-
-		$result = $this->request( 'domain.resource.update', $data );
-
-		return $result[ Domain_Record::ID_ATTRIBUTE ] == $record_id;
+		return $this->update_asset( 'domain.resource', 'Domain_Record', $domain_id, $record_id, $data );
 	}
 
 	/**
@@ -1234,12 +1312,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_domain_record( $domain_id, $record_id ) {
-		$data[ Domain_Record::PARENT_ID_ATTRIBUTE ] = $domain_id;
-		$data[ Domain_Record::ID_ATTRIBUTE ] = $record_id;
-
-		$result = $this->request( 'domain.resource.delete', $data );
-
-		return $result[ Domain_Record::ID_ATTRIBUTE ] == $record_id;
+		return $this->delete_asset( 'domain.resource', 'Domain_Record', $domain_id, $record_id, $data );
 	}
 
 	// =========================
@@ -1252,24 +1325,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param array $filter Optional Arguments for filtering the list request.
-	 * @param bool  $format Optional The format to return (Linode object or attributes array).
+	 * @param bool  $format Optional The format to return (Stackscript object or attributes array).
 	 *
-	 * @return array The list of StackScript objects.
+	 * @return array The list of Stackscript objects.
 	 */
 	public function list_stackscripts( array $filter = array(), $format = 'object' ) {
-		$data = $this->request( 'stackscript.list', $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ StackScript::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new StackScript( $this, $id, $entry );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_objects( 'stackscript', 'Stackscript', $filter, $format );
 	}
 
 	/**
@@ -1278,16 +1339,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int  $stackscript_id The ID of the stackscript to retrieve.
-	 * @param bool $format         Optional The format to return (Linode object or attributes array).
+	 * @param bool $format         Optional The format to return (Stackscript object or attributes array).
 	 *
-	 * @return StackScript|array The stackscript object.
+	 * @return Stackscript|array The stackscript object.
 	 */
 	public function get_stackscript( $stackscript_id, $format = 'object' ) {
-		$result = $this->list_stackscripts( array(
-			StackScript::ID_ATTRIBUTE => $stackscript_id,
-		), $format );
-
-		return $result[0];
+		return $this->get_object( 'stackscript', 'Stackscript', $stackscript_id, $format );
 	}
 
 	/**
@@ -1295,21 +1352,13 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data   The properties of the new StackScript.
-	 * @param bool  $format Optional The format to return (Linode object or attributes array).
+	 * @param array $data   The properties of the new Stackscript.
+	 * @param bool  $format Optional The format to return (Stackscript object or attributes array).
 	 *
-	 * @return StackScript|array The stackscript object.
+	 * @return Stackscript|array The stackscript object.
 	 */
 	public function create_stackscript( $data, $format = 'object' ) {
-		self::sanitize_data( $data );
-
-		$result = $this->request( 'stackscript.create', $data );
-
-		if ( $format == 'object' ) {
-			return new StackScript( $this, $result[ StackScript::ID_ATTRIBUTE ] );
-		} else {
-			return $result;
-		}
+		return $this->create_object( 'stackscript', 'Stackscript', $data, $format );
 	}
 
 	/**
@@ -1318,16 +1367,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @since 1.0.0
 	 *
 	 * @param int   $stackscript_id The ID of the stackscript to update.
-	 * @param array $data           The properties of the new StackScript.
+	 * @param array $data           The properties of the new Stackscript.
 	 *
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_stackscript( $stackscript_id, array $data ) {
-		$data[ StackScript::ID_ATTRIBUTE ] = $stackscript_id;
-
-		$result = $this->request( 'stackscript.update', $data );
-
-		return $result[ StackScript::ID_ATTRIBUTE ] == $stackscript_id;
+		return $this->update_object( 'stackscript', 'Stackscript', $stackscript_id, $data );
 	}
 
 	/**
@@ -1335,15 +1380,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $stackscript_id The ID of the stackscript to delete.
+	 * @param int   $stackscript_id The ID of the stackscript to delete.
+	 * @param array $data           Optional The options for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_stackscript( $stackscript_id ) {
-		$result = $this->request( 'stackscript.delete', array(
-			StackScript::ID_ATTRIBUTE => $stackscript_id,
-		) );
-
-		return $result[ StackScript::ID_ATTRIBUTE ] == $stackscript_id;
+	public function delete_stackscript( $stackscript_id, array $data = array() ) {
+		return $this->delete_object( 'stackscript', 'Stackscript', $stackscript_id, $data );
 	}
 }
