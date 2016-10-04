@@ -20,6 +20,24 @@ namespace BoxSpawner;
  */
 abstract class REST_API extends JSON_API {
 	/**
+	 * Make the request, return it's result.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $action The api_action
+	 * @param array  $data   The data of the request.
+	 *
+	 * @return mixed The result of the request.
+	 */
+	public function request( $endpoint, array $data = array() ) {
+		$options = array(
+			'endpoint' => $endpoint,
+		);
+
+		return parent::request( $data, $options );
+	}
+
+	/**
 	 * Parse the results.
 	 *
 	 * @since 1.0.0
@@ -31,9 +49,7 @@ abstract class REST_API extends JSON_API {
 	 *
 	 * @throws Exception If there is an error with the cURL request.
 	 *
-	 * @return mixed The parsed result.
-	 *     @option array  "headers" The list of response headers.
-	 *     @option string "body"    The body of the response.
+	 * @return array The "result" portion of the JSON response.
 	 */
 	protected function parse_result( $result, $curl, $options, $data ) {
 		$result = parent::parse_result( $result, $curl, $options, $data );
@@ -50,8 +66,8 @@ abstract class REST_API extends JSON_API {
 		}
 
 		// Get the response data
-		$response = $response['result'];
+		$result_data = $response['result'];
 
-		return $data;
+		return $result_data;
 	}
 }
