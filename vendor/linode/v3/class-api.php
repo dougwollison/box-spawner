@@ -185,8 +185,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	}
 
 	// ==================================================
-	// ! Read-only Information
+	// ! Utilities
 	// ==================================================
+
+	// =========================
+	// ! - Availables Utilities
+	// =========================
 
 	/**
 	 * Shared logic for avail.* list methods.
@@ -229,128 +233,8 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	}
 
 	// =========================
-	// ! - Datacenters
+	// ! - Object Utilities
 	// =========================
-
-	/**
-	 * Retrieve a list of datacenters.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $filter Optional UNUSED.
-	 *
-	 * @return array The list of datacenters.
-	 */
-	public function list_datacenters( array $filter = array() ) {
-		return $this->list_avails( 'datacenters' );
-	}
-
-	/**
-	 * Retrieve a single datacenter.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $datacenter_id The ID of the datacenter to retrieve.
-	 *
-	 * @return array The datacenter information.
-	 */
-	public function get_datacenter( $datacenter_id ) {
-		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
-	}
-
-	// =========================
-	// ! - Distributions
-	// =========================
-
-	/**
-	 * Retrieve a list of distributions.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $filter Optional Arguments for filtering the list request.
-	 *
-	 * @return array The list of distributions.
-	 */
-	public function list_distributions( array $filter = array() ) {
-		return $this->list_avails( 'datacenters' );
-	}
-
-	/**
-	 * Retrieve a single datacenter.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $distribution_id The ID of the distribution to retrieve.
-	 *
-	 * @return array The distribution information.
-	 */
-	public function get_distribution( $distribution_id ) {
-		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
-	}
-
-	// =========================
-	// ! - Kernels
-	// =========================
-
-	/**
-	 * Retrieve a list of kernels.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $filter Optional Arguments for filtering the list request.
-	 *
-	 * @return array The list of kernels.
-	 */
-	public function list_kernels( array $filter = array() ) {
-		return $this->list_avails( 'kernels' );
-	}
-
-	/**
-	 * Retrieve a single datacenter.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $kernel_id The ID of the kernel to retrieve.
-	 *
-	 * @return array The kernel information.
-	 */
-	public function get_kernel( $kernel_id ) {
-		return $this->get_avail( 'kernels', 'KERNELID', $datacenter_id );
-	}
-
-	// =========================
-	// ! - Plans
-	// =========================
-
-	/**
-	 * Retrieve a list of plans.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $filter Optional Arguments for filtering the list request.
-	 *
-	 * @return array The list of plans.
-	 */
-	public function list_plans( array $filter = array() ) {
-		return $this->list_avails( 'plans' );
-	}
-
-	/**
-	 * Retrieve a single plan.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $kernel_id The ID of the kernel to retrieve.
-	 *
-	 * @return array The plan information.
-	 */
-	public function get_plan( $plan_id ) {
-		return $this->get_avail( 'plans', 'PLANID', $plan_id );
-	}
-
-	// ==================================================
-	// ! Editable Objects
-	// ==================================================
 
 	/**
 	 * Shared logic for object list methods.
@@ -479,6 +363,10 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		return $result[ $class::ID_ATTRIBUTE ] == $object_id;
 	}
 
+	// =========================
+	// ! - Asset Utilities
+	// =========================
+
 	/**
 	 * Shared logic for asset list methods.
 	 *
@@ -585,6 +473,134 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 
 		return $this->delete_object( $endpoint, $class, $asset_id, $data );
 	}
+
+	// ==================================================
+	// ! Read-only Information
+	// ==================================================
+
+	// =========================
+	// ! - Datacenters
+	// =========================
+
+	/**
+	 * Retrieve a list of datacenters.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter Optional UNUSED.
+	 *
+	 * @return array The list of datacenters.
+	 */
+	public function list_datacenters( array $filter = array() ) {
+		return $this->list_avails( 'datacenters' );
+	}
+
+	/**
+	 * Retrieve a single datacenter.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $datacenter_id The ID of the datacenter to retrieve.
+	 *
+	 * @return array The datacenter information.
+	 */
+	public function get_datacenter( $datacenter_id ) {
+		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
+	}
+
+	// =========================
+	// ! - Distributions
+	// =========================
+
+	/**
+	 * Retrieve a list of distributions.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter Optional Arguments for filtering the list request.
+	 *
+	 * @return array The list of distributions.
+	 */
+	public function list_distributions( array $filter = array() ) {
+		return $this->list_avails( 'datacenters' );
+	}
+
+	/**
+	 * Retrieve a single datacenter.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $distribution_id The ID of the distribution to retrieve.
+	 *
+	 * @return array The distribution information.
+	 */
+	public function get_distribution( $distribution_id ) {
+		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
+	}
+
+	// =========================
+	// ! - Kernels
+	// =========================
+
+	/**
+	 * Retrieve a list of kernels.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter Optional Arguments for filtering the list request.
+	 *
+	 * @return array The list of kernels.
+	 */
+	public function list_kernels( array $filter = array() ) {
+		return $this->list_avails( 'kernels' );
+	}
+
+	/**
+	 * Retrieve a single datacenter.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $kernel_id The ID of the kernel to retrieve.
+	 *
+	 * @return array The kernel information.
+	 */
+	public function get_kernel( $kernel_id ) {
+		return $this->get_avail( 'kernels', 'KERNELID', $datacenter_id );
+	}
+
+	// =========================
+	// ! - Plans
+	// =========================
+
+	/**
+	 * Retrieve a list of plans.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $filter Optional Arguments for filtering the list request.
+	 *
+	 * @return array The list of plans.
+	 */
+	public function list_plans( array $filter = array() ) {
+		return $this->list_avails( 'plans' );
+	}
+
+	/**
+	 * Retrieve a single plan.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $kernel_id The ID of the kernel to retrieve.
+	 *
+	 * @return array The plan information.
+	 */
+	public function get_plan( $plan_id ) {
+		return $this->get_avail( 'plans', 'PLANID', $plan_id );
+	}
+
+	// ==================================================
+	// ! Editable Objects
+	// ==================================================
 
 	// =========================
 	// ! - Linode Objects
