@@ -1,13 +1,13 @@
 <?php
 /**
- * The CloudFlare Record Object (version 3).
+ * The CloudFlare Record Object (version 4).
  *
  * @package Box_Spawner
  * @subpackage CloudFlare
  *
  * @since 1.0.0
  */
-namespace BoxSpawner\CloudFlare\V3;
+namespace BoxSpawner\CloudFlare\V4;
 
 /**
  * The CloudFlare Record object class.
