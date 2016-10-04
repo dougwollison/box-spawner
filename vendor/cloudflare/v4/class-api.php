@@ -103,7 +103,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of Zone objects.
 	 */
 	public function list_zones( array $filter = array(), $format = 'object' ) {
-		$data = $this->get( 'zones', $filter );
+		$data = $this->get( "zones", $filter );
 
 		foreach ( $data as $i => $entry ) {
 			$id = $entry[ Zone::ID_ATTRIBUTE ];
@@ -149,7 +149,13 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return Zone|array The zone object.
 	 */
 	public function create_zone( $data, $format = 'object' ) {
-		// to be written
+		$result = $this->post( "zones", $data );
+
+		if ( $format == 'object' ) {
+			return new Zone( $this, $result[ Zone::ID_ATTRIBUTE ], $result );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -163,7 +169,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_zone( $zone_id, array $data ) {
-		// to be written
+		return $this->put( "zones/$zone_id", $data );
 	}
 
 	/**
@@ -171,12 +177,15 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $zone_id The ID of the zone to delete.
+	 * @param int   $zone_id The ID of the zone to delete.
+	 * @param array $data    Optinoal Any custom parameters for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_zone( $zone_id ) {
-		// to be written
+		$result = $this->delete( "zones/$zone_id", $data );
+
+		return $result[ Zone::ID_ATTRIBUTE ] == $record_id;
 	}
 
 	// =========================
@@ -243,7 +252,13 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return Zone_Record|array The record object.
 	 */
 	public function create_zone_record( $zone_id, $data, $format = 'object' ) {
-		// to be written
+		$result = $this->post( "zones/$zone_id/dns_records", $data );
+
+		if ( $format == 'object' ) {
+			return new Zone_Record( $this, $result[ Zone::ID_ATTRIBUTE ], $result, $zone_id );
+		} else {
+			return $result;
+		}
 	}
 
 	/**
@@ -255,10 +270,10 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @param int   $record_id The ID of the record to update.
 	 * @param array $data      The properties of the new Zone.
 	 *
-	 * @return bool Wether or not the update was successful.
+	 * @return array The updated record data.
 	 */
 	public function update_zone_record( $zone_id, $record_id, array $data ) {
-		// to be written
+		return $this->put( "zones/$zone_id/dns_records/$record_id", $data );
 	}
 
 	/**
@@ -266,12 +281,15 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $zone_id   The ID of the zone the record belongs to.
-	 * @param int $record_id The ID of the record to delete.
+	 * @param int   $zone_id   The ID of the zone the record belongs to.
+	 * @param int   $record_id The ID of the record to delete.
+	 * @param array $data      Optinoal Any custom parameters for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_zone_record( $zone_id, $record_id ) {
-		// to be written
+	public function delete_zone_record( $zone_id, $record_id, $data ) {
+		$result = $this->delete( "zones/$zone_id/dns_records/$record_id", $data );
+
+		return $result[ Zone_Record::ID_ATTRIBUTE ] == $record_id;
 	}
 }
