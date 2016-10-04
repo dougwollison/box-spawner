@@ -24,13 +24,15 @@ abstract class REST_API extends JSON_API {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $action The api_action
-	 * @param array  $data   The data of the request.
+	 * @param string $method   The HTTP method for the request.
+	 * @param string $endpoint The the endpoint for the request.
+	 * @param array  $data     The data of the request.
 	 *
 	 * @return mixed The result of the request.
 	 */
-	public function request( $endpoint, array $data = array() ) {
+	public function request( $method, $endpoint, array $data = array() ) {
 		$options = array(
+			'method' => $method,
 			'endpoint' => $endpoint,
 		);
 
