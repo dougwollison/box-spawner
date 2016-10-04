@@ -163,7 +163,7 @@ interface API_Framework {
 	 * @since 1.0.0
 	 *
 	 * @param int   $linode_id The ID of the linode to delete.
-	 * @param array $data      Optional The options for the delete request.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
@@ -265,12 +265,13 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the disk belongs to.
-	 * @param int $disk_id   The ID of the disk to delete.
+	 * @param int   $linode_id The ID of the linode the disk belongs to.
+	 * @param int   $disk_id   The ID of the disk to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_linode_disk( $linode_id, $disk_id );
+	public function delete_linode_disk( $linode_id, $disk_id, array $data = array() );
 
 	/**
 	 * Delete an existing disk for a linode.
@@ -346,12 +347,13 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $linode_id The ID of the linode the config belongs to.
-	 * @param int $config_id The ID of the config to delete.
+	 * @param int   $linode_id The ID of the linode the config belongs to.
+	 * @param int   $config_id The ID of the config to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_linode_config( $linode_id, $config_id );
+	public function delete_linode_config( $linode_id, $config_id, array $data = array() );
 
 	// =========================
 	// ! -- Linode IP Objects
@@ -466,11 +468,12 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $domain_id The ID of the domain to delete.
+	 * @param int   $domain_id The ID of the domain to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_domain( $domain_id );
+	public function delete_domain( $domain_id, array $data = array() );
 
 	// =========================
 	// ! -- Domain Record Objects
@@ -533,12 +536,13 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $domain_id   The ID of the domain the record belongs to.
-	 * @param int $record_id The ID of the record to delete.
+	 * @param int   $domain_id The ID of the domain the record belongs to.
+	 * @param int   $record_id The ID of the record to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_domain_record( $domain_id, $record_id );
+	public function delete_domain_record( $domain_id, $record_id, array $data = array() );
 
 	// =========================
 	// ! - StackScript Objects
@@ -597,9 +601,10 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $stackscript_id The ID of the stackscript to delete.
+	 * @param int   $stackscript_id The ID of the stackscript to delete.
+	 * @param array $data           Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_stackscript( $stackscript_id );
+	public function delete_stackscript( $stackscript_id, array $data = array() );
 }
