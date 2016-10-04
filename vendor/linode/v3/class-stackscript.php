@@ -69,9 +69,9 @@ class Stackscript extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\S
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Optional The data for the delete request.
+	 * @param array $data Optional UNUSED.
 	 */
 	public function delete( array $data = array() ) {
-		return $this->api->delete_stackscript( $this->id, $data );
+		return $this->api->delete_stackscript( $this->id );
 	}
 }
