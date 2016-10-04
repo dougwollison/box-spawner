@@ -19,6 +19,8 @@ namespace BoxSpawner\CloudFlare\V4;
  * @since 1.0.0
  */
 class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Framework {
+	use \BoxSpawner\Resolve_Class;
+
 	/**
 	 * The base endpoint URL.
 	 *
@@ -59,23 +61,6 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	public function __construct( array $options ) {
 		$this->api_email = $options['api_email'];
 		$this->api_key   = $options['api_key'];
-	}
-
-	// =========================
-	// ! Helpers
-	// =========================
-
-	/**
-	 * Resolve a classname by prepending the namespace.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string &$class The class to resolve.
-	 */
-	public static function resolve_class( &$class ) {
-		if ( strpos( $class, '\\' ) === false ){
-			$class = __NAMESPACE__ . '\\' . $class;
-		}
 	}
 
 	// =========================

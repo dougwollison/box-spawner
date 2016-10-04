@@ -19,6 +19,8 @@ namespace BoxSpawner\Linode\V3;
  * @since 1.0.0
  */
 class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framework {
+	use \BoxSpawner\Resolve_Class;
+
 	/**
 	 * The API key for all requests.
 	 *
@@ -45,19 +47,6 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	// =========================
 	// ! Helpers
 	// =========================
-
-	/**
-	 * Resolve a classname by prepending the namespace.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string &$class The class to resolve.
-	 */
-	public static function resolve_class( &$class ) {
-		if ( strpos( $class, '\\' ) === false ){
-			$class = __NAMESPACE__ . '\\' . $class;
-		}
-	}
 
 	/**
 	 * Format the provided data, namely converting all keys to UPPERCASE.
