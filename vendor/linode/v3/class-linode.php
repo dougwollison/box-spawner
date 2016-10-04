@@ -322,8 +322,8 @@ class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode
 	 *
 	 * @return int The ID of the job handling the request.
 	 */
-	public function duplicate_disk() {
-		return $this->api->duplicate_linode_disk( $this->parent_id, $disk_id );
+	public function duplicate_disk( $disk_id ) {
+		return $this->api->duplicate_linode_disk( $this->id, $disk_id );
 	}
 
 	/**
