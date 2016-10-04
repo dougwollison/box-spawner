@@ -26,7 +26,7 @@ class Stackscript extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\S
 	 *
 	 * @var string
 	 */
-	const ID_ATTRIBUTE = 'DOMAINID';
+	const ID_ATTRIBUTE = 'STACKSCRIPTID';
 
 	/**
 	 * Issue a create request for a new object.
