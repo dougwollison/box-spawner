@@ -163,7 +163,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		// Standardize the keys of the results to uppercase
 		if ( array_keys( $response ) === range( 0, count( $response ) - 1 ) ) {
 			// Response is a list, loop through and standardies entries
-			foreach ( $response as $entry ) {
+			foreach ( $response as &$entry ) {
 				self::sanitize_data( $entry );
 			}
 		} else {
