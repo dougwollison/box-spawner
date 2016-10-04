@@ -70,7 +70,7 @@ abstract class API {
 	 *
 	 * @return mixed The result of the request.
 	 */
-	public function request( $data, array $options = array() ) {
+	public function do_request( $data, array $options = array() ) {
 		// Initialize a cURL handle
 		$curl = curl_init();
 

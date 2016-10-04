@@ -77,7 +77,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	public function request( $endpoint, array $data = array() ) {
 		$data['API_ACTION'] = $endpoint;
 
-		return parent::request( $data );
+		return parent::do_request( $data );
 	}
 
 	/**

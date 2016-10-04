@@ -36,7 +36,7 @@ abstract class REST_API extends JSON_API {
 			'endpoint' => $endpoint,
 		);
 
-		return parent::request( $data, $options );
+		return parent::do_request( $data, $options );
 	}
 
 	/**
