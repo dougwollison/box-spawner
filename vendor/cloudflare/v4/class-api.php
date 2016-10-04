@@ -18,7 +18,7 @@ namespace BoxSpawner\CloudFlare\V4;
  *
  * @since 1.0.0
  */
-class API extends \BoxSpawner\API {
+class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Framework {
 	/**
 	 * The base endpoint URL.
 	 *
@@ -61,6 +61,10 @@ class API extends \BoxSpawner\API {
 		$this->api_key   = $options['api_key'];
 	}
 
+	// =========================
+	// ! Request Handling
+	// =========================
+
 	/**
 	 * Determine the headers of the request.
 	 *
@@ -99,7 +103,19 @@ class API extends \BoxSpawner\API {
 	 * @return array The list of Zone objects.
 	 */
 	public function list_zones( array $filter = array(), $format = 'object' ) {
-		// to be written
+		$data = $this->get( 'zones', $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Zone::ID_ATTRIBUTE ];
+
+			if ( $format == 'object' ) {
+				$entry = new Zone( $this, $id, $entry );
+			}
+
+			$data[ $i ] = $entry;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -113,7 +129,13 @@ class API extends \BoxSpawner\API {
 	 * @return Zone|array The zone object.
 	 */
 	public function get_zone( $zone_id, $format = 'object' ) {
-		// to be written
+		$data = $this->get( "zones/$zone_id" );
+
+		if ( $format == 'object' ) {
+			$data = new Zone( $this, $zone_id, $data );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -173,7 +195,19 @@ class API extends \BoxSpawner\API {
 	 * @return array The list of Zone_Record objects.
 	 */
 	public function list_zone_records( $zone_id, array $filter = array(), $format = 'object' ) {
-		// to be written
+		$data = $this->get( "zones/$zone_id/dns_records", $filter );
+
+		foreach ( $data as $i => $entry ) {
+			$id = $entry[ Zone_Record::ID_ATTRIBUTE ];
+
+			if ( $format == 'object' ) {
+				$entry = new Zone_Record( $this, $id, $entry, $zone_id );
+			}
+
+			$data[ $i ] = $entry;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -188,7 +222,13 @@ class API extends \BoxSpawner\API {
 	 * @return Zone_Record|array The record object.
 	 */
 	public function get_zone_record( $zone_id, $record_id, $format = 'object' ) {
-		// to be written
+		$data = $this->get( "zones/$zone_id/dns_records/$record_id" );
+
+		if ( $format == 'object' ) {
+			$data = new Zone_Record( $this, $record_id, $data, $zone_id );
+		}
+
+		return $data;
 	}
 
 	/**
