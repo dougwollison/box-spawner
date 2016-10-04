@@ -22,9 +22,11 @@ trait Resolve_Class {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string &$class The class to resolve.
+	 * @param string $class The class to resolve.
+	 *
+	 * @return string The fully resolved class name.
 	 */
-	public static function resolve_class( &$class ) {
+	public static function resolve_class( $class ) {
 		static $namespace = '';
 		if ( ! $namespace ) {
 			$called_class = get_called_class();
@@ -34,5 +36,7 @@ trait Resolve_Class {
 		if ( strpos( $class, '\\' ) === false ){
 			$class = $namespace . '\\' . $class;
 		}
+
+		return $class;
 	}
 }
