@@ -145,6 +145,7 @@ interface Linode_Framework {
 	 * @return Linode_Disk The disk object.
 	 */
 	public function create_disk( $data );
+
 	/**
 	 * Update an existing disk.
 	 *
