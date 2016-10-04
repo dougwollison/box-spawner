@@ -92,16 +92,16 @@ abstract class JSON_API extends API {
 	 *     @option string "body"    The body of the response.
 	 */
 	protected function parse_result( $result, $curl, $data , $options ) {
-		$result = parent::parse_result( $result, $curl, $data , $options);
+		$result = parent::parse_result( $result, $curl, $data, $options);
 
-		$data = json_decode( $result['body'], true );
+		$json = json_decode( $result['body'], true );
 
 		$error = json_last_error();
 		if ( $error !== JSON_ERROR_NONE ) {
 			throw new ResourceException( 'JSON Decoding Error: ' . self::$json_errors[ $error ] );
 		}
 
-		$result['body'] = $data;
+		$result['body'] = $json;
 
 		return $result;
 	}
