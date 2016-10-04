@@ -261,28 +261,4 @@ interface Linode_Framework {
 	 * @param string $hostname The hostname ot set the rDNS to.
 	 */
 	public function set_ip_rdns( $ip_id, $hostname );
-
-	/**
-	 * Exchange an existing IP with another IP.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $ip_id        The ID of the ip to swap.
-	 * @param int $target_ip_id The ID of the ip to swap with.
-	 *
-	 * @return array The new relationships between the IPs.
-	 */
-	public function swap_with( $ip_id, $target_ip_id );
-
-	/**
-	 * Transfer an existing IP to another Linode.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $ip_id        The ID of the ip to transfer.
-	 * @param int $target_ip_id The ID of the linode to transfer to.
-	 *
-	 * @return array The new relationships between the IPs.
-	 */
-	public function transfer_to( $ip_id, $target_linode_id );
 }
