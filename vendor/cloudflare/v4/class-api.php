@@ -62,6 +62,23 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	}
 
 	// =========================
+	// ! Helpers
+	// =========================
+
+	/**
+	 * Resolve a classname by prepending the namespace.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string &$class The class to resolve.
+	 */
+	public static function resolve_class( &$class ) {
+		if ( strpos( $class, '\\' ) === false ){
+			$class = __NAMESPACE__ . '\\' . $class;
+		}
+	}
+
+	// =========================
 	// ! Request Handling
 	// =========================
 
@@ -85,6 +102,200 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	}
 
 	// ==================================================
+	// ! Utilities
+	// ==================================================
+
+	// =========================
+	// ! - Object Utilities
+	// =========================
+
+	/**
+	 * Shared logic for object list methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The endpoint prefix.
+	 * @param string $class    The class to use.
+	 * @param array  $filter   Optional Arguments for filtering the list request.
+	 * @param bool   $format   Optional The format to return (Linode object or attributes array).
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function list_objects( $endpoint, $class, array $filter = array(), $format = 'object' ) {
+		self::resolve_class( $class );
+
+		$data = $this->get( $endpoint, $filter );
+
+		if ( $format == 'object' ) {
+			// Convert to list of objects
+			foreach ( $data as $i => $entry ) {
+				$id = $entry[ $class::ID_ATTRIBUTE ];
+				$entry = new $class( $this, $id, $entry );
+
+				$data[ $i ] = $entry;
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Shared logic for object get methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param string $object_id The id of the object to get.
+	 * @param bool   $format    Optional The format to return (objects or attribute arrays).
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function get_object( $endpoint, $class, $object_id, $format = 'object' ) {
+		self::resolve_class( $class );
+
+		$data = $this->get( "{$endpoint}/{$object_id}" );
+
+		if ( $format == 'object' ) {
+			$data = new $class( $this, $object_id, $data );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Shared logic for object create methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint The endpoint prefix.
+	 * @param string $class    The class to use.
+	 * @param array  $data     The properties of the new object.
+	 * @param bool   $format   Optional The format to return (object or attributes array).
+	 *
+	 * @return array The list of objects.
+	 */
+	protected function create_object( $endpoint, $class, array $data, $format = 'object' ) {
+		self::resolve_class( $class );
+
+		$result = $this->post( $endpoint, $data );
+
+		if ( $format == 'object' ) {
+			$result = new $class( $this, $result[ $class::ID_ATTRIBUTE ], $result );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Shared logic for object delete methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param string $object_id The id of the object to update.
+	 * @param array  $data      The properties to update.
+	 *
+	 * @return bool Wether or not the delete was successful.
+	 */
+	protected function delete_object( $endpoint, $class, $object_id, array $data = array() ) {
+		self::resolve_class( $class );
+
+		$result = $this->delete( "{$endpoint}/{$object_id}", $data );
+
+		return $result[ $class::ID_ATTRIBUTE ] == $object_id;
+	}
+
+	// =========================
+	// ! - Asset Utilities
+	// =========================
+
+	/**
+	 * Shared logic for asset list methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param array  $filter    Optional Arguments for filtering the list request.
+	 * @param bool   $format    Optional The format to return (Linode asset or attributes array).
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function list_assets( $endpoint, $class, $parent_id, $filter, $format ) {
+		self::resolve_class( $class );
+
+		$endpoint = sprintf( $endpoint, $parent_id );
+
+		return $this->list_objects( $endpoint, $class, $filter, $format );
+	}
+
+	/**
+	 * Shared logic for asset get methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param string $asset_id  The id of the asset to get.
+	 * @param bool   $format    Optional The format to return (assets or attribute arrays).
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function get_asset( $endpoint, $class, $parent_id, $asset_id, $format = 'asset' ) {
+		self::resolve_class( $class );
+
+		$endpoint = sprintf( $endpoint, $parent_id );
+
+		return $this->get_object( $endpoint, $class, $asset_id, $format );
+	}
+
+	/**
+	 * Shared logic for asset create methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param array  $data      The properties of the new asset.
+	 * @param bool   $format    Optional The format to return (asset or attributes array).
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function create_asset( $endpoint, $class, $parent_id, array $data, $format = 'asset' ) {
+		self::resolve_class( $class );
+
+		$endpoint = sprintf( $endpoint, $parent_id );
+
+		return $this->create_object( $endpoint, $class, $data, $format );
+	}
+
+	/**
+	 * Shared logic for asset delete methods.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $endpoint  The endpoint prefix.
+	 * @param string $class     The class to use.
+	 * @param int    $parent_id The ID of the parent object.
+	 * @param string $asset_id  The id of the asset to update.
+	 * @param array  $data      The properties to update.
+	 *
+	 * @return array The list of assets.
+	 */
+	protected function delete_asset( $endpoint, $class, $parent_id, $asset_id, array $data = array() ) {
+		self::resolve_class( $class );
+
+		$endpoint = sprintf( $endpoint, $parent_id );
+
+		return $this->delete_object( $endpoint, $class, $asset_id, $data );
+	}
+
+	// ==================================================
 	// ! Editable Objects
 	// ==================================================
 
@@ -103,19 +314,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of Zone objects.
 	 */
 	public function list_zones( array $filter = array(), $format = 'object' ) {
-		$data = $this->get( "zones", $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Zone::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Zone( $this, $id, $entry );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_objects( 'zones', 'Zone', $filter, $format );
 	}
 
 	/**
@@ -129,13 +328,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return Zone|array The zone object.
 	 */
 	public function get_zone( $zone_id, $format = 'object' ) {
-		$data = $this->get( "zones/$zone_id" );
-
-		if ( $format == 'object' ) {
-			$data = new Zone( $this, $zone_id, $data );
-		}
-
-		return $data;
+		return $this->get_object( 'zones', 'Zone', $zone_id, $format );
 	}
 
 	/**
@@ -149,13 +342,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return Zone|array The zone object.
 	 */
 	public function create_zone( $data, $format = 'object' ) {
-		$result = $this->post( "zones", $data );
-
-		if ( $format == 'object' ) {
-			return new Zone( $this, $result[ Zone::ID_ATTRIBUTE ], $result );
-		} else {
-			return $result;
-		}
+		return $this->create_object( 'zones', 'Zone', $data, $format );
 	}
 
 	/**
@@ -164,9 +351,9 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @since 1.0.0
 	 *
 	 * @param int   $zone_id The ID of the zone to update.
-	 * @param array $data    The properties of the new Zone.
+	 * @param array $data    The properties to update.
 	 *
-	 * @return bool Wether or not the update was successful.
+	 * @return array The resulting zone data.
 	 */
 	public function update_zone( $zone_id, array $data ) {
 		return $this->put( "zones/$zone_id", $data );
@@ -182,10 +369,8 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_zone( $zone_id ) {
-		$result = $this->delete( "zones/$zone_id", $data );
-
-		return $result[ Zone::ID_ATTRIBUTE ] == $record_id;
+	public function delete_zone( $zone_id, array $data = array() ) {
+		return $this->delet_object( 'zones', 'Zone', $zone_id, $data );
 	}
 
 	// =========================
@@ -204,19 +389,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of Zone_Record objects.
 	 */
 	public function list_zone_records( $zone_id, array $filter = array(), $format = 'object' ) {
-		$data = $this->get( "zones/$zone_id/dns_records", $filter );
-
-		foreach ( $data as $i => $entry ) {
-			$id = $entry[ Zone_Record::ID_ATTRIBUTE ];
-
-			if ( $format == 'object' ) {
-				$entry = new Zone_Record( $this, $id, $entry, $zone_id );
-			}
-
-			$data[ $i ] = $entry;
-		}
-
-		return $data;
+		return $this->list_assets( 'zones/%s/dns_records', 'Zone_Record', $zone_id, $filter, $format );
 	}
 
 	/**
@@ -231,13 +404,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return Zone_Record|array The record object.
 	 */
 	public function get_zone_record( $zone_id, $record_id, $format = 'object' ) {
-		$data = $this->get( "zones/$zone_id/dns_records/$record_id" );
-
-		if ( $format == 'object' ) {
-			$data = new Zone_Record( $this, $record_id, $data, $zone_id );
-		}
-
-		return $data;
+		return $this->get_asset( 'zones/%s/dns_records', 'Zone_Record', $zone_id, $record_id, $format );
 	}
 
 	/**
@@ -252,13 +419,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return Zone_Record|array The record object.
 	 */
 	public function create_zone_record( $zone_id, $data, $format = 'object' ) {
-		$result = $this->post( "zones/$zone_id/dns_records", $data );
-
-		if ( $format == 'object' ) {
-			return new Zone_Record( $this, $result[ Zone::ID_ATTRIBUTE ], $result, $zone_id );
-		} else {
-			return $result;
-		}
+		return $this->create_asset( 'zones/%s/dns_records', 'Zone_Record', $zone_id, $data, $format );
 	}
 
 	/**
@@ -268,9 +429,9 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 *
 	 * @param int   $zone_id   The ID of the zone the record belongs to.
 	 * @param int   $record_id The ID of the record to update.
-	 * @param array $data      The properties of the new Zone.
+	 * @param array $data      The properties to update.
 	 *
-	 * @return array The updated record data.
+	 * @return array The resulting record data.
 	 */
 	public function update_zone_record( $zone_id, $record_id, array $data ) {
 		return $this->put( "zones/$zone_id/dns_records/$record_id", $data );
@@ -287,9 +448,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_zone_record( $zone_id, $record_id, $data ) {
-		$result = $this->delete( "zones/$zone_id/dns_records/$record_id", $data );
-
-		return $result[ Zone_Record::ID_ATTRIBUTE ] == $record_id;
+	public function delete_zone_record( $zone_id, $record_id, array $data = array() ) {
+		return $this->delet_asset( 'zones/%s/dns_records', 'Zone_Record', $zone_id, $record_id, $data );
 	}
 }
