@@ -80,11 +80,12 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $zone_id The ID of the zone to delete.
+	 * @param int   $zone_id The ID of the zone to delete.
+	 * @param array $data    Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_zone( $zone_id );
+	public function delete_zone( $zone_id, array $data = array() );
 
 	// =========================
 	// ! -- Zone Record Objects
@@ -147,10 +148,11 @@ interface API_Framework {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $zone_id   The ID of the zone the record belongs to.
-	 * @param int $record_id The ID of the record to delete.
+	 * @param int   $zone_id   The ID of the zone the record belongs to.
+	 * @param int   $record_id The ID of the record to delete.
+	 * @param array $data      Optional Any arguments for the delete request.
 	 *
 	 * @return bool Wether or not the delete was successful.
 	 */
-	public function delete_zone_record( $zone_id, $record_id );
+	public function delete_zone_record( $zone_id, $record_id, array $data = array() );
 }
