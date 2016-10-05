@@ -78,6 +78,42 @@ abstract class API_Object {
 		}
 	}
 
+	// =========================
+	// ! Propert Accessing
+	// =========================
+
+	/**
+	 * Retrieve an attribute value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $attr The attribute to retrieve.
+	 *
+	 * @return mixed The value of the attribute.
+	 */
+	public function get( $attr ) {
+		if ( isset( $this->attributes[ $attr ] ) ) {
+			return $this->attributes[ $attr ];
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve an attribute value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $attr  The attribute to set.
+	 * @param mixed  $value The value to use.
+	 */
+	public function set( $attr, $value ) {
+		$this->attributes[ $attr ] = $value;
+	}
+
+	// =========================
+	// ! CRUD Methods
+	// =========================
+
 	/**
 	 * Issue a create request for a new object.
 	 *
