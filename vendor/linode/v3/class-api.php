@@ -825,7 +825,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config|array The config object.
 	 */
 	public function create_linode_config( $linode_id, $data, $format = 'object' ) {
-		return $this->create_asset( 'linod.config', 'Linode_Config', $linode_id, $data, $format );
+		return $this->create_asset( 'linode.config', 'Linode_Config', $linode_id, $data, $format );
 	}
 
 	/**
@@ -840,7 +840,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the update was successful.
 	 */
 	public function update_linode_config( $linode_id, $config_id, array $data ) {
-		return $this->update_asset( 'linod.config', 'Linode_Config', $linode_id, $config_id, $data );
+		return $this->update_asset( 'linode.config', 'Linode_Config', $linode_id, $config_id, $data );
 	}
 
 	/**
@@ -855,7 +855,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_linode_config( $linode_id, $config_id, array $data = array() ) {
-		return $this->delete_asset( 'linod.config', 'Linode_Config', $linode_id, $config_id, $data );
+		return $this->delete_asset( 'linode.config', 'Linode_Config', $linode_id, $config_id, $data );
 	}
 
 	// =========================
@@ -922,7 +922,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$result = $this->request( 'linode.disk.' . $method, $data );
 
 		if ( $format == 'object' ) {
-			return new Linode_Disk( $this, $result[ Linode_Disk::ID_ATTRIBUTE ], null, $linode_id );
+			return new Linode_Disk( $this, $result[ Linode_Disk::ID_ATTRIBUTE ], array(), $linode_id );
 		} else {
 			return $result;
 		}
@@ -1077,7 +1077,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		) );
 
 		if ( $format == 'object' ) {
-			return new Linode_IP( $this, $result[ Linode_IP::ID_ATTRIBUTE ], null, $linode_id );
+			return new Linode_IP( $this, $result[ Linode_IP::ID_ATTRIBUTE ], array(), $linode_id );
 		} else {
 			return $result;
 		}
