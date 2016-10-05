@@ -1126,7 +1126,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 */
 	public function set_linode_ip_rdns( $linode_id, $ip_id, $hostname ) {
 		return $this->update_linode_ip( $linode_id, $ip_id, array(
-			'Hostname' => $this->id,
+			'Hostname' => $hostname,
 		) );
 	}
 
