@@ -10,9 +10,9 @@
 namespace BoxSpawner;
 
 /**
- * The REST Creatable trait.
+ * The Resolve Class trait.
  *
- * @internal Used by REST objects that support the standard create request.
+ * @internal Used by API classes to resolve the full name of a class in the same namespace.
  *
  * @since 1.0.0
  */
