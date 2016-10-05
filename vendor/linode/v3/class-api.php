@@ -907,12 +907,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		self::sanitize_data( $data );
 
 		$type = null;
-		if ( isset( $data['DISTRIBUTIONID'] ) ) {
-			$type = 'distribution';
+		if ( isset( $data['STACKSCRIPTID'] ) ) {
+			$type = 'stackscript';
 		} else if ( isset( $data['IMAGEID'] ) ) {
 			$type = 'image';
-		} else if ( isset( $data['STACKSCRIPTID'] ) ) {
-			$type = 'stackscript';
+		} else if ( isset( $data['DISTRIBUTIONID'] ) ) {
+			$type = 'distribution';
 		}
 
 		$method = 'create' . ( $type ? "from{$type}" : '' );
