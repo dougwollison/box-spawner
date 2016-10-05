@@ -110,6 +110,20 @@ abstract class API_Object {
 		$this->attributes[ $attr ] = $value;
 	}
 
+	/**
+	 * Dump the attributes (including ID) as an array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The attributes array.
+	 */
+	public function dump() {
+		$attributes = $this->attributes;
+		$attributes[ $this::ID_ATTRIBUTE ] = $this->id;
+
+		return $attributes;
+	}
+
 	// =========================
 	// ! CRUD Methods
 	// =========================

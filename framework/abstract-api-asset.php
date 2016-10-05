@@ -59,4 +59,19 @@ abstract class API_Asset extends API_Object {
 
 		parent::__construct( $api, $id, $data );
 	}
+
+	/**
+	 * Dump the attributes (including ID) as an array.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The attributes array.
+	 */
+	public function dump() {
+		$attributes = $this->attributes;
+		$attributes[ $this::ID_ATTRIBUTE ] = $this->id;
+		$attributes[ $this::PARENT_ID_ATTRIBUTE ] = $this->parent_id;
+
+		return $attributes;
+	}
 }
