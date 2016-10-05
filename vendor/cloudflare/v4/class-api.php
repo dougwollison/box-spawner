@@ -107,7 +107,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of objects.
 	 */
 	protected function list_objects( $endpoint, $class, array $filter = array(), $format = 'object' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data = $this->get( $endpoint, $filter );
 
@@ -137,7 +137,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of objects.
 	 */
 	protected function get_object( $endpoint, $class, $object_id, $format = 'object' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data = $this->get( "{$endpoint}/{$object_id}" );
 
@@ -161,7 +161,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of objects.
 	 */
 	protected function create_object( $endpoint, $class, array $data, $format = 'object' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$result = $this->post( $endpoint, $data );
 
@@ -185,7 +185,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return bool Wether or not the delete was successful.
 	 */
 	protected function delete_object( $endpoint, $class, $object_id, array $data = array() ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$result = $this->delete( "{$endpoint}/{$object_id}", $data );
 
@@ -210,7 +210,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of assets.
 	 */
 	protected function list_assets( $endpoint, $class, $parent_id, $filter, $format ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$endpoint = sprintf( $endpoint, $parent_id );
 
@@ -231,7 +231,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of assets.
 	 */
 	protected function get_asset( $endpoint, $class, $parent_id, $asset_id, $format = 'asset' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$endpoint = sprintf( $endpoint, $parent_id );
 
@@ -252,7 +252,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of assets.
 	 */
 	protected function create_asset( $endpoint, $class, $parent_id, array $data, $format = 'asset' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$endpoint = sprintf( $endpoint, $parent_id );
 
@@ -273,7 +273,7 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return array The list of assets.
 	 */
 	protected function delete_asset( $endpoint, $class, $parent_id, $asset_id, array $data = array() ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$endpoint = sprintf( $endpoint, $parent_id );
 
