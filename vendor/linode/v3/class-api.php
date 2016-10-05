@@ -238,7 +238,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of objects.
 	 */
 	protected function list_objects( $endpoint, $class, array $filter = array(), $format = 'object' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$endpoint = "{$endpoint}.list";
 		$data = $this->request( $endpoint, $filter );
@@ -269,7 +269,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of objects.
 	 */
 	protected function get_object( $endpoint, $class, $object_id, $format = 'object' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		// Call list_objects, filtering by object id
 		$result = $this->list_objects( $endpoint, $class, array(
@@ -292,7 +292,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of objects.
 	 */
 	protected function create_object( $endpoint, $class, array $data, $format = 'object' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		self::sanitize_data( $data );
 
@@ -319,7 +319,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of objects.
 	 */
 	protected function update_object( $endpoint, $class, $object_id, array $data ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data[ $class::ID_ATTRIBUTE ] = $linode_id;
 
@@ -342,7 +342,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of objects.
 	 */
 	protected function delete_object( $endpoint, $class, $object_id, array $data = array() ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data[ $class::ID_ATTRIBUTE ] = $object_id;
 
@@ -370,7 +370,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of assets.
 	 */
 	protected function list_assets( $endpoint, $class, $parent_id, $filter, $format ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$filter[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
 
@@ -391,7 +391,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of assets.
 	 */
 	protected function get_asset( $endpoint, $class, $parent_id, $asset_id, $format = 'asset' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$result = $this->list_assets( $endpoint, $class, $parent_id, array(
 			$class::ID_ATTRIBUTE => $disk_id,
@@ -414,7 +414,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of assets.
 	 */
 	protected function create_asset( $endpoint, $class, $parent_id, array $data, $format = 'asset' ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
 
@@ -435,7 +435,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of assets.
 	 */
 	protected function update_asset( $endpoint, $class, $parent_id, $asset_id, array $data ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
 
@@ -456,7 +456,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of assets.
 	 */
 	protected function delete_asset( $endpoint, $class, $parent_id, $asset_id, array $data = array() ) {
-		self::resolve_class( $class );
+		$class = self::resolve_class( $class );
 
 		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
 
