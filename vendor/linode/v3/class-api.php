@@ -524,7 +524,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The distribution information.
 	 */
 	public function get_distribution( $distribution_id ) {
-		return $this->get_avail( 'datacenters', 'DATACENTERID', $datacenter_id );
+		return $this->get_avail( 'datacenters', 'DATACENTERID', $distribution_id );
 	}
 
 	// =========================
