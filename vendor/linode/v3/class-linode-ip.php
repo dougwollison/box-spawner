@@ -80,6 +80,17 @@ class Linode_IP extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Lino
 	// =========================
 
 	/**
+	 * Check if the IP is public or not.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool Wether or not the IP is public.
+	 */
+	public function is_public() {
+		return (bool) $this->attributes['ISPUBLIC'];
+	}
+
+	/**
 	 * Set the rDNS name of the ip.
 	 *
 	 * @since 1.0.0

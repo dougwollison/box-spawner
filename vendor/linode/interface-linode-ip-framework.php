@@ -17,6 +17,15 @@ namespace BoxSpawner\Linode;
  */
 interface Linode_IP_Framework {
 	/**
+	 * Check if the IP is public or not.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool Wether or not the IP is public.
+	 */
+	public function is_public();
+
+	/**
 	 * Set the rDNS name of the ip.
 	 *
 	 * @since 1.0.0
