@@ -49,7 +49,7 @@ abstract class REST_API extends JSON_API {
 	 *
 	 * @return array The result of the request.
 	 */
-	public function get( $endpoint, $data ) {
+	public function get( $endpoint, array $data = array() ) {
 		return $this->request( 'GET', $endpoint, $data );
 	}
 
@@ -63,7 +63,7 @@ abstract class REST_API extends JSON_API {
 	 *
 	 * @return array The result of the request.
 	 */
-	public function post( $endpoint, $data ) {
+	public function post( $endpoint, array $data = array() ) {
 		return $this->request( 'POST', $endpoint, $data );
 	}
 
@@ -77,7 +77,7 @@ abstract class REST_API extends JSON_API {
 	 *
 	 * @return array The result of the request.
 	 */
-	public function put( $endpoint, $data ) {
+	public function put( $endpoint, array $data = array() ) {
 		return $this->request( 'PUT', $endpoint, $data );
 	}
 
@@ -91,7 +91,7 @@ abstract class REST_API extends JSON_API {
 	 *
 	 * @return array The result of the request.
 	 */
-	public function delete( $endpoint, $data ) {
+	public function delete( $endpoint, array $data = array() ) {
 		return $this->request( 'DELETE', $endpoint, $data );
 	}
 
