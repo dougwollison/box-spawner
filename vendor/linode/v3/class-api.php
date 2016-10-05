@@ -321,12 +321,12 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	protected function update_object( $endpoint, $class, $object_id, array $data ) {
 		$class = self::resolve_class( $class );
 
-		$data[ $class::ID_ATTRIBUTE ] = $linode_id;
+		$data[ $class::ID_ATTRIBUTE ] = $object_id;
 
 		$endpoint = "{$endpoint}.update";
 		$result = $this->request( $endpoint, $data );
 
-		return $result[ $class::ID_ATTRIBUTE ] == $linode_id;
+		return $result[ $class::ID_ATTRIBUTE ] == $object_id;
 	}
 
 	/**
@@ -394,7 +394,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 		$class = self::resolve_class( $class );
 
 		$result = $this->list_assets( $endpoint, $class, $parent_id, array(
-			$class::ID_ATTRIBUTE => $disk_id,
+			$class::ID_ATTRIBUTE => $asset_id,
 		), $format );
 
 		return $result[0];
@@ -416,9 +416,17 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	protected function create_asset( $endpoint, $class, $parent_id, array $data, $format = 'asset' ) {
 		$class = self::resolve_class( $class );
 
+		self::sanitize_data( $data );
 		$data[ $class::PARENT_ID_ATTRIBUTE ] = $parent_id;
 
-		return $this->create_object( $endpoint, $class, $data, $format );
+		$endpoint = "{$endpoint}.create";
+		$result = $this->request( $endpoint, $data );
+
+		if ( $format == 'object' ) {
+			$result = new $class( $this, $result[ $class::ID_ATTRIBUTE ], array(), $parent_id );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -810,7 +818,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Config|array The config object.
 	 */
 	public function get_linode_config( $linode_id, $config_id, $format = 'object' ) {
-		return $this->get_asset( 'linode.config', 'Linode_Config', $linode_id, $format );
+		return $this->get_asset( 'linode.config', 'Linode_Config', $linode_id, $config_id, $format );
 	}
 
 	/**
@@ -889,7 +897,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_Disk|array The disk object.
 	 */
 	public function get_linode_disk( $linode_id, $disk_id, $format = 'object' ) {
-		return $this->get_asset( 'linode.disk', 'Linode_Disk', $linode_id, $format );
+		return $this->get_asset( 'linode.disk', 'Linode_Disk', $linode_id, $disk_id, $format );
 	}
 
 	/**
@@ -1047,7 +1055,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Linode_IP|array The ip object.
 	 */
 	public function get_linode_ip( $linode_id, $ip_id, $format = 'object' ) {
-		return $this->get_asset( 'linode.ip', 'Linode_IP', $linode_id, $format );
+		return $this->get_asset( 'linode.ip', 'Linode_IP', $linode_id, $ip_id, $format );
 	}
 
 	/**
@@ -1265,7 +1273,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return Domain_Record|array The record object.
 	 */
 	public function get_domain_record( $domain_id, $record_id, $format = 'object' ) {
-		return $this->get_asset( 'domain.resource', 'Domain_Record', $domain_id, $format );
+		return $this->get_asset( 'domain.resource', 'Domain_Record', $domain_id, $record_id, $format );
 	}
 
 	/**
