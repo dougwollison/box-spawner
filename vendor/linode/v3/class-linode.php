@@ -19,6 +19,8 @@ namespace BoxSpawner\Linode\V3;
  * @since 1.0.0
  */
 class Linode extends \BoxSpawner\API_Object implements \BoxSpawner\Linode\Linode_Framework {
+	use \BoxSpawner\Case_Insensitive_Object;
+
 	/**
 	 * The name of the option to assign the ID to.
 	 *

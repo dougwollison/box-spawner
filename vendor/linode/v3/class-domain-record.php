@@ -19,6 +19,8 @@ namespace BoxSpawner\Linode\V3;
  * @since 1.0.0
  */
 class Domain_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\Linode\Domain_Record_Framework {
+	use \BoxSpawner\Case_Insensitive_Object;
+
 	/**
 	 * The name of the option to assign the ID to.
 	 *
