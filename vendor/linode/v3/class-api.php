@@ -554,7 +554,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The kernel information.
 	 */
 	public function get_kernel( $kernel_id ) {
-		return $this->get_avail( 'kernels', 'KERNELID', $datacenter_id );
+		return $this->get_avail( 'kernels', 'KERNELID', $kernel_id );
 	}
 
 	// =========================
@@ -571,7 +571,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The list of plans.
 	 */
 	public function list_plans( array $filter = array() ) {
-		return $this->list_avails( 'plans' );
+		return $this->list_avails( 'linodeplans' );
 	}
 
 	/**
@@ -584,7 +584,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return array The plan information.
 	 */
 	public function get_plan( $plan_id ) {
-		return $this->get_avail( 'plans', 'PLANID', $plan_id );
+		return $this->get_avail( 'linodeplans', 'PLANID', $plan_id );
 	}
 
 	// ==================================================
