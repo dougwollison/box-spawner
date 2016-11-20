@@ -79,7 +79,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	public function request( $endpoint, array $data = array() ) {
 		$data['API_ACTION'] = $endpoint;
 
-		return parent::do_request( $data );
+		return parent::do_request( $data, array( 'method' => 'POST' ) );
 	}
 
 	/**
@@ -90,7 +90,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @param resource     $curl    The cURL handle of the request.
 	 */
 	protected function get_request_url( $data, $options ) {
-		return 'https://api.linode.com/?' . http_build_query( $data );
+		return 'https://api.linode.com/';
 	}
 
 	/**
@@ -122,7 +122,7 @@ class API extends \BoxSpawner\JSON_API implements \BoxSpawner\Linode\API_Framewo
 	 * @return string|array The body for the request.
 	 */
 	protected function get_request_body( $data, $options ) {
-		return null;
+		return $data;
 	}
 
 	/**
