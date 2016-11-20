@@ -36,7 +36,7 @@ class Zone_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\CloudFlar
 	 * @param array $data The data for the create request.
 	 */
 	protected function create( array $data ) {
-		$result = $this->api->create_domain_record( $this->parent_id, $data, 'array' );
+		$result = $this->api->create_zone_record( $this->parent_id, $data, 'array' );
 
 		$this->id = $result[ $this::ID_ATTRIBUTE ];
 		$this->attrbiutes = $result;
@@ -51,7 +51,7 @@ class Zone_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\CloudFlar
 	 */
 	protected function load( $id ) {
 		$this->id = $id;
-		$this->attributes = $this->api->get_domain_record( $this->parent_id, $id, 'array' );
+		$this->attributes = $this->api->get_zone_record( $this->parent_id, $id, 'array' );
 	}
 
 	/**
@@ -62,7 +62,8 @@ class Zone_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\CloudFlar
 	 * @param array $data The data for the update request.
 	 */
 	public function update( array $data ) {
-		$this->attributes = $this->api->update_domain_record( $this->parent_id, $this->id, $data );
+		$data = array_merge( $this->attributes, $data );
+		$this->attributes = $this->api->update_zone_record( $this->parent_id, $this->id, $data );
 		return true;
 	}
 
@@ -74,6 +75,6 @@ class Zone_Record extends \BoxSpawner\API_Asset implements \BoxSpawner\CloudFlar
 	 * @param array $data Optional UNUSED.
 	 */
 	public function delete( array $data = array() ) {
-		return $this->api->delete_domain_record( $this->parent_id, $this->id );
+		return $this->api->delete_zone_record( $this->parent_id, $this->id );
 	}
 }
