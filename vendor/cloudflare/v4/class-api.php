@@ -434,6 +434,6 @@ class API extends \BoxSpawner\REST_API implements \BoxSpawner\CloudFlare\API_Fra
 	 * @return bool Wether or not the delete was successful.
 	 */
 	public function delete_zone_record( $zone_id, $record_id, array $data = array() ) {
-		return $this->delet_asset( 'zones/%s/dns_records', 'Zone_Record', $zone_id, $record_id, $data );
+		return $this->delete_asset( 'zones/%s/dns_records', 'Zone_Record', $zone_id, $record_id, $data );
 	}
 }
